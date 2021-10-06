@@ -1,3 +1,36 @@
+Metadata-Version: 2.1
+Name: contnextViewer
+Version: 0.0.1.dev0
+Summary: ContNext WebApp
+Home-page: https://github.com/gitlab.scai.fraunhofer/gitlab.scai.fraunhofer
+Author: sara_diaz
+Author-email: sara.diaz.del.ser@scai.fraunhofer.de
+Maintainer: sara_diaz
+Maintainer-email: sara.diaz.del.ser@scai.fraunhofer.de
+License: MIT
+Download-URL: https://github.com/gitlab.scai.fraunhofer/gitlab.scai.fraunhofer/releases
+Project-URL: Bug Tracker, https://github.com/gitlab.scai.fraunhofer/gitlab.scai.fraunhofer/issues
+Project-URL: Source Code, https://github.com/gitlab.scai.fraunhofer/gitlab.scai.fraunhofer
+Keywords: snekpack,cookiecutter
+Platform: UNKNOWN
+Classifier: Development Status :: 1 - Planning
+Classifier: Environment :: Console
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Operating System :: OS Independent
+Classifier: Framework :: Pytest
+Classifier: Framework :: tox
+Classifier: Framework :: Sphinx
+Classifier: Programming Language :: Python
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3 :: Only
+Requires-Python: >=3.8
+Description-Content-Type: text/markdown
+Provides-Extra: tests
+Provides-Extra: docs
+License-File: LICENSE
+
 <!--
 <p align="center">
   <img src="https://github.com/gitlab.scai.fraunhofer/gitlab.scai.fraunhofer/raw/main/docs/source/logo.png" height="150">
@@ -158,3 +191,5 @@ This script does the following:
 5. Bump the version to the next patch. If you made big changes and want to bump the version by minor, you can
    use `tox -e bumpversion minor` after.
 </details>
+
+
