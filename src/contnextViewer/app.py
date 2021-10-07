@@ -38,7 +38,7 @@ def FUN_413(error):
 
 @app.route("/")
 def FUN_root():
-    return render_template("index.html")
+    return render_template("layout.html")
 
 
 @app.route("/public/")
