@@ -1,4 +1,4 @@
-#!/Users/sdiazdelser/contnextViewer/venv/bin/python
+#!/Users/sdiazdelser/contnextViewer/venv1/bin/python
 # EASY-INSTALL-ENTRY-SCRIPT: 'contnextViewer','console_scripts','contnextViewer'
 import re
 import sys

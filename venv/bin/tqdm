@@ -1,4 +1,4 @@
-#!/Users/sdiazdelser/contnextViewer/venv/bin/python
+#!/Users/sdiazdelser/contnextViewer/venv1/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys
