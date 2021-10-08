@@ -1,0 +1,12 @@
+{% extends "layout.html" %}
+{% block title %}Home page{% endblock %}
+{% block content %}
+    <header>
+        <div class="jumbotron">
+            <h1>ContNext Viewer</h1>
+            <image href="{{url_for('static', filename='img/placeholder_img.png') }}"></image>
+            <p id="page-subtitle">A web application for ContNext</p>
+        </div>
+    </header>
+{% endblock %}
+

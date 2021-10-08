@@ -1,13 +1,11 @@
 from flask import Flask, redirect, url_for, render_template, request, session, flash
-# from datetime import timedelta
 
 app = Flask(__name__)
 app.secret_key = "changethislater"
-# app.permanent_session_lifetime = timedelta(minutes=5)
 
 @app.route("/")
 def home():
-   return render_template("index.html")
+   return render_template("home.html")
 
 @app.route("/page")
 def page():
@@ -28,11 +26,21 @@ def login():
             return redirect(url_for("user"))
         return render_template("login.html")
 
-@app.route("/user")
+@app.route("/user", methods=["POST", "GET"])
 def user():
+    email = None
     if "user" in session:
         user = session["user"]
-        return render_template("user.html", user=user)
+
+        if request.method == "POST":
+            email =request.form["email"]
+            session["email"] = email
+            flash(f"Your email is saved: {email}.", "info")
+        else:
+            if "email" in session:
+                email = session["email"]
+        return render_template("user.html", email=email)
+
     else:
         flash("You are not logged in!", "info")
         return redirect(url_for("login"))
@@ -42,6 +50,7 @@ def logout():
     if "user" in session:
         user = session["user"]
         session.pop("user", None)
+        session.pop("email", None)
         flash(f"You have been logged out, {user}", "info")
     return redirect(url_for("login"))
 
@@ -52,5 +61,6 @@ def admin():
 
 if __name__ == "__main__":
     app.run(debug=True)
+
 
 
