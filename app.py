@@ -7,9 +7,17 @@ app.secret_key = "changethislater"
 def home():
    return render_template("home.html")
 
-@app.route("/page")
-def page():
-   return render_template("page.html")
+@app.route("/about")
+def about():
+   return render_template("about.html")
+
+@app.route("/terms")
+def terms():
+   return render_template("terms.html")
+
+@app.route("/tutorial")
+def tutorial():
+   return render_template("tutorial.html")
 
 
 @app.route("/login", methods=["POST", "GET"])
