@@ -37,16 +37,20 @@ def loadDatabase(tsv_file):
     # Open tsv file
     with open(tsv_file) as f:
         reader = csv.reader(f, delimiter=';')
+        # skip header
+        next(reader, None)
         for row in reader:
             if row:
-                new = Networks(geneStart=row[0],
+                newNET = Networks(geneStart=row[0],
                               geneEnd=row[1],
                               direction=row[2],
                               method=row[3],
                               weight=row[4],
                               )
+                #NOD1 = Nodes(name=row[0])
+                #NOD2 = Nodes(name=row[1])
                 # Push to Database
-                db.session.add(new)
+                db.session.add(newNET)
                 db.session.commit()
     source = tsv_file
     return source
@@ -98,7 +102,7 @@ class Nodes(db.Model):
 class Networks(db.Model):
     __tablename__ = 'networks'
     id = db.Column(db.Integer, primary_key=True)
-    # node_id= db.Column(db.Integer, db.ForeignKey('nodes.id'), nullable=False)
+    # net_id= db.Column(db.Integer, db.ForeignKey('nodes.id'), nullable=False)
     # !!!! need to make node_id a list.
     geneStart = db.Column(db.String(20), nullable=False)
     geneEnd = db.Column(db.String(20), nullable=False)
