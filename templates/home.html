@@ -4,6 +4,7 @@
     <header>
     </header>
     <body>
+    <!–– Box with site name, logo and quick summary of application -->
         <div class="container" style="margin-top: 50px" >
             <div class="row align-items-center">
                 <div class="col-lg-2 col-md-2 col-sm-2">
@@ -17,17 +18,24 @@
             </div>
         </div>
 
+    <!–– Search bar -->
         <div class="container" style="margin-top: 50px" >
-          <div class="input-group mb-3">
-          <button class="btn btn-outline-secondary dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Search</button>
-          <ul class="dropdown-menu">
-            <li><a class="dropdown-item" href="#">Option 1</a></li>
-            <li><a class="dropdown-item" href="#">Option 2</a></li>
-            <li><a class="dropdown-item" href="#">Option 3</a></li>
-          </ul>
-          <input type="text" class="form-control" aria-label="Text input with dropdown button">
+            <form class="row 3-g needs-validation col-md-11" method="post">
+                  <div class="col-md-2">
+                      <select class="form-select" name="queryOptions" aria-expanded="false">
+                        <option selected value="NET" >Network</option>
+                        <option value="NOD">Node</option>
+            <         </select>
+                  </div>
+                  <div class="col-md-8">
+                    <input type="text" class="form-control" name="query" placeholder="Gene or protein of interest" aria-label="Text input with dropdown button" required>
+                  </div>
+                  <div class="col-md-1">
+                      <input type="submit" class="btn btn-primary"/>
+                  </div>
+           </form>
         </div>
-    </div>
+
     </body>
 
 {% endblock %}

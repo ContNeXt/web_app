@@ -1,74 +1,58 @@
-from flask import Flask, redirect, url_for, render_template, request, session, flash
+from flask import Flask, render_template, request, redirect, url_for
+from flask_sqlalchemy import SQLAlchemy
+import os
+
+currentDirectory = os.path.dirname(os.path.abspath(__file__))
+
 
 app = Flask(__name__)
-app.secret_key = "changethislater"
 
-@app.route("/")
+# SQLAlchemy
+db_name = 'testDatabase.db'
+
+app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
+
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
+
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+
+# Initialize the database
+db = SQLAlchemy(app)
+
+'''
+    URL Builders for website
+'''
+
+@app.route("/", methods=['GET', 'POST'])
 def home():
-   return render_template("home.html")
+    if request.method == 'POST':
+        # Fetch query data
+        query = request.form['query']
+        queryOptions = request.form['queryOptions']
+        return redirect(url_for("query"))
+    else:
+        return render_template("home.html")
+
+@app.route("/query")
+def query():
+    return render_template("results.html")
 
 @app.route("/about")
 def about():
-   return render_template("about.html")
+    return render_template("about.html")
 
 @app.route("/terms")
 def terms():
-   return render_template("terms.html")
+    return render_template("terms.html")
 
 @app.route("/tutorial")
 def tutorial():
-   return render_template("tutorial.html")
+    return render_template("tutorial.html")
 
 
-@app.route("/login", methods=["POST", "GET"])
-def login():
-    if request.method == "POST":
-        # session.permanent = True
-        user = request.form["nm"]
-        session["user"] = user
-        flash(f"You have logged in successfully, {user}", "info")
-
-        return redirect(url_for("user"))
-    else:
-        if "user" in session:
-            return redirect(url_for("user"))
-        return render_template("login.html")
-
-@app.route("/user", methods=["POST", "GET"])
-def user():
-    email = None
-    if "user" in session:
-        user = session["user"]
-
-        if request.method == "POST":
-            email =request.form["email"]
-            session["email"] = email
-            flash(f"Your email is saved: {email}.", "info")
-        else:
-            if "email" in session:
-                email = session["email"]
-        return render_template("user.html", email=email)
-
-    else:
-        flash("You are not logged in!", "info")
-        return redirect(url_for("login"))
-
-@app.route("/logout")
-def logout():
-    if "user" in session:
-        user = session["user"]
-        session.pop("user", None)
-        session.pop("email", None)
-        flash(f"You have been logged out, {user}", "info")
-    return redirect(url_for("login"))
-
-
-@app.route("/admin")
-def admin():
-   return render_template("admin.html")
-
+'''
+    Run app
+'''
 if __name__ == "__main__":
     app.run(debug=True)
-
-
 
