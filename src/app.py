@@ -2,14 +2,17 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from homepage import homepage
 from querypage import querypage
+#from models import models
 
-# import os
-# currentDirectory = os.path.dirname(os.path.abspath(__file__))
 
 app = Flask(__name__)
 
+
+# Initialize the database
+db = SQLAlchemy(app)
+
 # SQLAlchemy
-db_name = 'testDatabase.db'
+db_name = "testDatabase.db"
 
 app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
 
@@ -17,8 +20,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
 
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-# Initialize the database
-db = SQLAlchemy(app)
+
 
 '''
     URL Builders for website
@@ -26,6 +28,7 @@ db = SQLAlchemy(app)
 
 app.register_blueprint(homepage, url_prefix="")
 app.register_blueprint(querypage, url_prefix="")
+#app.register_blueprint(models)
 
 
 @app.route("/")

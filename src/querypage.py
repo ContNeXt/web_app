@@ -11,8 +11,17 @@ def query():
     idoptions=session.get('idoptions', None)
 
     # Run query
-    NETQuery = Networks.query.filter(
+    if idoptions == 'NET':
+        NQuery = Networks.query.filter(
         (Networks.geneStart == idquery) | (Networks.geneEnd == idquery)
         ).all()
+        idoptions = "Networks Database"
+    elif idoptions == 'NOD':
+        NQuery = Nodes.query.filter(
+            (Nodes.name == idquery)
+        ).all()
+        idoptions = "Nodes Database"
+    else:
+        NQuery = "Something went wrong"
 
-    return render_template("results.html", idquery=idquery, idoptions=idoptions, results=NETQuery)
+    return render_template("results.html", idquery=idquery, idoptions=idoptions, results=NQuery)

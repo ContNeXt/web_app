@@ -6,6 +6,8 @@ RUN ONCE TO CREATE THE DATABASE
 
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
+#from models import Networks, Nodes
+
 import csv
 from tqdm import tqdm
 import os
@@ -25,64 +27,6 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 # Initialize the database
 db = SQLAlchemy(app)
-
-
-
-'''
-Function loads data from given tsv file into database1.db
-!!!!! ATTENTION: currently set to csv, instead !!!!!
-'''
-
-def loadDatabase(tsv_file):
-    # Open tsv file
-    with open(tsv_file) as f:
-        reader = csv.reader(f, delimiter=';')
-        # skip header
-        next(reader, None)
-        for row in reader:
-            if row:
-                newNET = Networks(geneStart=row[0],
-                              geneEnd=row[1],
-                              direction=row[2],
-                              method=row[3],
-                              weight=row[4],
-                              )
-                #NOD1 = Nodes(name=row[0])
-                #NOD2 = Nodes(name=row[1])
-                # Push to Database
-                db.session.add(newNET)
-                db.session.commit()
-    source = tsv_file
-    return source
-
-'''
-For given path, find all tsv files
-'''
-
-def list_files(dir):
-    # create a list of file and sub directories
-    listOfFile = os.listdir(dir)
-    allFiles = list()
-    # Iterate over all the entries
-    for entry in listOfFile:
-        # Create full path
-        fullPath = os.path.join(dir, entry)
-        # If entry is a directory then get the list of files in this directory
-        if os.path.isdir(fullPath):
-            allFiles = allFiles + list_files(fullPath)
-        else:
-            allFiles.append(fullPath)
-    return allFiles
-
-def check_tsv(allFiles):
-    list_tsv = list()
-    for each in allFiles:
-        # Check the extension
-        if each.endswith(".csv"):
-            list_tsv.append(each)
-    return list_tsv
-
-
 
 '''
 database structure 
@@ -117,6 +61,62 @@ class Networks(db.Model):
         self.method = method
         self.weight = weight
 
+
+'''
+Function loads data from given tsv file into database1.db
+!!!!! ATTENTION: currently set to csv, instead !!!!!
+'''
+
+def load_database(tsv_file):
+    # Open tsv file
+    with open(tsv_file) as f:
+        reader = csv.reader(f, delimiter=';')
+        # skip header
+        next(reader, None)
+        for row in reader:
+            if row:
+                newNET = Networks(geneStart=row[0],
+                              geneEnd=row[1],
+                              direction=row[2],
+                              method=row[3],
+                              weight=row[4],
+                              )
+                NOD1 = Nodes(name=row[0])
+                NOD2 = Nodes(name=row[1])
+                # Push to Database
+                db.session.add(newNET, NOD2, NOD1)
+                db.session.commit()
+    source = tsv_file
+    return source
+
+'''
+For given path, find all tsv files
+'''
+
+def list_files(dir):
+    # create a list of file and sub directories
+    listOfFile = os.listdir(dir)
+    allFiles = list()
+    # Iterate over all the entries
+    for entry in listOfFile:
+        # Create full path
+        fullPath = os.path.join(dir, entry)
+        # If entry is a directory then get the list of files in this directory
+        if os.path.isdir(fullPath):
+            allFiles = allFiles + list_files(fullPath)
+        else:
+            allFiles.append(fullPath)
+    return allFiles
+
+def check_tsv(allFiles):
+    list_tsv = list()
+    for each in allFiles:
+        # Check the extension
+        if each.endswith(".csv"):
+            list_tsv.append(each)
+    return list_tsv
+
+
 '''
     Run app
 '''
@@ -133,7 +133,7 @@ def testdb():
     sources = list()
     try:
         for each in tqdm(list_tsv):
-            source = loadDatabase(each)
+            source = load_database(each)
             sources.append(source)
         return f"<h1> Success! Database created from: { str(sources) } </h1>"
 
