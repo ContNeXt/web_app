@@ -1,11 +1,10 @@
 from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
-# !!!!!!! change this to models when separate file is made
-from load_db import Networks, Nodes
+from homepage import homepage
+from querypage import querypage
 
 # import os
 # currentDirectory = os.path.dirname(os.path.abspath(__file__))
-
 
 app = Flask(__name__)
 
@@ -25,26 +24,13 @@ db = SQLAlchemy(app)
     URL Builders for website
 '''
 
-@app.route("/", methods=['GET', 'POST'])
-def home():
-    if request.method == 'POST':
-        # Fetch query data
-        query = request.form['query']
-        queryOptions = request.form['queryOptions']
+app.register_blueprint(homepage, url_prefix="")
+app.register_blueprint(querypage, url_prefix="")
 
-        # !!!!!! MAKE SEPARATE
-        # Run query
-        NETQuery = Networks.query.filter(
-            (Networks.geneStart == query) | (Networks.geneEnd == query)
-        ).all()
 
-        return redirect(url_for("query", idquery=query))
-    else:
-        return render_template("home.html")
-
-@app.route("/query/<idquery>")
-def query(idquery):
-    return render_template("results.html", idquery=idquery)
+@app.route("/")
+def main():
+    return redirect("home")
 
 @app.route("/about")
 def about():
