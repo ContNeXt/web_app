@@ -12,12 +12,10 @@ app = Flask(__name__)
 db = SQLAlchemy(app)
 
 # SQLAlchemy
-db_name = "testDatabase.db"
+db_name = "database.db"
 
 app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
-
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
-
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 

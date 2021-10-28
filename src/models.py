@@ -6,7 +6,7 @@ app = Flask(__name__)
 
 
 # Database settings
-db_name = "new_database.db"
+db_name = "database.db"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 

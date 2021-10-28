@@ -13,7 +13,7 @@ from sqlalchemy.sql import text
 app = Flask(__name__)
 
 # change to name of your database; add path if necessary
-db_name = "networks.db"
+db_name = "database.db"
 
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
 
