@@ -17,7 +17,7 @@ app = Flask(__name__)
 # SQLAlchemy
 db_name = "database.db"
 
-#data_source ="/Users/sdiazdelser/Downloads/networks"
+#data_source ="~/Downloads/networks"
 
 app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
@@ -114,7 +114,7 @@ def add_edgelist(file_path):
 
 @app.route('/')
 
-def load_database(data_source="/Users/sdiazdelser/Downloads/networks2/tissues"):
+def load_database(data_source="~/Downloads/networks2/tissues"):
     # Find all files in directory
     all_files = list_files(data_source)
 

@@ -44,7 +44,7 @@ class Node(db.Model):
     name = db.Column(db.String(30))
 
     # many to many relationship:
-    networks = db.relationship('Networks',
+    networks = db.relationship('Network',
                                      secondary=networks,
                                      lazy='dynamic',
                                      backref=db.backref('nodes'))

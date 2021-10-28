@@ -17,7 +17,7 @@ def query():
         NQuery = Node.query.filter(Node.name == idquery).all()
         NAnswer=[]
         for each in NQuery:
-            answer=Node.query.filter(Node.network.any(id=each.id)).all()
+            answer=Node.query.filter(Node.networks.any(id=each.id)).all()
             NAnswer.append(answer)
         idoptions = "Tissues"
 
