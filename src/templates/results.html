@@ -6,7 +6,7 @@
 </h3>
 <p>
     query: {{ idquery }}
-    databse: {{ idoptions }}
+    database: {{ idoptions }}
 </p>
 <div class="container" style="margin-top: 50px" >
     <div class="row">
@@ -16,7 +16,7 @@
         <button class="btn btn btn-info" type="button" data-bs-toggle="collapse" data-bs-target="#resultGraph" aria-expanded="false" aria-controls="resultGraph">
         Graph
       </button>
-
+    </div>
 </div>
 <div class="collapse" id="resultsTable">
     <div class="container" style="margin-top: 50px" >
@@ -24,13 +24,11 @@
 
     <!-- Table headers -->
         <th>
-             <tr>
-                <th>From</th>
-                <th>To</th>
-                <th>Direction</th>
-                <th>Method</th>
-                <th>Weight</th>
-            </tr>
+            <th>From</th>
+            <th>To</th>
+            <th>Direction</th>
+            <th>Method</th>
+            <th>Weight</th>
         </th>
 
     <!-- Table content -->
@@ -58,5 +56,7 @@
 </div>
 
 <div class="collapse" id="resultsGraph">
-<p> Not Available</p>
+    <p> Not Available</p>
+</div>
 {% endblock %}
+

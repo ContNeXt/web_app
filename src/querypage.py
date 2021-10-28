@@ -10,18 +10,36 @@ def query():
     idquery=session.get('query', None)
     idoptions=session.get('idoptions', None)
 
+    # Import dictionary from database
+
     # Run query
-    if idoptions == 'NET':
+    if idoptions == 'TISS':
         NQuery = Nodes.query.filter(Nodes.name == idquery).all()
+        NAnswer=[]
+        for each in NQuery:
+            answer=Nodes.query.filter(Nodes.which_networks.any(id=each.id)).all()
+            NAnswer.append(answer)
+        idoptions = "Tissues"
 
-        idoptions = "Networks Database"
-
-    elif idoptions == 'NOD':
+    elif idoptions == 'CELL':
         NQuery = Nodes.query.filter(
             (Nodes.name == idquery)
         ).all()
-        idoptions = "Nodes Database"
+        idoptions = "Cell Lines"
+
+    elif idoptions == 'CELT':
+        NQuery = Nodes.query.filter(
+            (Nodes.name == idquery)
+        ).all()
+        idoptions = "Cell Types"
+
+    elif idoptions == 'SPEC':
+        NQuery = Nodes.query.filter(
+            (Nodes.name == idquery)
+        ).all()
+        idoptions = "Species"
+
     else:
         NQuery = "Something went wrong"
 
-    return render_template("results.html", idquery=idquery, idoptions=idoptions, results=NQuery)
+    return render_template("results.html", idquery=idquery, idoptions=idoptions, results=NAnswer)
