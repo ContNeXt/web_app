@@ -1,16 +1,12 @@
-'''
+''' RUN ONCE TO CREATE THE DATABASE '''
 
-RUN ONCE TO CREATE THE DATABASE
-
-'''
-
-from flask import Flask, render_template
+from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy import Column, Integer, String, LargeBinary
+#from sqlalchemy import Column, Integer, String, LargeBinary
 
 import networkx as nx
 #from models import Networks, Nodes
-import pickle
+from pickler import pickle_network
 
 from tqdm import tqdm
 import os
@@ -19,14 +15,13 @@ import os
 app = Flask(__name__)
 
 # SQLAlchemy
-db_name = "new_database.db"
-data_source ="/Users/sdiazdelser/Downloads/networks"
+db_name = "database.db"
+
+#data_source ="/Users/sdiazdelser/Downloads/networks"
 
 app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
-
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
-
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 # Initialize the database
 db = SQLAlchemy(app)
@@ -35,27 +30,42 @@ db = SQLAlchemy(app)
 '''
 database structure 
 '''
+
+# Create many-to-many relationship table
+relationship_table=db.Table('relationship_table',
+                            db.Column('network_id', db.Integer, db.ForeignKey('networks.id')),
+                            db.Column('node_id', db.Integer, db.ForeignKey('nodes.id'))
+)
+
 # Create database class: Nodes
 class Nodes(db.Model):
     __tablename__ = 'nodes'
-    id = db.Column(Integer, primary_key=True)
-    name = db.Column(LargeBinary())
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(30))
+
+    # many to many relationship:
+    which_networks = db.relationship('Networks',
+                                     secondary=relationship_table,
+                                     backref=db.backref('which_nodes', lazy='dynamic'))
     def __init__(self, name):
         self.name = name
 
     def __repr__(self):
         return f'<Node {self.name!r}'
 
-
-
 # Create database class: Networks
 class Networks(db.Model):
     __tablename__ = 'networks'
-    id = db.Column(Integer, primary_key=True)
-    edge = db.Column(LargeBinary())
+    id = db.Column(db.Integer, primary_key=True)
+    network = db.Column(db.LargeBinary())
 
-    def __init__(self, edge):
-        self.edge = edge
+    def __init__(self, network):
+        self.network = network
+
+    def __repr__(self):
+        return f'<Network {self.network!r}'
+
+
 
 
 '''
@@ -93,18 +103,6 @@ def add_edgelist(file_path):
         ("weight", float),), encoding='utf-8')
     return network
 
-def pickle_network(network_object):
-    # pickle the network objects
-    with open('network_database.pkl', 'wb') as network_pickled:
-        pickled=pickle.dump(network_object, network_pickled)
-        network_pickled.close()
-    return pickled
-
-def unpickle_network():
-    # unpickle the network objects
-    with open('network_database.pkl', 'rb') as network_pickled:
-        network_unpickled = pickle.load(network_pickled)
-    return network_unpickled
 
 
 '''
@@ -112,32 +110,40 @@ def unpickle_network():
 '''
 
 @app.route('/')
-def load_database(data_source):
+
+def load_database(data_source="/Users/sdiazdelser/Downloads/networks/tissues"):
     # Find all files in directory
     all_files = list_files(data_source)
 
     # filter out all non-tsv
     list_tsv= check_tsv(all_files)
 
+    debugger = int(0)
+
     # add data from each file to database
     for each in tqdm(list_tsv):
         network = add_edgelist(each)
-        # pickle network
-        pkl_edges = pickle_network(list(network.edges))
-        pkl_nodes = pickle_network(list(network.nodes))
 
-        new_node = Nodes(pkl_nodes)
-        new_edge = Networks(pkl_edges)
+        # pickle network
+        pkl_network = pickle_network(network)
+        new_network = Networks(pkl_network)
+
+       # pickle nodes
+        for node in network.nodes:
+            new_node = Nodes(node)
+
+            # add relationship between nodes
+            new_network.which_nodes.append(new_node)
+            db.session.add(new_node)
+
+        debugger = debugger+1
 
         # push to database
-        try:
-            db.session.add(new_node)
-            db.session.add(new_edge)
-            db.session.commit()
-            return f"<h1> Success! Database created from: {  str(data_source) } </h1>"
+        db.session.add(new_network)
+        db.session.commit()
 
-        except:
-            return "<h1>Something went wrong! Database was not created correctly.</h1>"
+    return f"<h1> Files uploaded to database: {str(debugger) } </h1>"
+
 
 
 if __name__ == "__main__":
