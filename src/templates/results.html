@@ -24,32 +24,29 @@
     <table class="table table-light table-hover table-sm">
 
     <!-- Table headers -->
-        <th>
-            <th>From</th>
-            <th>To</th>
-            <th>Direction</th>
-            <th>Method</th>
-            <th>Weight</th>
-        </th>
-
+        <th>From</th>
+        <th>To</th>
+        <th>Direction</th>
+        <th>Method</th>
+        <th>Weight</th>
     <!-- Table content -->
 
-        {% for network_id in results %}
+       {% for item in somthing %}
         <tr>
             <td>
-                {{network_id.geneStart}}
+                {{item[0]}}
              </td>
              <td>
-                {{network_id.geneEnd}}
+                -
             </td>
             <td>
-                {{network_id.direction}}
+                {{item[1]}}
             </td>
             <td>
-                {{network_id.method}}
+                {{item[2]}}
             </td>
             <td>
-                {{network_id.weight}}
+                {{item[3]}}
             </td>
 
         {% endfor %}

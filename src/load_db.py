@@ -104,7 +104,7 @@ def add_edgelist(file_path):
     network = nx.read_edgelist(file_path, comments='from', delimiter='\t', data=(
         ("direction", str),
         ("method", str),
-        ("weight", float),), encoding='utf-8')
+        ("weight", float),), encoding='utf-8', create_using=nx.DiGraph())
     return network
 
 
