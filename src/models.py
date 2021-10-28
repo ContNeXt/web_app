@@ -28,6 +28,7 @@ relationship_table=db.Table('relationship_table',
 class Network(db.Model):
     __tablename__ = 'network'
     id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(40), unique=True)
     data = db.Column(db.PickleType())
     # many-to-many relationship
     _nodes = db.relationship('Node',
@@ -35,8 +36,9 @@ class Network(db.Model):
                              lazy='dynamic',
                              backref=db.backref('node_to_network_table_backref'))
 
-    def __init__(self, data):
+    def __init__(self, data, name):
         self.data = data
+        self.name = name
 
     def __repr__(self):
         return f'<Network {self.data!r}'

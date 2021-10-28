@@ -1,8 +1,5 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session
 from models import Network, Node
-from pickler import unpickle_network
-from collections import namedtuple
-import networkx as nx
 from tqdm import tqdm
 
 
@@ -22,19 +19,10 @@ def query():
         listof_nodes_id=[each.id for each in Node.query.filter(Node.name == idquery).all()]
 
         # For each id, get list of all networks associated with it.
-        listof_networks=[]
+        listof_networks={}
         for each in tqdm(listof_nodes_id):
             for one in Network.query.filter(Network._nodes.any(id=each)).all():
-                a_network = unpickle_network(one.data)
-                a_network_as_list = [nx.edges(a_network),
-                                     nx.get_edge_attributes(a_network, 'direction'),
-                                     nx.get_edge_attributes(a_network, 'method'),
-                                     nx.get_edge_attributes(a_network,'weight')
-                                     ]
-                listof_networks.append(a_network_as_list)
-
-                # Turn result into list
-
+                listof_networks.update({one.name: one.data})
         idoptions = "Tissues"
 
     else:
