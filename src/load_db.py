@@ -38,6 +38,20 @@ networks=db.Table('relationship_table',
 )
 
 
+
+# Create database class: Network
+class Network(db.Model):
+    __tablename__ = 'network'
+    id = db.Column(db.Integer, primary_key=True)
+    data = db.Column(db.PickleType())
+
+
+    def __init__(self, data):
+        self.data = data
+
+    def __repr__(self):
+        return f'<Network {self.data!r}'
+
 # Create database class: Node
 class Node(db.Model):
     __tablename__ = 'node'
@@ -55,19 +69,6 @@ class Node(db.Model):
 
     def __repr__(self):
         return f'<Node {self.name!r}'
-
-# Create database class: Network
-class Network(db.Model):
-    __tablename__ = 'network'
-    id = db.Column(db.Integer, primary_key=True)
-    data = db.Column(db.PickleType())
-
-
-    def __init__(self, data):
-        self.data = data
-
-    def __repr__(self):
-        return f'<Network {self.data!r}'
 
 
 '''
@@ -113,7 +114,7 @@ def add_edgelist(file_path):
 
 @app.route('/')
 
-def load_database(data_source="/Users/sdiazdelser/Downloads/networks/tissues"):
+def load_database(data_source="/Users/sdiazdelser/Downloads/networks2/tissues"):
     # Find all files in directory
     all_files = list_files(data_source)
 
@@ -130,7 +131,7 @@ def load_database(data_source="/Users/sdiazdelser/Downloads/networks/tissues"):
         pkl_network = pickle_network(network)
         new_network = Network(pkl_network)
 
-       # pickle nodes
+        # pickle nodes
         for node in network.nodes:
             new_node = Node(node)
 

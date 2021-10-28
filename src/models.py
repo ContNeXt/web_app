@@ -24,6 +24,19 @@ networks=db.Table('relationship_table',
 )
 
 
+# Create database class: Network
+class Network(db.Model):
+    __tablename__ = 'network'
+    id = db.Column(db.Integer, primary_key=True)
+    data = db.Column(db.PickleType())
+
+
+    def __init__(self, data):
+        self.data = data
+
+    def __repr__(self):
+        return f'<Network {self.data!r}'
+
 # Create database class: Node
 class Node(db.Model):
     __tablename__ = 'node'
@@ -42,18 +55,6 @@ class Node(db.Model):
     def __repr__(self):
         return f'<Node {self.name!r}'
 
-# Create database class: Network
-class Network(db.Model):
-    __tablename__ = 'network'
-    id = db.Column(db.Integer, primary_key=True)
-    data = db.Column(db.PickleType())
-
-
-    def __init__(self, data):
-        self.data = data
-
-    def __repr__(self):
-        return f'<Network {self.data!r}'
 
 if __name__ == "__main__":
 
