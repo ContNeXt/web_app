@@ -17,8 +17,6 @@ app = Flask(__name__)
 # SQLAlchemy
 db_name = "database.db"
 
-#data_source ="~/Downloads/networks"
-
 app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -32,7 +30,7 @@ database structure
 '''
 
 # Create many-to-many relationship table
-networks=db.Table('relationship_table',
+relationship_table=db.Table('relationship_table',
                             db.Column('network_id', db.Integer, db.ForeignKey('network.id'), primary_key=True),
                             db.Column('node_id', db.Integer, db.ForeignKey('node.id'), primary_key=True)
 )
@@ -44,7 +42,11 @@ class Network(db.Model):
     __tablename__ = 'network'
     id = db.Column(db.Integer, primary_key=True)
     data = db.Column(db.PickleType())
-
+    # many-to-many relationship
+    _nodes = db.relationship('Node',
+                             secondary=relationship_table,
+                             lazy='dynamic',
+                             backref=db.backref('node_to_network_table_backref'))
 
     def __init__(self, data):
         self.data = data
@@ -57,10 +59,9 @@ class Node(db.Model):
     __tablename__ = 'node'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
-
     # many to many relationship:
-    networks = db.relationship('Network',
-                                     secondary=networks,
+    _networks = db.relationship('Network',
+                                     secondary=relationship_table,
                                      lazy='dynamic',
                                      backref=db.backref('nodes'))
 
@@ -114,7 +115,7 @@ def add_edgelist(file_path):
 
 @app.route('/')
 
-def load_database(data_source="~/Downloads/networks2/tissues"):
+def load_database(data_source ="/Users/sdiazdelser/Downloads/networks2/tissues"):
     # Find all files in directory
     all_files = list_files(data_source)
 
