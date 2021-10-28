@@ -1,0 +1,5 @@
+Flask~=2.0.2
+setuptools~=58.3.0
+networkx~=2.6.3
+tqdm~=4.62.3
+SQLAlchemy~=1.4.26

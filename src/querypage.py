@@ -1,6 +1,6 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session
 from flask_sqlalchemy import SQLAlchemy
-from load_db import Networks, Nodes
+from models import Networks, Nodes
 
 querypage = Blueprint("querypage", __name__, static_folder="static", template_folder="templates")
 
@@ -12,10 +12,10 @@ def query():
 
     # Run query
     if idoptions == 'NET':
-        NQuery = Networks.query.filter(
-        (Networks.geneStart == idquery) | (Networks.geneEnd == idquery)
-        ).all()
+        NQuery = Nodes.query.filter(Nodes.name == idquery).all()
+
         idoptions = "Networks Database"
+
     elif idoptions == 'NOD':
         NQuery = Nodes.query.filter(
             (Nodes.name == idquery)
