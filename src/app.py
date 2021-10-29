@@ -2,7 +2,6 @@ from flask import Flask, render_template, request, redirect, url_for
 from flask_sqlalchemy import SQLAlchemy
 from homepage import homepage
 from querypage import querypage
-#from models import models
 
 
 app = Flask(__name__)
@@ -12,7 +11,7 @@ app = Flask(__name__)
 db = SQLAlchemy(app)
 
 # SQLAlchemy
-db_name = "database_2.db"
+db_name = "database.db"
 
 app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name

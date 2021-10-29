@@ -6,7 +6,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 import networkx as nx
 from models import Network, Node
-from pickler import pickle_network
+# from pickler import pickle_network
 
 from tqdm import tqdm
 import os
@@ -15,7 +15,7 @@ import os
 app = Flask(__name__)
 
 # SQLAlchemy
-db_name = "database_2.db"
+db_name = "database.db"
 
 app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
@@ -36,7 +36,7 @@ relationship_table=db.Table('relationship_table',
 )
 
 
-""""
+
 # Create database class: Network
 class Network(db.Model):
     __tablename__ = 'network'
@@ -55,7 +55,6 @@ class Network(db.Model):
 
     def __repr__(self):
         return f'<Network {self.data!r}'
-        return f'<Network {self.name!r}'
 
 # Create database class: Node
 class Node(db.Model):
@@ -75,7 +74,7 @@ class Node(db.Model):
         return f'<Node {self.name!r}'
 
 
-"""
+
 '''
 For given path, find all tsv files
 '''
@@ -133,7 +132,7 @@ def add_edgelist(file_path):
 
 @app.route('/')
 
-def load_database(data_source ="/Users/sdiazdelser/Downloads/networks2/tissues"):
+def load_database(data_source ="/Users/sara/Downloads/networks2"):
     # Find all files
     all_files = list_files(data_source)
     dic = files_to_dic(all_files)
