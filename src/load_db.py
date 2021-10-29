@@ -132,7 +132,7 @@ def add_edgelist(file_path):
 
 @app.route('/')
 
-def load_database(data_source ="/Users/sara/Downloads/networks2"):
+def load_database(data_source ="/../../Downloads/networks2"):
     # Find all files
     all_files = list_files(data_source)
     dic = files_to_dic(all_files)
