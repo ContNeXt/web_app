@@ -30,16 +30,19 @@ class Network(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(40), unique=True)
     data = db.Column(db.PickleType())
+    context = db.Column(db.String(30))
+
     # many-to-many relationship
     _nodes = db.relationship('Node',
                              secondary=relationship_table,
                              lazy='dynamic',
                              backref=db.backref('node_to_network_table_backref'))
 
-    def __init__(self, data, name, _nodes):
+    def __init__(self, data, name, context, _nodes):
         self.data = data
         self.name = name
         self._nodes = _nodes
+        self.context = context
 
     def __repr__(self):
         return f'<Network {self.data!r}'
@@ -49,14 +52,16 @@ class Node(db.Model):
     __tablename__ = 'node'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
+    context = db.Column(db.String(30))
     # many-to-many relationship:
     _networks = db.relationship('Network',
                                      secondary=relationship_table,
                                      lazy='dynamic',
                                      backref=db.backref('nodes'))
 
-    def __init__(self, name, _networks):
+    def __init__(self, name, context, _networks):
         self.name = name
+        self.context = context
         self._networks = _networks
 
     def __repr__(self):

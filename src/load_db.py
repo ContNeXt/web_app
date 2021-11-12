@@ -10,12 +10,14 @@ from models import Network, Node
 
 from tqdm import tqdm
 import os
-
+import sys
 
 app = Flask(__name__)
 
 # SQLAlchemy
 db_name = "database.db"
+#data_source = sys.argv[1]
+data_source= "/Users/sara/Downloads/networks2"
 
 app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
@@ -43,15 +45,18 @@ class Network(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(40), unique=True)
     data = db.Column(db.PickleType())
+    context = db.Column(db.String(30))
+
     # many-to-many relationship
     _nodes = db.relationship('Node',
                              secondary=relationship_table,
                              lazy='dynamic',
                              backref=db.backref('node_to_network_table_backref'))
 
-    def __init__(self, data, name):
+    def __init__(self, data, name, context):
         self.data = data
         self.name = name
+        self.context = context
 
     def __repr__(self):
         return f'<Network {self.data!r}'
@@ -61,14 +66,17 @@ class Node(db.Model):
     __tablename__ = 'node'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
+    context = db.Column(db.String(30))
+
     # many to many relationship:
     _networks = db.relationship('Network',
                                      secondary=relationship_table,
                                      lazy='dynamic',
                                      backref=db.backref('nodes'))
 
-    def __init__(self, name):
+    def __init__(self, name, context):
         self.name = name
+        self.context = context
 
     def __repr__(self):
         return f'<Node {self.name!r}'
@@ -112,7 +120,6 @@ def check_tsv(all_files_dic):
     for each in list(all_files_dic.items()):
         # Check the extension
         if not each[1].endswith(".tsv"):
-            print("deleting: ",each[0])
             del all_files_dic[each[0]]
     return all_files_dic
 
@@ -132,7 +139,7 @@ def add_edgelist(file_path):
 
 @app.route('/')
 
-def load_database(data_source ="/../../Downloads/networks2"):
+def load_database(data_source=data_source):
     # Find all files
     all_files = list_files(data_source)
     dic = files_to_dic(all_files)
@@ -146,14 +153,14 @@ def load_database(data_source ="/../../Downloads/networks2"):
     # add data from each file to database
     for key, value in tqdm(list_tsv.items()):
         network = add_edgelist(value)
-        new_network = Network(name=key, data=network)
+        new_network = Network(name=key, data=network, context='tissues')
 
         # pickle network -> NOT NEEDED if we add it as a pickled object
         # pkl_network = pickle_network(network)
         # new_network = Network(name=key, data=pkl_network )
 
         for node in network.nodes:
-            new_node = Node(name=node)
+            new_node = Node(name=node, context='tissues')
 
             # add relationship between nodes
             new_network._nodes.append(new_node)
