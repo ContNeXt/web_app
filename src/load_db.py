@@ -6,7 +6,6 @@ from flask_sqlalchemy import SQLAlchemy
 
 import networkx as nx
 from models import Network, Node
-# from pickler import pickle_network
 
 from tqdm import tqdm
 import os
@@ -157,10 +156,6 @@ def load_database(data_source=data_source):
     for key, value in tqdm(list_tsv.items()):
         network = add_edgelist(value)
         new_network = Network(name=key, data=network, context='tissues')
-
-        # pickle network -> NOT NEEDED if we add it as a pickled object
-        # pkl_network = pickle_network(network)
-        # new_network = Network(name=key, data=pkl_network )
 
         for node in network.nodes:
             new_node = Node(name=node, context='tissues')
