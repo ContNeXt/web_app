@@ -36,9 +36,10 @@ class Network(db.Model):
                              lazy='dynamic',
                              backref=db.backref('node_to_network_table_backref'))
 
-    def __init__(self, data, name):
+    def __init__(self, data, name, _nodes):
         self.data = data
         self.name = name
+        self._nodes = _nodes
 
     def __repr__(self):
         return f'<Network {self.data!r}'
@@ -54,8 +55,9 @@ class Node(db.Model):
                                      lazy='dynamic',
                                      backref=db.backref('nodes'))
 
-    def __init__(self, name):
+    def __init__(self, name, _networks):
         self.name = name
+        self._networks = _networks
 
     def __repr__(self):
         return f'<Node {self.name!r}'

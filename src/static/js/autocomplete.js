@@ -2,6 +2,7 @@
  **
  * @requires: jquery
  */
+
 $(document).ready(function () {
 
     // Autocompletion in the first input
