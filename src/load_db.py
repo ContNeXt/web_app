@@ -17,7 +17,7 @@ app = Flask(__name__)
 # SQLAlchemy
 db_name = "database.db"
 data_source = sys.argv[1]
-#data_source= "/Users/sara/Downloads/networks2"
+#data_source= "/../../Downloads/networks2"
 
 app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
@@ -159,7 +159,7 @@ def load_database(data_source=data_source):
 
         for node in network.nodes:
             new_node = Node(name=node, context='tissues')
-            list_of_nodes.append(node)
+            list_of_nodes.append({'node':node})
 
             # add relationship between nodes
             new_network._nodes.append(new_node)
@@ -172,7 +172,7 @@ def load_database(data_source=data_source):
         db.session.commit()
 
         # create json file with list of nodes
-        with open ("static/json/nodes.json", 'w') as f:
+        with open ("static/data/nodes.json", 'w') as f:
             json.dump(list_of_nodes, f)
 
     return f"<h1> Files uploaded to database: {str(debugger) } </h1>"
