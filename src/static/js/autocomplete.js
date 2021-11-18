@@ -6,20 +6,19 @@
 $(document).ready(function () {
 
     // Autocompletion in the first input
-    $('#input_q').autocomplete({
+    $("#input-q").autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: "/api/autocompletion/pathway_name",
+                url: "/api/autocomplete/nodesjson",
                 dataType: "json",
                 data: {
-                    resource: $('#select-1').find(":selected").val(),
                     q: request.term
                 },
                 success: function (data) {
-                    response(data); // functionName
+                    response(data);
                 }
             });
-        }, minLength: 2
+        },
+        minLength: 2
     });
-
 });

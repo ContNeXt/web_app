@@ -1,14 +1,16 @@
-from flask import Flask, render_template, request, redirect, url_for
+from flask import Flask, render_template, request, redirect, url_for, send_file
 from flask_sqlalchemy import SQLAlchemy
 from homepage import homepage
 from querypage import querypage
 
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
+from flask_restful import Api, Resource
+
 from models import Network, Node
 
 app = Flask(__name__)
-
+api = Api(app)
 
 # Initialize the database
 db = SQLAlchemy(app)
@@ -53,6 +55,13 @@ def tutorial():
 @app.route("/admin")
 def admin():
     return render_template("admin.html")
+
+# autocomplete API: node list
+class returnJSON(Resource):
+    def get(self):
+        return send_file('./static/data/nodes.json')
+
+api.add_resource(returnJSON,'/api/autocomplete/nodesjson')
 '''
     Run app
 '''
