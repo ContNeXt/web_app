@@ -16,3 +16,4 @@ def home():
     else:
         return render_template("home.html")
 
+        #listof_nodes_id=[each.id for each in Node.query.filter(Node.name == idquery).all()]

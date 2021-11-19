@@ -19,7 +19,7 @@ def query():
         # For each id, get list of all networks associated with it.
         listof_networks={}
         for each in tqdm(listof_nodes_id):
-            for one in Network.query.filter(Network._nodes.any(id=each)).all():
+            for one in Network.query.filter(Network.nodes_.any(id=each)).all():
                 listof_networks.update({one.name: one.data})
         idoptions = "Tissues"
 
