@@ -2,20 +2,18 @@
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
-#from sqlalchemy import Column, Integer, String, LargeBinary
 
 import networkx as nx
-from models import Network, Node
+#from models import Network, Node
 
 from tqdm import tqdm
 import os
 import sys
-import json
 
 app = Flask(__name__)
 
 # SQLAlchemy
-db_name = "database.db"
+db_name = "database5.db"
 data_source = sys.argv[1]
 #data_source= "/../../Downloads/networks2"
 
@@ -37,8 +35,6 @@ relationship_table=db.Table('relationship_table',
                             db.Column('node_id', db.Integer, db.ForeignKey('node.id'), primary_key=True)
 )
 
-
-
 # Create database class: Network
 class Network(db.Model):
     __tablename__ = 'network'
@@ -48,10 +44,10 @@ class Network(db.Model):
     context = db.Column(db.String(30))
 
     # many-to-many relationship
-    _nodes = db.relationship('Node',
+    nodes_ = db.relationship('Node',
                              secondary=relationship_table,
                              lazy='dynamic',
-                             backref=db.backref('node_to_network_table_backref'))
+                             backref='networks_')
 
     def __init__(self, data, name, context):
         self.data = data
@@ -61,26 +57,18 @@ class Network(db.Model):
     def __repr__(self):
         return f'<Network {self.data!r}'
 
+
 # Create database class: Node
 class Node(db.Model):
     __tablename__ = 'node'
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(30))
-    context = db.Column(db.String(30))
 
-    # many to many relationship:
-    _networks = db.relationship('Network',
-                                     secondary=relationship_table,
-                                     lazy='dynamic',
-                                     backref=db.backref('nodes'))
-
-    def __init__(self, name, context):
+    def __init__(self, name):
         self.name = name
-        self.context = context
 
     def __repr__(self):
         return f'<Node {self.name!r}'
-
 
 
 '''
@@ -88,6 +76,7 @@ For given path, find all tsv files
 '''
 
 def list_files(dir):
+    """ List all the files in a directory and it's sub-directories """
     # create a list of file and sub directories
     list_of_files = os.listdir(dir)
     all_files = list()
@@ -104,7 +93,7 @@ def list_files(dir):
 
 
 def files_to_dic(all_files):
-    """ Create dictionary of network names and files"""
+    """ Create dictionary of network id and files"""
     # init dic
     all_files_dic = {}
     # iterate over all files
@@ -123,7 +112,18 @@ def check_tsv(all_files_dic):
             del all_files_dic[each[0]]
     return all_files_dic
 
+def create_node_set(list_tsv):
+    """ Create a set of all the nodes """
+    # init set of nodes
+    list_of_nodes = set()
+    # get a set of nodes
+    for value in tqdm(list_tsv.values()):
+        for node in value.nodes:
+            list_of_nodes.add(node)
+    return list_of_nodes
+
 def add_edgelist(file_path):
+    """ Create networkx edgelist from file"""
     # Open the file as an nx object
     network = nx.read_edgelist(file_path, comments='from', delimiter='\t', data=(
         ("direction", str),
@@ -138,14 +138,16 @@ def add_edgelist(file_path):
 '''
 
 @app.route('/')
-
 def load_database(data_source=data_source):
+    """ Load the SQL-Alchemy Database with files from given directory """
+    CONTEXT = 'tissues'
+
     # Find all files
     all_files = list_files(data_source)
     dic = files_to_dic(all_files)
 
     # filter out all non-tsv
-    list_tsv= check_tsv(dic)
+    list_tsv = check_tsv(dic)
 
     # counter
     debugger = int(0)
@@ -154,15 +156,14 @@ def load_database(data_source=data_source):
 
     # add data from each file to database
     for key, value in tqdm(list_tsv.items()):
-        network = add_edgelist(value)
-        new_network = Network(name=key, data=network, context='tissues')
+        new_network = Network(name=key, data=add_edgelist(value), context=CONTEXT)
 
-        for node in network.nodes:
-            new_node = Node(name=node, context='tissues')
-            list_of_nodes.append({'node':node})
+        for node in add_edgelist(value).nodes:
+            new_node = Node(name=node)
+            list_of_nodes.append({'node': node})
 
             # add relationship between nodes
-            new_network._nodes.append(new_node)
+            new_network.nodes_.append(new_node)
             db.session.add(new_node)
 
         debugger = debugger+1
@@ -170,10 +171,6 @@ def load_database(data_source=data_source):
         # push to database
         db.session.add(new_network)
         db.session.commit()
-
-        # create json file with list of nodes
-        with open ("static/data/nodes.json", 'w') as f:
-            json.dump(list_of_nodes, f)
 
     return f"<h1> Files uploaded to database: {str(debugger) } </h1>"
 
