@@ -11,8 +11,6 @@ def query():
     idquery=session.get('query', None)
     idoptions=session.get('idoptions', None)
 
-    # Import dictionary from database
-
     # Run query
     if idoptions == 'TISS':
         # Get list of all the ids for that node
