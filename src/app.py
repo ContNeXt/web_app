@@ -1,16 +1,14 @@
-from flask import Flask, render_template, request, redirect, url_for, send_file
-from flask_sqlalchemy import SQLAlchemy
-from homepage import homepage
-from querypage import querypage
-
+from flask import Flask, render_template, request, redirect, jsonify
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
-from flask_restful import Api, Resource
+from flask_sqlalchemy import SQLAlchemy
 
+from homepage import homepage
 from models import Network, Node
+from querypage import querypage
+from autocomplete import query_db_for_nodes
 
 app = Flask(__name__)
-api = Api(app)
 
 # Initialize the database
 db = SQLAlchemy(app)
@@ -33,38 +31,47 @@ admin.add_view(ModelView(Node, db.session))
 
 app.register_blueprint(homepage, url_prefix="")
 app.register_blueprint(querypage, url_prefix="")
-#app.register_blueprint(models)
+
+# app.register_blueprint(models)
 
 
 @app.route("/")
 def main():
-    return redirect("home")
+	return redirect("home")
+
 
 @app.route("/about")
 def about():
-    return render_template("about.html")
+	return render_template("about.html")
+
 
 @app.route("/terms")
 def terms():
-    return render_template("terms.html")
+	return render_template("terms.html")
+
 
 @app.route("/tutorial")
 def tutorial():
-    return render_template("tutorial.html")
+	return render_template("tutorial.html")
+
 
 @app.route("/admin")
 def admin():
-    return render_template("admin.html")
+	return render_template("admin.html")
+
 
 # autocomplete API: node list
-class returnJSON(Resource):
-    def get(self):
-        return send_file('./static/data/nodes.json')
+@app.route("/api/autocomplete")
+def node_autocompletion():
+	q = request.args.get("q")
+	if not q:
+		return jsonify({})
+	# add context as second query!!
+	results = query_db_for_nodes(q, context='tissues')
+	return jsonify(results)
 
-api.add_resource(returnJSON,'/api/autocomplete/nodesjson')
 '''
     Run app
 '''
 if __name__ == "__main__":
-    app.run(debug=True)
-
+	app.run(debug=True)
