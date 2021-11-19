@@ -24,7 +24,7 @@
 
         <div class="container" style="margin-top: 50px" >
             <form class="row 3-g needs-validation col-md-11" method="post" autocomplete="off">
-                  <div class="col-md-6 m-auto">
+                  <div class="col-md-3 m-auto">
                       <select class="form-select" name="queryOptions" aria-expanded="false">
                         <option value="TISS" selected>Tissues</option>
                         <option value="CELL" disabled>Cell Lines</option>
@@ -33,16 +33,38 @@
 
             <         </select>
                   </div>
-                  <div class="col-md-8">
+                  <div class="col-md-7 m-auto">
                     <input type="text" class="form-control" name="query" id="input-q" placeholder="Gene of interest" aria-label="Text input with dropdown button" required>
                   </div>
-                  <div id="match-list"></div>
-                  <div class="col-md-1">
+                  <div class="col-md-1 m-auto">
                       <input type="submit" class="btn btn-primary"/>
                   </div>
+				  <div id="match-list"></div>
+
            </form>
         </div>
 
+	<script>
+		$(document).ready(function () {
+
+		// Autocompletion in the first input
+		$("#input-q").autocomplete({
+			source: function (request, response) {
+				$.ajax({
+					url: "/api/autocomplete/nodesjson",
+					dataType: "json",
+					data: {
+						q: request.term
+					},
+					success: function (data) {
+						response(data);
+					}
+				});
+			},
+			minLength: 2
+		});
+	});
+	</script>
     </body>
 
 {% endblock %}
