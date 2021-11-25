@@ -4,7 +4,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 import networkx as nx
-#from models import Network, Node
+#from models import Network, Node, relationship_table
 
 from tqdm import tqdm
 import os
@@ -20,6 +20,7 @@ data_source = sys.argv[1]
 app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+
 
 # Initialize the database
 db = SQLAlchemy(app)
@@ -47,7 +48,7 @@ class Network(db.Model):
     nodes_ = db.relationship('Node',
                              secondary=relationship_table,
                              lazy='dynamic',
-                             backref='networks_')
+                             backref=db.backref('networks_'))
 
     def __init__(self, data, name, context):
         self.data = data

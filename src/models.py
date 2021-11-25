@@ -19,8 +19,7 @@ database structure
 # Create many-to-many relationship table
 relationship_table=db.Table('relationship_table',
                             db.Column('network_id', db.Integer, db.ForeignKey('network.id'), primary_key=True),
-                            db.Column('node_id', db.Integer, db.ForeignKey('node.id'), primary_key=True)
-)
+                            db.Column('node_id', db.Integer, db.ForeignKey('node.id'), primary_key=True))
 
 # Create database class: Network
 class Network(db.Model):
@@ -34,7 +33,7 @@ class Network(db.Model):
     nodes_ = db.relationship('Node',
                              secondary=relationship_table,
                              lazy='dynamic',
-                             backref='networks_')
+                             backref=db.backref('networks_'))
 
     def __init__(self, data, name, context):
         self.data = data
