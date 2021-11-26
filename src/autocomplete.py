@@ -3,7 +3,6 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy, SignallingSession
 from sqlalchemy import and_
-
 from models import Network, Node, relationship_table
 
 app = Flask(__name__)
