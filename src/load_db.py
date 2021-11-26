@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 """ RUN ONCE TO CREATE THE DATABASE """
 
 from flask import Flask
