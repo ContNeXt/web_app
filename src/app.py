@@ -1,3 +1,5 @@
+# -*- coding: utf-8 -*-
+
 from flask import Flask, render_template, request, redirect, jsonify
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
