@@ -21,6 +21,6 @@ def query():
     listof_networks={}
     for each in tqdm(listof_nodes_id):
         for one in Network.query.filter(and_(Network.nodes_.any(id=each), Network.context==idoptions)).all():
-            listof_networks.update({one.name: [one.data, one.context]})
+            listof_networks.update({one.name: [one.data, one.context_info]})
 
     return render_template("results.html", idquery=idquery, idoptions=idoptions, results=listof_networks)

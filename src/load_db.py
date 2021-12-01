@@ -6,6 +6,7 @@ from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 
 import networkx as nx
+import csv
 #from models import Network, Node, relationship_table
 
 from tqdm import tqdm
@@ -15,7 +16,7 @@ import sys
 app = Flask(__name__)
 
 # SQLAlchemy
-db_name = "database5.db"
+db_name = "database.db"
 data_source = sys.argv[1]
 #data_source= "/../../Downloads/networks2"
 
@@ -45,6 +46,7 @@ class Network(db.Model):
     name = db.Column(db.String(40), unique=True)
     data = db.Column(db.PickleType())
     context = db.Column(db.String(30))
+    context_info = db.Column(db.String(50))
 
     # many-to-many relationship
     nodes_ = db.relationship('Node',
@@ -52,10 +54,11 @@ class Network(db.Model):
                              lazy='dynamic',
                              backref=db.backref('networks_'))
 
-    def __init__(self, data, name, context):
+    def __init__(self, data, name, context, context_info):
         self.data = data
         self.name = name
         self.context = context
+        self.context_info = context_info
 
     def __repr__(self):
         return f'<Network {self.data!r}'
@@ -134,7 +137,21 @@ def add_edgelist(file_path):
         ("weight", float),), encoding='utf-8', create_using=nx.DiGraph())
     return network
 
+def add_metadata_to_networks(file_path: str):
+    """ Add metadata to networks from tsv file, """
+    metadata_dict = {}
+    with open(file_path, 'r') as f:
+        csv_reader = csv.reader(f, delimiter='\t')
+        header = next(csv_reader) # skip header
+        for row in csv_reader:
+            metadata_dict.update({row[0].split(":")[1]: row[1]})
+    return metadata_dict
 
+def get_context(file:str) -> str:
+    """Get context from data folder structure"""
+    # structure is: context/network_name/file.tsv
+    dir = os.path.dirname(os.path.dirname(file))
+    return os.path.basename(dir)
 
 '''
     Run app
@@ -143,8 +160,7 @@ def add_edgelist(file_path):
 @app.route('/')
 def load_database(data_source=data_source):
     """ Load the SQL-Alchemy Database with files from given directory """
-    CONTEXT = 'tissues'
-
+    SUPPLEMENTARY_SOURCE = os.path.join(data_source, 'ContNeXt supplementary - Tissue overview.tsv')
     # Find all files
     all_files = list_files(data_source)
     dic = files_to_dic(all_files)
@@ -157,9 +173,10 @@ def load_database(data_source=data_source):
     # init list of nodes
     list_of_nodes = []
 
+    context_info = add_metadata_to_networks(file_path=SUPPLEMENTARY_SOURCE)
     # add data from each file to database
     for key, value in tqdm(list_tsv.items()):
-        new_network = Network(name=key, data=add_edgelist(value), context=CONTEXT)
+        new_network = Network(name=key, data=add_edgelist(value), context=get_context(value), context_info=context_info.get(key, None))
 
         for node in add_edgelist(value).nodes:
             new_node = Node(name=node)

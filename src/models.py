@@ -8,7 +8,7 @@ app = Flask(__name__)
 
 
 # Database settings
-db_name = "database5.db"
+db_name = "database.db"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
@@ -30,6 +30,7 @@ class Network(db.Model):
     name = db.Column(db.String(40), unique=True)
     data = db.Column(db.PickleType())
     context = db.Column(db.String(30))
+    context_info = db.Column(db.String(50))
 
     # many-to-many relationship
     nodes_ = db.relationship('Node',
@@ -37,10 +38,11 @@ class Network(db.Model):
                              lazy='dynamic',
                              backref=db.backref('networks_'))
 
-    def __init__(self, data, name, context):
+    def __init__(self, data, name, context, context_info):
         self.data = data
         self.name = name
         self.context = context
+        self.context_info = context_info
 
     def __repr__(self):
         return f'<Network {self.data!r}'
