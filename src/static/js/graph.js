@@ -1,13 +1,13 @@
 // graph.js
 
-// D3 graph
+// D3 graph (v4)
 // set the dimensions and margins of the graph
-var margin = {top: 10, right: 30, bottom: 30, left: 40},
-  width = 400 - margin.left - margin.right,
-  height = 400 - margin.top - margin.bottom;
+var margin = {top: 100, right: 30, bottom: 30, left: 1000},
+  width = 5600 - margin.left - margin.right,
+  height = 5600 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
-var svg = d3.select("#my_dataviz")
+var svg = d3.select("#graph")
 .append("svg")
   .attr("width", width + margin.left + margin.right)
   .attr("height", height + margin.top + margin.bottom)
@@ -15,7 +15,7 @@ var svg = d3.select("#my_dataviz")
   .attr("transform",
         "translate(" + margin.left + "," + margin.top + ")");
 
-d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/data_network.json", function( data) {
+d3.json("static/js/0000029.json", function(data) {
 
   // Initialize the links
   var link = svg
@@ -31,20 +31,25 @@ d3.json("https://raw.githubusercontent.com/holtzy/D3-graph-gallery/master/DATA/d
     .data(data.nodes)
     .enter()
     .append("circle")
-      .attr("r", 20)
+      .attr("r", 5)
       .style("fill", "#69b3a2")
+  // Add name to each node
+  node.append("title")
+      .text(function(d) { return d.name; });
 
-  // Let's list the force we wanna apply on the network
-  var simulation = d3.forceSimulation(data.nodes)                 // Force algorithm is applied to data.nodes
-      .force("link", d3.forceLink()                               // This force provides links between nodes
-            .id(function(d) { return d.id; })                     // This provide  the id of a node
-            .links(data.links)                                    // and this the list of links
+
+  // Create a force graph
+  // needs 3 forces: link, charge, center
+  var simulation = d3.forceSimulation(data.nodes)
+      .force("link", d3.forceLink()
+            .id(function(d) { return d.name; })  // id: Specifies by which attribute the nodes are linked (name)
+            .links(data.links)
       )
-      .force("charge", d3.forceManyBody().strength(-400))         // This adds repulsion between nodes. Play with the -400 for the repulsion strength
-      .force("center", d3.forceCenter(width / 2, height / 2))     // This force attracts nodes to the center of the svg area
+      .force("charge", d3.forceManyBody().strength(-20))     //  Adds repulsion between nodes.
+      .force("center", d3.forceCenter(width / 2, height / 2))    // Attracts nodes to the center of the svg area
       .on("end", ticked);
 
-  // This function is run at each iteration of the force algorithm, updating the nodes position.
+  // Run at each iteration of the force algorithm, updates the nodes position.
   function ticked() {
     link
         .attr("x1", function(d) { return d.source.x; })

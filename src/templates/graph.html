@@ -6,19 +6,10 @@
 
 </head>
 <body>
-<div class="container" style="margin-top: 50px" >
-    <div class="row needs-validation col-md-12">
-    	<div class="col-md-6">
-	        <button class="btn btn-light btn-block" type="button" data-bs-toggle="collapse" data-bs-target="#resultGraph" aria-expanded="false" aria-controls="resultGraph">Graph</button>
-		</div>
-	</div>
-</div>
-
 <!-- graph -->
-<div class="collapse" id="resultsTable">
-
-	<div id="my_dataviz"></div>
-		<div id="my_dataviz"></div>
+<div class="container" style="margin-top: 50px">
+	<p>Graph</p>
+	<div id="graph"></div>
 		<!-- Load d3.js -->
 		<script src="https://d3js.org/d3.v4.js"></script>
 		<script src="{{ url_for('static', filename='js/graph.js') }}"></script>

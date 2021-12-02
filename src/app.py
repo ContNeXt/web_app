@@ -16,7 +16,7 @@ app = Flask(__name__)
 db = SQLAlchemy(app)
 
 # SQLAlchemy
-db_name = "database.db"
+db_name = "database2.db"
 
 app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
@@ -66,14 +66,13 @@ def graph():
 	return render_template("graph.html")
 
 
-
 # autocomplete API: node list
 @app.route("/api/autocomplete")
 def node_autocompletion():
 	q = request.args.get("q")
 	if not q:
 		return jsonify({})
-	# add context as second query!!
+	# TODO add context as second query parameter context as second query!!
 	results = query_db_for_nodes(query=q, context='tissues')
 	return jsonify(results)
 

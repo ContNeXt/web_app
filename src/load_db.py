@@ -7,7 +7,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 import networkx as nx
 import csv
-#from models import Network, Node, relationship_table
+# from models import Network, Node, relationship_table
 
 from tqdm import tqdm
 import os
@@ -16,18 +16,18 @@ import sys
 app = Flask(__name__)
 
 # SQLAlchemy
-db_name = "database.db"
-data_source = sys.argv[1]
-#data_source= "/../../Downloads/networks2"
+DB_NAME = "database2.db"
+DATA_SOURCE = sys.argv[1]
+SUPPLEMENTARY_SOURCE = os.path.join(DATA_SOURCE, 'ContNeXt supplementary - Tissue overview.tsv')
+
 
 app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
+app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + DB_NAME
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 
 # Initialize the database
 db = SQLAlchemy(app)
-
 
 '''
 database structure 
@@ -158,9 +158,8 @@ def get_context(file:str) -> str:
 '''
 
 @app.route('/')
-def load_database(data_source=data_source):
+def load_database(data_source=DATA_SOURCE, supplementary_source=SUPPLEMENTARY_SOURCE):
     """ Load the SQL-Alchemy Database with files from given directory """
-    SUPPLEMENTARY_SOURCE = os.path.join(data_source, 'ContNeXt supplementary - Tissue overview.tsv')
     # Find all files
     all_files = list_files(data_source)
     dic = files_to_dic(all_files)
@@ -173,15 +172,19 @@ def load_database(data_source=data_source):
     # init list of nodes
     list_of_nodes = []
 
-    context_info = add_metadata_to_networks(file_path=SUPPLEMENTARY_SOURCE)
+    context_info = add_metadata_to_networks(file_path=supplementary_source)
     # add data from each file to database
     for key, value in tqdm(list_tsv.items()):
         new_network = Network(name=key, data=add_edgelist(value), context=get_context(value), context_info=context_info.get(key, None))
 
         for node in add_edgelist(value).nodes:
-            new_node = Node(name=node)
-            list_of_nodes.append({'node': node})
-
+            # check if node is already in the database
+            q = Node.query.filter(Node.name == node).first()
+            if q:
+                new_node = q
+            else:
+                new_node = Node(name=node)
+                list_of_nodes.append({'node': node})
             # add relationship between nodes
             new_network.nodes_.append(new_node)
             db.session.add(new_node)
