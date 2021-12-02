@@ -6,15 +6,23 @@
 
     <!-- Bootstrap & CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
-    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
+	<!-- Load c3.css -->
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/c3.min.css') }}">
+	{% block styles %} {% endblock %}
+
     <title>{% block title %}{% endblock %}</title>
+	{% block scripts %}{% endblock %}
+
 </head>
 <body>
 
     <div class="container">
 
     </div>
+
 <!-- Navigator -->
+
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
       <div class="container-fluid">
         <a class="navbar-brand" href="#">ContNext Viewer</a>
@@ -66,6 +74,13 @@
         {% endblock %}
     </div>
 
+
+	<!-- Load d3.js and c3.js
+	<script src="https://d3js.org/d3.v7.min.js"></script>
+	<script src="{{ url_for('static', filename='js/c3.min.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/graph.js') }}"></script>
+	-->
+	<!-- Load Bootstrap & JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
 </body>
 </html>

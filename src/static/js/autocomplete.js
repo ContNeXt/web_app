@@ -9,7 +9,7 @@ $(document).ready(function () {
     $("#input-q").autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: "/api/autocomplete/nodesjson",
+                url: "/api/autocomplete",
                 dataType: "json",
                 data: {
                     q: request.term
