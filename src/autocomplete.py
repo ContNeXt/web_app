@@ -11,7 +11,7 @@ app = Flask(__name__)
 db = SQLAlchemy(app)
 
 # SQLAlchemy
-db_name = "database5.db"
+db_name = "database.db"
 session = SignallingSession(db)
 
 app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
@@ -29,3 +29,4 @@ def query_db_for_nodes(query, context, limit=None):
 		q = q.limit(limit)
 
 	return [each.name for each in q.all()]
+

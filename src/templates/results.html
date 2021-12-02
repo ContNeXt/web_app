@@ -9,26 +9,20 @@
 
 </div>
 
+<!-- Graph Content -->
+	<div id="my_dataviz"></div>
+	<!-- Load d3.js -->
+	<script src="https://d3js.org/d3.v4.js"></script>
+	<script src="{{ url_for('static', filename='js/graph.js') }}"></script>
+
+<!-- Table Content -->
 <div class="container" style="margin-top: 50px" >
-    <div class="row needs-validation col-md-12">
-		<div class="col-md-6">
-        	<button class="btn btn-light btn-block" type="button" data-bs-toggle="collapse" data-bs-target="#resultsTable" aria-expanded="false" aria-controls="resultsTable">Table</button>
-    	</div><div class="col-md-6">
-	        <button class="btn btn-light btn-block" type="button" data-bs-toggle="collapse" data-bs-target="#resultGraph" aria-expanded="false" aria-controls="resultGraph">Graph</button>
-		</div>
-	</div>
-</div>
-
-	<!-- Table Content -->
-
-<div class="collapse" id="resultsTable">
-    <div class="container" style="margin-top: 50px" >
-    <table class="table table-light table-hover table-sm">
+<table class="table table-light table-hover table-sm">
 
     <!-- Table headers -->
         <th>Network</th>
         <th>Description</th>
-		<th>idoptions</th>
+		<th>{{ idoptions }}</th>
 
     <!-- Table content -->
 
@@ -45,17 +39,7 @@
                 </td>
         {% endfor %}
      </table>
-    </div>
 </div>
-
-	<!-- Graph Content -->
-
-<div class="collapse" id="resultsGraph">
-	<div id="chart"></div>
-</div>
-
-
-
 
 
 {% endblock %}

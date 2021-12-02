@@ -61,9 +61,14 @@ def tutorial():
 def admin():
 	return render_template("admin.html")
 
+@app.route("/graph")
+def graph():
+	return render_template("graph.html")
+
+
 
 # autocomplete API: node list
-@app.route("/api/autocomplete")
+@app.route("/api/autocomplete/")
 def node_autocompletion():
 	q = request.args.get("q")
 	if not q:
