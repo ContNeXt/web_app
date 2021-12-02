@@ -68,7 +68,7 @@ def graph():
 
 
 # autocomplete API: node list
-@app.route("/api/autocomplete/")
+@app.route("/api/autocomplete")
 def node_autocompletion():
 	q = request.args.get("q")
 	if not q:
