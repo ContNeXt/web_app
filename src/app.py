@@ -9,6 +9,7 @@ from homepage import homepage
 from models import Network, Node
 from querypage import querypage
 from autocomplete import query_db_for_nodes
+# from graph import create_json_file
 
 app = Flask(__name__)
 
@@ -66,15 +67,24 @@ def graph():
 	return render_template("explorer.html")
 
 
-# autocomplete API: node list
-@app.route("/api/autocomplete")
+# autocomplete API: node list json
+@app.route("/api/autocomplete", methods = ['POST'])
 def node_autocompletion():
-	q = request.args.get("q")
+	q = request.form['q']
+	print ('term ', q)
 	if not q:
 		return jsonify({})
-	# TODO add context as second query parameter context as second query!!
 	results = query_db_for_nodes(query=q, context='tissues')
+	# TODO add context as second query parameter context as second query!!
+	print(results)
 	return jsonify(results)
+
+# # autocomplete API: result json
+# @app.route("/api/explorer/<node>/<network_id>", methods = ['GET'])
+# def network_explorer(node, network_id):
+# 	if (request.method == 'GET'):
+# 		results = create_json_file(g=network, node=node)
+# 		return jsonify(results)
 
 '''
     Run app

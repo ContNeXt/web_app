@@ -15,12 +15,11 @@ def query():
 
     # Run query
     # Get list of all the ids for that node
-    listof_nodes_id=[each.id for each in Node.query.filter(Node.name == idquery).all()]
-
+    listof_nodes={each.id : each.node for each in Node.query.filter(Node.name == idquery).all()}
     # For each id, get list of all networks associated with it.
     listof_networks={}
-    for each in tqdm(listof_nodes_id):
-        for one in Network.query.filter(and_(Network.nodes_.any(id=each), Network.context==idoptions)).all():
-            listof_networks.update({one.name: [one.data, one.context_info]})
+    for node in tqdm(listof_nodes.keys()):
+        for network in Network.query.filter(and_(Network.nodes_.any(id=node), Network.context==idoptions)).all():
+            listof_networks.update({network.name: [network.data, network.context_info]})
 
     return render_template("results.html", idquery=idquery, idoptions=idoptions, results=listof_networks)
