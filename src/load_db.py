@@ -116,6 +116,9 @@ def check_tsv(all_files_dic):
         # Check the extension
         if not each[1].endswith(".tsv"):
             del all_files_dic[each[0]]
+        if each[1].endswith("overview.tsv"):
+            # skip supplementary files
+            del all_files_dic[each[0]]
     return all_files_dic
 
 def create_node_set(list_tsv):
