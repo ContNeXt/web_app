@@ -63,7 +63,7 @@ def admin():
 
 @app.route("/graph")
 def graph():
-	return render_template("graph.html")
+	return render_template("explorer.html")
 
 
 # autocomplete API: node list
