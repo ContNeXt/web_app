@@ -6,7 +6,9 @@ from tqdm import tqdm
 from sqlalchemy import and_
 from models import Network, Node, relationship_table
 
-def create_json_file(g, file, node):
+def create_json_file(g, node):
+	FILENAME = str(node) + '.json'
+
 	# Get edges linked to nodes:
 	edges = list(g.in_edges(node))
 	edges.extend(list(g.out_edges(node)))
@@ -15,9 +17,10 @@ def create_json_file(g, file, node):
 
 	nodes = [{'name': str(i) } for i in list(set(node_list)) ]
 	links = [{'source': u[0], 'target': u[1]} for u in edges ]
-	with open(file, 'w') as f:
+	with open(FILENAME, 'w') as f:
 		json.dump({'nodes': nodes, 'links': links}, f, indent=4,)
 	return
+
 
 NODE = 'NAT2'
 idoptions = 'tissues'
@@ -33,10 +36,9 @@ for key in tqdm(listof_nodes.keys()):
 		listof_networks.update({one.name: [one.data, one.context_info]})
 
 NETWORKS = [graphs[0] for graphs in listof_networks.values()]
-FILENAMES = [ str(each)+'.json' for each in listof_networks.keys() ]
 
-for file, network in tqdm(zip(FILENAMES, NETWORKS)):
-	create_json_file(g=network, file=file, node=NODE)
+for network in tqdm(NETWORKS):
+	create_json_file(g=network, node=NODE)
 
 # TODO link this code to the results page, so that every network generates a json file
 # TODO add API for a json file for graphs (graph.js should get json from there)

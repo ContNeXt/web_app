@@ -3,8 +3,8 @@
 // D3 graph (v4)
 // set the dimensions and margins of the graph
 var margin = {top: 100, right: 30, bottom: 30, left: 1000},
-  width = 5600 - margin.left - margin.right,
-  height = 5600 - margin.top - margin.bottom;
+  width = 600 - margin.left - margin.right,
+  height = 600 - margin.top - margin.bottom;
 
 // append the svg object to the body of the page
 var svg = d3.select("#graph")

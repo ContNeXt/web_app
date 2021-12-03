@@ -2,8 +2,9 @@
 {% block title %}ContNext Viewer—Home{% endblock %}
 {% block styles %}
     {{ super() }}
-    <link rel="stylesheet" type="text/css"
-          href='https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css'/>
+    <!-- <link rel="stylesheet" type="text/css" href='https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css'/> -->
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> <!-- new -->
+
 {% endblock %}
 
 {% block scripts %}
@@ -13,7 +14,10 @@
     	<script type="text/javascript"
             src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.min.js"></script>
 
-    	<script type="text/javascript" src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>
+		<script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script> <!-- new -->
+		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" crossorigin="anonymous"></script> <!-- new -->
+		<script type="text/javascript" src="{{ url_for('static', filename='js/autocomplete.js') }}"></script> -->
+
 {% endblock %}
 
 
@@ -50,7 +54,7 @@
             <         </select>
                   </div>
                   <div class="col-md-7 m-auto">
-                    <input type="text" class="form-control" name="query" id="input-q" placeholder="Gene of interest" autocomplete="on" required>
+					  <input type="text" class="form-control" name="query" id="input-q" placeholder="Gene of interest">
                   </div>
                   <div class="col-md-1 m-auto">
                       <input type="submit" class="btn btn-primary"/>

@@ -10,11 +10,18 @@
 </div>
 
 <!-- Graph Content -->
+<div class="container" style="margin-top: 50px" >
+
+	{% for key, value in results.items() %}
+
+	{% endfor %}
+
 	<div id="graph"></div>
 	<!-- Load d3.js -->
 	<script src="https://d3js.org/d3.v4.js"></script>
 	<script src="{{ url_for('static', filename='js/graph.js') }}"></script>
 
+ </div>
 <!-- Table Content -->
 <div class="container" style="margin-top: 50px" >
 <table class="table table-light table-hover table-sm">
