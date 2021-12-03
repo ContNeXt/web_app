@@ -9,13 +9,19 @@ $(document).ready(function () {
     $("#input-q").autocomplete({
         source: function (request, response) {
             $.ajax({
-                url: "/api/autocomplete",
+                type: "POST",
+                url: "http://localhost:5000/api/autocomplete",
                 dataType: "json",
                 data: {
                     q: request.term
                 },
                 success: function (data) {
+                    //alert(data)
+                    // console.log(data)
                     response(data);
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    console.log(textStatus + " " + errorThrown);
                 }
             });
         },
