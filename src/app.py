@@ -9,7 +9,7 @@ from homepage import homepage
 from models import Network, Node
 from querypage import querypage
 from autocomplete import query_db_for_nodes
-# from graph import create_json_file
+from graph import create_json_file
 
 app = Flask(__name__)
 
@@ -17,7 +17,7 @@ app = Flask(__name__)
 db = SQLAlchemy(app)
 
 # SQLAlchemy
-db_name = "database2.db"
+db_name = "database.db"
 
 app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
@@ -62,9 +62,9 @@ def tutorial():
 def admin():
 	return render_template("admin.html")
 
-@app.route("/graph")
-def graph():
-	return render_template("explorer.html")
+@app.route("/graph/<node>/<network_id>")
+def graph(node, network_id):
+	return render_template("explorer.html", network=network_id, node=node)
 
 
 # autocomplete API: node list json
@@ -79,12 +79,14 @@ def node_autocompletion():
 	print(results)
 	return jsonify(results)
 
-# # autocomplete API: result json
-# @app.route("/api/explorer/<node>/<network_id>", methods = ['GET'])
-# def network_explorer(node, network_id):
-# 	if (request.method == 'GET'):
-# 		results = create_json_file(g=network, node=node)
-# 		return jsonify(results)
+# autocomplete API: result json
+@app.route("/api/explorer/<node>/<network_id>", methods = ['GET'])
+def network_explorer(node, network_id):
+	if (request.method == 'GET'):
+		print(network_id)
+		nodes, links = 	create_json_file(id=network_id, node=node)
+		return jsonify({'nodes': nodes, 'links': links})
+
 
 '''
     Run app

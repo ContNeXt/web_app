@@ -23,7 +23,7 @@ $(document).ready(function () {
  * @param {object} graph json data
  */
 
-d3.json("0000029.json", function initD3Force(graph) {
+d3.json("/api/explorer/{node}/{network_id}", function initD3Force(graph) {
 
     //////////////////////////////
     // Main graph visualization //

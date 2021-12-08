@@ -16,7 +16,7 @@ import sys
 app = Flask(__name__)
 
 # SQLAlchemy
-DB_NAME = "database2.db"
+DB_NAME = "database.db"
 DATA_SOURCE = sys.argv[1]
 SUPPLEMENTARY_SOURCE = os.path.join(DATA_SOURCE, 'ContNeXt supplementary - Tissue overview.tsv')
 

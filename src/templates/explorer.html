@@ -21,9 +21,8 @@
 	<script type="text/javascript"
 			src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js'></script>
 
-    <!-- Block for Network dependencies -->
+    <!-- Network dependencies -->
     <!-- graph css -->
-
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/graph.css') }}">
 	<link rel="stylesheet" href="{{ url_for('static', filename='css/slider.css') }}">
 
@@ -45,7 +44,7 @@
 
     <script type="text/javascript"
             src='{{ url_for('static', filename='js/manyBodyReuse.js') }}'></script>
-	<script src="{{ url_for('static', filename='js/graph.js') }}"></script>
+	<script src="{{ url_for('static', filename='js/graph_controller.js') }}"></script>
 
 
 </head>
@@ -54,7 +53,7 @@
 <div class="container container-fluid" style="max-width: 90%">
 
     {% if graph_data %}
-        <h1 class="text-center" style="margin-top:20px"> {{ clusters_text|safe }}</h1>
+        <h1 class="text-center" style="margin-top:20px"> {{ network }} | {{ node }}</h1>
         <div class="row" style="margin-right: 0; margin-bottom:20px; margin-top:20px"><!-- visualization row -->
             <div class="col-8">
                 <div id="graph-chart"></div>

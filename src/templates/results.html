@@ -9,19 +9,6 @@
 
 </div>
 
-<!-- Graph Content -->
-<div class="container" style="margin-top: 50px" >
-
-	{% for key, value in results.items() %}
-
-	{% endfor %}
-
-	<div id="graph"></div>
-	<!-- Load d3.js -->
-	<script src="https://d3js.org/d3.v4.js"></script>
-	<script src="{{ url_for('static', filename='js/graph.js') }}"></script>
-
- </div>
 <!-- Table Content -->
 <div class="container" style="margin-top: 50px" >
 <table class="table table-light table-hover table-sm">
@@ -34,9 +21,9 @@
     <!-- Table content -->
 
        {% for key, value in results.items() %}
-            <tr>
+            <tr class="clickable text-left" onclick="window.location='{{ url_for('graph', node=idquery, network_id=key) }}'">
                 <td>
-                    {{key}}
+					{{key}}
                  </td>
                 <td>
                     {{value[0]}}

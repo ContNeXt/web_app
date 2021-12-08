@@ -1,6 +1,5 @@
 // network_graph.js
 // D3 force graph (v5)
-// TODO image too big to load, fix
 
   // Initialize svg in <div> element
   var svg = d3.select("#graph").select("svg");

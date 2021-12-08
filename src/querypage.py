@@ -15,7 +15,8 @@ def query():
 
     # Run query
     # Get list of all the ids for that node
-    listof_nodes={each.id : each.node for each in Node.query.filter(Node.name == idquery).all()}
+    listof_nodes={each.id : each.name for each in Node.query.filter(Node.name == idquery).all()}
+
     # For each id, get list of all networks associated with it.
     listof_networks={}
     for node in tqdm(listof_nodes.keys()):
