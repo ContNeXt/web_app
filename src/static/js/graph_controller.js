@@ -186,10 +186,6 @@ function initD3Force(graph) {
         node.attr("transform", function (d) {
             return "translate(" + d.x + ", " + d.y + ")";
         });
-
-        if (hullsBoolean === true) {
-            updateGroups(graph.links, paths);
-        }
     }
 
     simulation.nodes(graph.nodes)
