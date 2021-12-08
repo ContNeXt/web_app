@@ -4,43 +4,13 @@
 <head>
     <title>Network Graph</title>
 
-	<!-- jqery dependencies -->
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/modernizr/2.8.3/modernizr.min.js"></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/tether/1.4.4/js/tether.min.js"></script>
+    {% include "dependencies/jquery_dependencies.html" %}
+    {% include "dependencies/bootstrap_dependencies.html" %}
 
-	<link rel="stylesheet" type="text/css"
-		  href='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/themes/base/jquery-ui.css'/>
-	<script type="text/javascript"
-			src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js'></script>
-	<script type="text/javascript"
-			src='https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js'></script>
+	<!-- Block for Network dependencies -->
 
-	<!-- bootstrap dependencies -->
-	<link rel="stylesheet"
-		  href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/css/bootstrap.css'/>
-	<script type="text/javascript"
-			src='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.3.1/js/bootstrap.min.js'></script>
-
-    <!-- Network dependencies -->
-    <!-- graph css -->
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/graph.css') }}">
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/slider.css') }}">
-
-	<link rel="stylesheet" type="text/css"
-		  href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/css/bootstrap-toggle.min.css'/>
-	<link rel="stylesheet" type="text/css" href='https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css'/>
-	<link rel="stylesheet"
-		  href='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.8.0/css/bootstrap-slider.min.css'/>
-	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"/>
-
-	<!-- graph js -->
-	<script type="text/javascript"
-			src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-	<script type="text/javascript"
-			src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-slider/9.8.0/bootstrap-slider.js'></script>
-	<script type="text/javascript"
-			src='https://cdnjs.cloudflare.com/ajax/libs/bootstrap-toggle/2.2.2/js/bootstrap-toggle.min.js'></script>
-	<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/d3/5.5.0/d3.min.js"></script>
+    {% include "dependencies/graph_css.html" %}
+    {% include "dependencies/graph_js.html" %}
 
 	<script type="text/javascript">
         // If graph data render the graph
@@ -56,190 +26,171 @@
 <body>
 
 <div class="container container-fluid" style="max-width: 90%">
-
-    {% if graph_data %}
-        <h1 class="text-center" style="margin-top:20px"> {{ network_id }} | {{ node }}</h1>
-        <div class="row" style="margin-right: 0; margin-bottom:20px; margin-top:20px"><!-- visualization row -->
-            <div class="col-8">
-                <div id="graph-chart"></div>
-            </div>
-            <div class="card col" id="panel"
-                 style="max-height: 585px;height: 585px;padding-right: 0;padding-left: 0; margin-bottom:0">
-                <!-- Nav tabs -->
-                <ul class="nav nav-tabs nav-center-tabs">
-                    <li class="active">
-                        <a class="nav-link" data-toggle="tab" href="#nodes-panel"><i
-                                class="fa fa-circle-o" aria-hidden="true"></i>
-                            Nodes
-                        </a>
-                    </li>
-                    <li>
-                        <a class="nav-link" data-toggle="tab" href="#edges-panel"><i
-                                class="fa fa-long-arrow-right" aria-hidden="true"></i> Edges</a>
-                    </li>
-                    <li>
-                        <a class="nav-link" data-toggle="tab" href="#highlight-panel">
-                            <i class="fa fa-lightbulb-o" aria-hidden="true"></i>
-                            Highlight
-                        </a>
-                    </li>
-                </ul>
-                <!-- Tab panes -->
-                <div class="tab-content">
-                    <div class="tab-pane not-rounded active" id="nodes-panel" role="tabpanel">
-                        <button class='btn btn-primary not-rounded full-width' id='get-checked-nodes'>Show
-                            Selected Nodes
-                        </button>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                            <span class="input-group-text not-rounded2" id="sizing-addon"><i
-                                    class="fa fa-connectdevelop fa-0.5x"></i></span>
-                            </div>
-                            <input placeholder="Search nodes" id="node-search"
-                                   class="wide form-control not-rounded"
-                                   aria-describedby="sizing-addon1" type="text"/>
-                        </div>
-                        <div class="not-rounded2" id="node-list"
-                             style="max-height: 450px;height: 450px; overflow:auto;"></div>
-                    </div>
-                    <div class="tab-pane not-rounded" id="edges-panel" role="tabpanel">
-                        <p class="text-center"><b> Modify Links Length</b></p>
-                        <label for="link-slider"></label><input id="link-slider" style="width: 80%; margin-bottom: 5px; margin-top: 5px;
-                         margin-left: 10%; margin-right: 10%;"
-                                                                class="text-center" type="range" min="0"
-                                                                max="1"
-                                                                step="any" value="0.7"/>
-                        <button class='btn btn-primary not-rounded full-width' id='get-checked-edges'>Show
-                            Selected Edges
-                        </button>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                             <span class="input-group-text not-rounded2" id="sizing-addon"><i
-                                     class="fa fa-connectdevelop fa-0.5x"></i></span>
-                            </div>
-                            <input placeholder="Search edges" id="edge-search"
-                                   class="wide form-control not-rounded"
-                                   aria-describedby="sizing-addon1" type="text"/>
-                        </div>
-                        <div id="edge-list" class="not-rounded2"
-                             style="max-height: 300px;height: 300px; overflow:auto;"></div>
-                    </div>
-                    <div class="tab-pane not-rounded" id="highlight-panel" role="tabpanel">
-                        {% if hulls_boolean %}
-                            <button class='btn btn-primary not-rounded full-width' id='remove-convex-hulls'>
-                                Remove
-                                Subgraph Highlighting
-                            </button>
-                        {% endif %}
-                        <button class='btn btn-primary not-rounded full-width' id='highlight-button'>
-                            Highlight
-                            Selection Below
-                        </button>
-                        <div class="input-group">
-                            <div class="input-group-prepend">
-                            <span class="input-group-text not-rounded2" id="sizing-addon">
-                                <i class="fa fa-lightbulb-o" aria-hidden="true"></i></span>
-                            </div>
-                            <input placeholder="Search Highlight Function" id="highlight-search"
-                                   class="wide form-control not-rounded"
-                                   aria-describedby="sizing-addon1" type="text"/>
-                        </div>
-                        <div id="highlight-list" class="not-rounded2"
-                             style="max-height: 400px;height: 400px; overflow:auto;">
-                            <ul id="highlight-list-ul" class="list-group checked-list-box not-rounded">
-                                <li class="list-group-item">
-                                    <label>
-                                        <input class="highlight-checkbox" type="checkbox">
-                                    </label>
-                                    <span class="node-function" id="Gene">Highlight Genes</span>
-                                </li>
-                                <li class="list-group-item">
-                                    <label>
-                                        <input class="highlight-checkbox" type="checkbox">
-                                    </label>
-                                    <span class="node-function" id="RNA">Highlight RNAs</span>
-                                </li>
-                                <li class="list-group-item">
-                                    <label>
-                                        <input class="highlight-checkbox" type="checkbox">
-                                    </label>
-                                    <span class="node-function" id="Protein">Highlight Proteins</span>
-                                </li>
-                                <li class="list-group-item">
-                                    <label>
-                                        <input class="highlight-checkbox" type="checkbox">
-                                    </label>
-                                    <span class="node-function" id="Abundance">Highlight Abundances</span>
-                                </li>
-                                <li class="list-group-item">
-                                    <label>
-                                        <input class="highlight-checkbox" type="checkbox">
-                                    </label>
-                                    <span class="node-function"
-                                          id="BiologicalProcess">Highlight Biological Processes</span>
-                                </li>
-                                <li class="list-group-item">
-                                    <label>
-                                        <input class="highlight-checkbox" type="checkbox">
-                                    </label>
-                                    <span class="node-function" id="Pathology">Highlight Pathologies</span>
-                                </li>
-                                <li class="list-group-item">
-                                    <label>
-                                        <input class="highlight-checkbox" type="checkbox">
-                                    </label>
-                                    <span class="node-function" id="Composite">Highlight Composites</span>
-                                </li>
-                                <li class="list-group-item">
-                                    <label>
-                                        <input class="highlight-checkbox" type="checkbox">
-                                    </label>
-                                    <span class="node-function" id="Complex">Highlight Complexes</span>
-                                </li>
-                                <li class="list-group-item">
-                                    <label>
-                                        <input class="highlight-checkbox" type="checkbox">
-                                    </label>
-                                    <span class="node-function" id="Reaction">Highlight Reactions</span>
-                                </li>
-                                <li class="list-group-item">
-                                    <label>
-                                        <input class="highlight-checkbox" type="checkbox">
-                                    </label>
-                                    <span class="edge-relation"
-                                          id="increases">Highlight Increase Relationships</span>
-                                </li>
-                                <li class="list-group-item">
-                                    <label>
-                                        <input class="highlight-checkbox" type="checkbox">
-                                    </label>
-                                    <span class="edge-relation"
-                                          id="decreases">Highlight Decrease Relationships</span>
-                                </li>
-                                <li class="list-group-item">
-                                    <label>
-                                        <input class="highlight-checkbox" type="checkbox">
-                                    </label>
-                                    <span class="edge-relation"
-                                          id="association">Highlight Association Relationships</span>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    {% endif %}
-    {# Biomarkers path legend #}
-    {% if not cluster_ids and graph_data %}
-        <div class="row col-8">
-            <p>NeuroMMSig mechanisms nodes are represented with a red circle (
-                <span class='circle neurommsig'></span>
-                ). Biological processes and pathways nodes are represented with a yellow circle (
-                <span class='circle biomarker'></span>). Click on each node or link to see more detail information.
-            </p>
-        </div>
-    {% endif %}
+	<h1 class="text-center" style="margin-top:20px"> {{ network_id}} | {{ node }} </h1>
+	<div class="row" style="margin-right: 0; margin-bottom:20px; margin-top:20px"><!-- visualization row -->
+		<div class="col-8">
+			<div id="graph-chart"></div>
+		</div>
+		<div class="card col" id="panel"
+			 style="max-height: 585px;height: 585px;padding-right: 0;padding-left: 0; margin-bottom:0">
+			<!-- Nav tabs -->
+			<ul class="nav nav-tabs nav-center-tabs">
+				<li class="active">
+					<a class="nav-link" data-toggle="tab" href="#nodes-panel"><i
+							class="fa fa-circle-o" aria-hidden="true"></i>
+						Nodes
+					</a>
+				</li>
+				<li>
+					<a class="nav-link" data-toggle="tab" href="#edges-panel"><i
+							class="fa fa-long-arrow-right" aria-hidden="true"></i> Edges</a>
+				</li>
+				<li>
+					<a class="nav-link" data-toggle="tab" href="#highlight-panel">
+						<i class="fa fa-lightbulb-o" aria-hidden="true"></i>
+						Highlight
+					</a>
+				</li>
+			</ul>
+			<!-- Tab panes -->
+			<div class="tab-content">
+				<div class="tab-pane not-rounded active" id="nodes-panel" role="tabpanel">
+					<button class='btn btn-primary not-rounded full-width' id='get-checked-nodes'>Show
+						Selected Nodes
+					</button>
+					<div class="input-group">
+						<div class="input-group-prepend">
+						<span class="input-group-text not-rounded2" id="sizing-addon"><i
+								class="fa fa-connectdevelop fa-0.5x"></i></span>
+						</div>
+						<input placeholder="Search nodes" id="node-search"
+							   class="wide form-control not-rounded"
+							   aria-describedby="sizing-addon1" type="text"/>
+					</div>
+					<div class="not-rounded2" id="node-list"
+						 style="max-height: 450px;height: 450px; overflow:auto;"></div>
+				</div>
+				<div class="tab-pane not-rounded" id="edges-panel" role="tabpanel">
+					<p class="text-center"><b> Modify Links Length</b></p>
+					<label for="link-slider"></label><input id="link-slider" style="width: 80%; margin-bottom: 5px; margin-top: 5px;
+					 margin-left: 10%; margin-right: 10%;"
+															class="text-center" type="range" min="0"
+															max="1"
+															step="any" value="0.7"/>
+					<button class='btn btn-primary not-rounded full-width' id='get-checked-edges'>Show
+						Selected Edges
+					</button>
+					<div class="input-group">
+						<div class="input-group-prepend">
+						 <span class="input-group-text not-rounded2" id="sizing-addon"><i
+								 class="fa fa-connectdevelop fa-0.5x"></i></span>
+						</div>
+						<input placeholder="Search edges" id="edge-search"
+							   class="wide form-control not-rounded"
+							   aria-describedby="sizing-addon1" type="text"/>
+					</div>
+					<div id="edge-list" class="not-rounded2"
+						 style="max-height: 300px;height: 300px; overflow:auto;"></div>
+				</div>
+				<div class="tab-pane not-rounded" id="highlight-panel" role="tabpanel">
+					<button class='btn btn-primary not-rounded full-width' id='highlight-button'>
+						Highlight
+						Selection Below
+					</button>
+					<div class="input-group">
+						<div class="input-group-prepend">
+						<span class="input-group-text not-rounded2" id="sizing-addon">
+							<i class="fa fa-lightbulb-o" aria-hidden="true"></i></span>
+						</div>
+						<input placeholder="Search Highlight Function" id="highlight-search"
+							   class="wide form-control not-rounded"
+							   aria-describedby="sizing-addon1" type="text"/>
+					</div>
+					<div id="highlight-list" class="not-rounded2"
+						 style="max-height: 400px;height: 400px; overflow:auto;">
+						<ul id="highlight-list-ul" class="list-group checked-list-box not-rounded">
+							<li class="list-group-item">
+								<label>
+									<input class="highlight-checkbox" type="checkbox">
+								</label>
+								<span class="node-function" id="Gene">Highlight Genes</span>
+							</li>
+							<li class="list-group-item">
+								<label>
+									<input class="highlight-checkbox" type="checkbox">
+								</label>
+								<span class="node-function" id="RNA">Highlight RNAs</span>
+							</li>
+							<li class="list-group-item">
+								<label>
+									<input class="highlight-checkbox" type="checkbox">
+								</label>
+								<span class="node-function" id="Protein">Highlight Proteins</span>
+							</li>
+							<li class="list-group-item">
+								<label>
+									<input class="highlight-checkbox" type="checkbox">
+								</label>
+								<span class="node-function" id="Abundance">Highlight Abundances</span>
+							</li>
+							<li class="list-group-item">
+								<label>
+									<input class="highlight-checkbox" type="checkbox">
+								</label>
+								<span class="node-function"
+									  id="BiologicalProcess">Highlight Biological Processes</span>
+							</li>
+							<li class="list-group-item">
+								<label>
+									<input class="highlight-checkbox" type="checkbox">
+								</label>
+								<span class="node-function" id="Pathology">Highlight Pathologies</span>
+							</li>
+							<li class="list-group-item">
+								<label>
+									<input class="highlight-checkbox" type="checkbox">
+								</label>
+								<span class="node-function" id="Composite">Highlight Composites</span>
+							</li>
+							<li class="list-group-item">
+								<label>
+									<input class="highlight-checkbox" type="checkbox">
+								</label>
+								<span class="node-function" id="Complex">Highlight Complexes</span>
+							</li>
+							<li class="list-group-item">
+								<label>
+									<input class="highlight-checkbox" type="checkbox">
+								</label>
+								<span class="node-function" id="Reaction">Highlight Reactions</span>
+							</li>
+							<li class="list-group-item">
+								<label>
+									<input class="highlight-checkbox" type="checkbox">
+								</label>
+								<span class="edge-relation"
+									  id="increases">Highlight Increase Relationships</span>
+							</li>
+							<li class="list-group-item">
+								<label>
+									<input class="highlight-checkbox" type="checkbox">
+								</label>
+								<span class="edge-relation"
+									  id="decreases">Highlight Decrease Relationships</span>
+							</li>
+							<li class="list-group-item">
+								<label>
+									<input class="highlight-checkbox" type="checkbox">
+								</label>
+								<span class="edge-relation"
+									  id="association">Highlight Association Relationships</span>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
     <div class="row text-center col-8">
         <table id="info-table" class="table table-bordered table-hover"></table>
     </div>
