@@ -1,29 +1,10 @@
-$(document).ready(function () {
-
-    // render network
-    initD3Force(graphData);
-
-    // Controls behaviour of clicking in dropdowns
-    $('li.dropdown.mega-dropdown a').on('click', function () {
-        $(this).parent().toggleClass('open');
-    });
-
-    $('body').on('click', function (e) {
-        if (!$('li.dropdown.mega-dropdown').is(e.target)
-            && $('li.dropdown.mega-dropdown').has(e.target).length === 0
-            && $('.open').has(e.target).length === 0
-        ) {
-            $('li.dropdown.mega-dropdown').removeClass('open');
-        }
-    });
-});
+var opacity = 0.3; //opacity links
 
 /**
  * Initialize d3 Force to plot network from json
  * @param {object} graph json data
  */
-
-d3.json("/api/explorer/{node}/{network_id}", function initD3Force(graph) {
+function initD3Force(graph) {
 
     //////////////////////////////
     // Main graph visualization //
@@ -207,4 +188,359 @@ d3.json("/api/explorer/{node}/{network_id}", function initD3Force(graph) {
     simulation.force("link")
         .links(graph.links);
 
+    /////////////////////////////
+    // Modify the simulation   //
+    /////////////////////////////
+
+    function inputted() {
+        simulation.force("link").strength(+this.value);
+        simulation.alpha(1).restart();
+    }
+
+    d3.select("#link-slider").on("input", inputted);
+
+    ////////////////////////////////////////////////////
+    // Definition of links, nodes, text, groups...
+    ////////////////////////////////////////////////////
+
+    groups = g.append('g').attr('class', 'groups');
+
+    var link = g.selectAll(".link")
+        .data(graph.links)
+        .enter().append("line")
+        .style("stroke-width", edgeStroke)
+        .style("stroke-opacity", 0.4)
+
+    var node = g.selectAll(".nodes")
+        .data(graph.nodes)
+        .enter().append("g")
+        .attr("class", "node")
+        // Next two lines -> Pin down functionality
+        .on("dblclick", releaseNode)
+        // Dragging
+        .call(nodeDrag);
+
+    var circle = node.append("circle")
+        .attr("r", nominalBaseNodeSize)
+
+    var text = node.append("text")
+        .attr("class", "node-name")
+        .attr("id", function (d) {
+            return d.id;
+        })
+        .attr("fill", "black")
+        .attr("dx", 16)
+        .attr("dy", ".35em")
+        .text(function (d) {
+            return d.name;
+        });
+
+    // Highlight on mouse-enter and back to normal on mouseout
+    node.on("mouseenter", function (data, index) {
+        d3.select(this).classed('node_highlighted', true);
+
+
+        link.classed("link_highlighted", function (o) {
+            return o.source.index === index || o.target.index === index;
+        });
+
+        node.classed('node_highlighted', function (o) {
+            return isConnected(data, o);
+        });
+    })
+        .on("mousedown", function () {
+            d3.event.stopPropagation();
+        })
+        .on("mouseout", function () {
+            link.classed("link_highlighted", false);
+            node.classed("node_highlighted", false);
+        });
+
+
+    // Highlight links on mouseenter and back to normal on mouseout
+    link.on("mouseenter", function (data) {
+        d3.select(this).classed('link_highlighted', true);
+    })
+        .on("mousedown", function () {
+            d3.event.stopPropagation();
+        })
+        .on("mouseout", function () {
+            d3.select(this).classed('link_highlighted', false);
+        });
+
+
+    /**
+     * Freeze the graph when space is pressed
+     */
+    function freezeGraph() {
+        if (d3.event.keyCode === 32) {
+            simulation.stop();
+        }
+    }
+
+    /**
+     * Resets default styles for nodes/edges/text on double click
+     */
+    function resetAttributesDoubleClick() {
+        // On double click reset attributes (Important disabling the zoom behavior of dbl click because it interferes with this)
+        svg.on("dblclick", function () {
+            // Remove the overriding stroke so the links default back to the CSS definitions
+            link.style("stroke", null);
+
+            // SET default attributes //
+            svg.selectAll(".link, .node").style("visibility", "visible")
+                .style("opacity", "1");
+            // Show node names
+            svg.selectAll(".node-name").style("visibility", "visible").style("opacity", "1");
+        });
+
+    }
+
+    /**
+     * Resets default styles for nodes/edges/text
+     */
+    function resetAttributes() {
+        // Reset visibility and opacity
+        svg.selectAll(".link, .node").style("visibility", "visible").style("opacity", "1");
+        // Show node names
+        svg.selectAll(".node-name").style("visibility", "visible").style("opacity", "1");
+        svg.selectAll(".node-name").style("display", "block");
+    }
+
+    /**
+     * Changes the opacity to 0.1 of edges that are not in array
+     * @param {array} edgeArray
+     * @param {string} property of the edge to filter
+     */
+    function highlightEdges(edgeArray, property) {
+        // Array with names of the nodes in the selected edge
+        var nodesInEdges = [];
+
+        // Filtered not selected links
+        var edgesNotInArray = g.selectAll(".link").filter(function (edgeObject) {
+
+            if (edgeArray.indexOf(edgeObject.source[property] + "-" + edgeObject.target[property]) >= 0) {
+                nodesInEdges.push(edgeObject.source[property]);
+                nodesInEdges.push(edgeObject.target[property]);
+            }
+            else return edgeObject;
+        });
+
+        var nodesNotInEdges = node.filter(function (nodeObject) {
+            return nodesInEdges.indexOf(nodeObject[property]) < 0;
+        });
+
+        nodesNotInEdges.style("opacity", "0.1");
+        edgesNotInArray.style("opacity", "0.1");
+
+    }
+
+    /**
+     * Highlights nodes from array using property as filter and changes the opacity of the rest of nodes
+     * @param {array} nodeArray
+     * @param {string} property of the edge to filter
+     */
+    function highlightNodes(nodeArray, property) {
+        // Filter not mapped nodes to change opacity
+        var nodesNotInArray = svg.selectAll(".node").filter(function (el) {
+            return nodeArray.indexOf(el[property]) < 0;
+        });
+
+        // Not mapped links
+        var notMappedEdges = g.selectAll(".link").filter(function (el) {
+            // Source and target should be present in the edge
+            return !(nodeArray.indexOf(el.source[property]) >= 0 || nodeArray.indexOf(el.target[property]) >= 0);
+        });
+
+        nodesNotInArray.style("opacity", "0.1");
+        notMappedEdges.style("opacity", "0.1");
+    }
+
+
+    // Call freezeGraph when a key is pressed, freezeGraph checks whether this key is "Space" that triggers the freeze
+    d3.select(window).on("keydown", freezeGraph);
+
+
+    /////////////////////////////////////////////////////////////////////////
+    // Build the node selection toggle and creates hashmap nodeNames to IDs /
+    /////////////////////////////////////////////////////////////////////////
+
+    // Build the node unordered list
+    nodePanel.append("<ul id='node-list-ul' class='list-group checked-list-box not-rounded'></ul>");
+
+    // Variable with all node names
+    var nodeNames = [];
+
+    // Create node list and create an array with duplicates
+    $.each(graph.nodes, function (key, value) {
+
+        nodeNames.push(value.name);
+
+        $("#node-list-ul").append("<li class='list-group-item'><input class='node-checkbox' type='checkbox'>" +
+            "<div class='circle'></div><span class='node-" + value.id + "'>" + value.name + "</span></li>");
+    });
+
+
+    // Highlight only selected nodes in the graph
+    $("#get-checked-nodes").on("click", function (event) {
+        event.preventDefault();
+        var checkedItems = [];
+        $(".node-checkbox:checked").each(function (idx, li) {
+            // Get the class of the span element (node-ID) Strips "node-" and evaluate the string to integer
+            checkedItems.push(li.parentElement.childNodes[2].className.replace("node-", ""))
+        });
+
+        resetAttributes();
+        highlightNodes(checkedItems, 'id');
+        resetAttributesDoubleClick();
+
+    });
+
+    ///////////////////////////////////////
+    // Build the edge selection toggle
+    ///////////////////////////////////////
+
+
+    // Build the node unordered list
+    edgePanel.append("<ul id='edge-list-ul' class='list-group checked-list-box not-rounded'></ul>");
+
+
+    function zoomed() {
+        //Transform svg and update convex hull
+        g.attr("transform", d3.event.transform);
+    }
+
+    // Zoomming/Panning functionality
+    svg.call(d3.zoom()
+        .scaleExtent([minZoom, maxZoom])
+        .on("zoom", zoomed))
+        .on("dblclick.zoom", null);
+
+    /// Convex Hull Specific
+
+    $("#get-checked-edges").on("click", function (event) {
+        event.preventDefault();
+
+        var checkedItems = [];
+        $(".edge-checkbox:checked").each(function (idx, li) {
+            checkedItems.push(li.parentElement.childNodes[1].id);
+        });
+
+        resetAttributes();
+
+        highlightEdges(checkedItems, 'id');
+
+        resetAttributesDoubleClick();
+    });
+
+
+    // Update Node Dropdown
+    $("#node-search").on("keyup", function () {
+        // Get value from search form (fixing spaces and case insensitive
+        var searchText = $(this).val();
+        searchText = searchText.toLowerCase();
+        searchText = searchText.replace(/\s+/g, "");
+
+        $.each($("#node-list-ul")[0].childNodes, updateNodeArray);
+
+        function updateNodeArray() {
+            var currentLiText = $(this).find("span")[0].innerHTML,
+                showCurrentLi = ((currentLiText.toLowerCase()).replace(/\s+/g, "")).indexOf(searchText) !== -1;
+            $(this).toggle(showCurrentLi);
+        }
+    });
+
+    // Update Edge Dropdown
+    $("#edge-search").on("keyup", function () {
+        // Get value from search form (fixing spaces and case insensitive
+        var searchText = $(this).val();
+        searchText = searchText.toLowerCase();
+        searchText = searchText.replace(/\s+/g, "");
+
+        $.each($("#edge-list-ul")[0].childNodes, updateEdgeArray);
+
+        function updateEdgeArray() {
+
+            var currentLiText = $(this).find("span")[0].innerHTML,
+                showCurrentLi = ((currentLiText.toLowerCase()).replace(/\s+/g, "")).indexOf(searchText) !== -1;
+            $(this).toggle(showCurrentLi);
+        }
+    });
+
+
+    var highlightButton = $("#highlight-button");
+    highlightButton.off("click"); // It will unbind the previous click if multiple graphs has been rendered
+
+    // Highlight stuffs
+    highlightButton.click(function (event) {
+        event.preventDefault();
+
+        // Reduce opacity of all nodes/edges to minimum
+        svg.selectAll(".node").style("opacity", "0.1");
+        svg.selectAll(".link").style("opacity", "0.1");
+
+        $(".highlight-checkbox:checked").each(function (idx, li) {
+            var highlightSpan = li.parentElement.parentElement.childNodes[3];
+
+            var spanClass = highlightSpan.className.split("-");
+
+        });
+
+        resetAttributesDoubleClick()
+
+    });
+
+
+    ///////////////////////
+    // Tool modal buttons /
+    ///////////////////////
+
+    // Hide node names button
+
+    var hideNodeNames = $("#hide-node-names");
+
+    hideNodeNames.off("click"); // It will unbind the previous click if multiple graphs has been rendered
+
+    // Hide text in graph
+    hideNodeNames.on("click", function () {
+        svg.selectAll(".node-name").style("display", "none");
+    });
+
+    var restoreNodeNames = $("#restore-node-names");
+
+    restoreNodeNames.off("click"); // It will unbind the previous click if multiple graphs has been rendered
+
+    // Hide text in graph
+    restoreNodeNames.on("click", function () {
+        svg.selectAll(".node-name").style("display", "block");
+    });
+
+    var restoreAll = $("#restore");
+
+    restoreAll.off("click"); // It will unbind the previous click if multiple graphs has been rendered
+
+    // Restore all
+    restoreAll.on("click", function () {
+        resetAttributes();
+    });
+}
+
+$(document).ready(function () {
+
+    // render network
+    initD3Force(network);
+
+    // Controls behaviour of clicking in dropdowns
+    $('li.dropdown.mega-dropdown a').on('click', function () {
+        $(this).parent().toggleClass('open');
+    });
+
+    $('body').on('click', function (e) {
+        if (!$('li.dropdown.mega-dropdown').is(e.target)
+            && $('li.dropdown.mega-dropdown').has(e.target).length === 0
+            && $('.open').has(e.target).length === 0
+        ) {
+            $('li.dropdown.mega-dropdown').removeClass('open');
+        }
+    });
 });

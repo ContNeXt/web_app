@@ -19,7 +19,7 @@ app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 
-def query_db_for_nodes(query, context, limit=None):
+def query_db_for_nodes(query, context, limit=10):
 	"""Return all nodes having the query in their names."""
 	# Filter network by context, and nodes in said networks by containing query
 	q = db.session.query(Node).join(relationship_table).join(Network).filter(
