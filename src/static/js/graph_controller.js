@@ -1,4 +1,14 @@
+// Constants used in the graph controller
+var nominalBaseNodeSize = 10; // Default node radius
+var edgeStroke = 3.5;  // Edge width
+var minZoom = 0.1, maxZoom = 30; // Zoom variables
 var opacity = 0.3; //opacity links
+
+//Convex Hull Constants
+var polygon, groups;
+var color = d3.scaleOrdinal(d3.schemeCategory10);
+var simulationAlpha = 0.3; //Alpha simulation convex hulls
+
 
 /**
  * Initialize d3 Force to plot network from json
