@@ -1,11 +1,8 @@
-<!DOCTYPE html>
-<html lang="en">
-<meta charset="UTF-8">
-<head>
-    <title>Network Graph</title>
+{% extends "layout.html" %}
+{% block title %}ContNext Viewer—Network Graph{% endblock %}
 
+{% block scripts %}
     {% include "dependencies/jquery_dependencies.html" %}
-    {% include "dependencies/bootstrap_dependencies.html" %}
 
 	<!-- Block for Network dependencies -->
 
@@ -17,11 +14,15 @@
 		var network = {{ network | safe }};
     </script>
 
-    <script type="text/javascript"
-            src='{{ url_for('static', filename='js/manyBodyReuse.js') }}'></script>
+    <script type="text/javascript" src='{{ url_for('static', filename='js/manyBodyReuse.js') }}'></script>
 	<script src="{{ url_for('static', filename='js/graph_controller.js') }}"></script>
 
+{% endblock %}
 
+
+{% block content %}
+<head>
+    <title>Network Graph Explorer</title>
 </head>
 <body>
 
@@ -33,6 +34,7 @@
 		</div>
 		<div class="card col" id="panel"
 			 style="max-height: 585px;height: 585px;padding-right: 0;padding-left: 0; margin-bottom:0">
+
 			<!-- Nav tabs -->
 			<ul class="nav nav-tabs nav-center-tabs">
 				<li class="active">
@@ -52,6 +54,7 @@
 					</a>
 				</li>
 			</ul>
+
 			<!-- Tab panes -->
 			<div class="tab-content">
 				<div class="tab-pane not-rounded active" id="nodes-panel" role="tabpanel">
@@ -70,7 +73,7 @@
 					<div class="not-rounded2" id="node-list"
 						 style="max-height: 450px;height: 450px; overflow:auto;"></div>
 				</div>
-				<div class="tab-pane not-rounded" id="edges-panel" role="tabpanel">
+				<div class="tab-pane not-rounded active" id="edges-panel" role="tabpanel">
 					<p class="text-center"><b> Modify Links Length</b></p>
 					<label for="link-slider"></label><input id="link-slider" style="width: 80%; margin-bottom: 5px; margin-top: 5px;
 					 margin-left: 10%; margin-right: 10%;"
@@ -197,4 +200,5 @@
 </div>
 
 </body>
-</html>
+{% endblock %}
+

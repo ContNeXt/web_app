@@ -5,17 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <!-- Bootstrap & CSS -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-uWxY/CJNBR+1zjPWmfnSnVxwRheevXITnMqoEIeG1LJrdI0GlVs/9cVSyPYXdcSF" crossorigin="anonymous">
+    {% include "dependencies/bootstrap_css.html" %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-	<!-- Load c3.css -->
-	<link rel="stylesheet" href="{{ url_for('static', filename='css/c3.min.css') }}">
-	{% block styles %} {% endblock %}
+
+	{% block styles %}{% endblock %}
 
     <title>{% block title %}{% endblock %}</title>
 	{% block scripts %}{% endblock %}
 
 </head>
-<body>
+<body style="color:#11557C;">
 
     <div class="container">
 
@@ -34,42 +33,44 @@
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/">Home</a>
             </li>
-              <li class="nav-item dropdown">
-              <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="True">
+			<li class="nav-item dropdown active">
+              <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                 Getting Started
               </a>
-              <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                <li><a class="dropdown-item" href="{{ url_for ('about') }}">About ContNext</a></li>
-                <li><a class="dropdown-item" href="{{ url_for ('terms') }}">Terms and Conditions</a></li>
-                <li><hr class="dropdown-divider"></li>
-                <li><a class="dropdown-item" href="{{ url_for ('tutorial') }}">Tutorial</a></li>
-              </ul>
+				  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<li><a class="dropdown-item" href="/about">About ContNext</a></li>
+					<li><a class="dropdown-item" href="/terms">Terms and Conditions</a></li>
+					<li><hr class="dropdown-divider"></li>
+					<li><a class="dropdown-item" href="{{ url_for ('tutorial') }}">Tutorial</a></li>
+				  </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="#">SCAI Resources</a>
+              <a class="nav-link active" aria-current="page" href="/terms">SCAI Resources</a>
             </li>
           </ul>
-
-            <form class="d-flex">
-            <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-            <button class="btn btn-outline-success" type="submit">Search</button>
-          </form>
         </div>
       </div>
     </nav>
+
+	<!-- Content -->
 
     <div class="container-fluid">
         {% block content %}
         {% endblock %}
     </div>
 
+	<!-- Footer -->
 
-	<!-- Load d3.js and c3.js
-	<script src="https://d3js.org/d3.v7.min.js"></script>
-	<script src="{{ url_for('static', filename='js/c3.min.js') }}"></script>
-	<script src="{{ url_for('static', filename='js/graph.js') }}"></script>
-	-->
+    <div class="container-fluid">
+	  <footer class="d-flex flex-wrap py-3 my-4 border-top col-12" style="position:absolute; bottom:0;">
+		<div class="d-flex align-items-center">
+		  <span class="text-muted">© 2021 Company, Inc</span>
+		</div>
+	  </footer>
+    </div>
+
+
 	<!-- Load Bootstrap & JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-kQtW33rZJAHjgefvhyyzcGF3C5TFyBQBA13V1RKPf4uH+bwyzQxZ6CmMZHmNBEfJ" crossorigin="anonymous"></script>
+    {% include "dependencies/bootstrap_js.html" %}
 </body>
 </html>

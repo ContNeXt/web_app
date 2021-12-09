@@ -133,11 +133,11 @@
 }
 
 circle {
-    stroke-width: 2.5px;
-    stroke: black;
+    fill: #187bcd;
 }
 
 .node_highlighted > circle {
+    stroke-width: 2.5px;
     stroke: #4EB2D4 !important;
 }
 

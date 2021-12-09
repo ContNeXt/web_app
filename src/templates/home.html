@@ -2,29 +2,20 @@
 {% block title %}ContNext Viewer—Home{% endblock %}
 {% block styles %}
     {{ super() }}
-    <!-- <link rel="stylesheet" type="text/css" href='https://code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css'/> -->
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> <!-- new -->
 
 {% endblock %}
 
 {% block scripts %}
 	    {{ super() }}
-		<script src="https://code.jquery.com/jquery-3.6.0.min.js" crossorigin="anonymous"></script> <!-- new -->
-		<script src="https://code.jquery.com/ui/1.12.1/jquery-ui.min.js" crossorigin="anonymous"></script> <!-- new -->
-
-	    <script type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.12.1/jquery-ui.min.js"></script>
-    	<script type="text/javascript"
-            src="https://cdnjs.cloudflare.com/ajax/libs/select2/4.0.3/js/select2.full.min.js"></script>
-
-		<script type="text/javascript" src="{{ url_for('static', filename='js/autocomplete.js') }}"></script> -->
+		{% include "dependencies/autocomplete_dependencies.html" %}
+    	{% include "dependencies/jquery_dependencies.html" %}
+		<script type="text/javascript" src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>
 
 {% endblock %}
 
 
 {% block content %}
-    <header>
-    </header>
     <body>
 
     <!–– Box with site name, logo and quick summary of application -->
@@ -36,7 +27,7 @@
                 </div>
                 <div class="col-lg-10 col-md-10 col-sm-10">
                         <h1>ContNext Viewer</h1>
-                        <p>A web application for ContNext. See our {{ url_for('tutorial') }} tutorial on how to get started.</p>
+                        <p>A web application for ContNext. See our <a href="{{ url_for('tutorial') }}">tutorial</a> on how to get started.</p>
                 </div>
             </div>
         </div>
@@ -46,16 +37,16 @@
         <div class="container" style="margin-top: 50px" >
             <form class="row 3-g needs-validation col-md-11" method="post" autocomplete="on">
                   <div class="col-md-3 m-auto">
-                      <select class="form-select" name="queryOptions" id="input-context" aria-expanded="false">
+					  <label for="input-context">Context</label><select class="form-select" name="queryOptions" id="input-context" aria-expanded="false">
                         <option value="tissues" selected>Tissues</option>
                         <option value="cell-lines">Cell Lines</option>
                         <option value="cell-types">Cell Types</option>
                         <option value="specie" >Species</option>
 
-            <         </select>
+				  </select>
                   </div>
                   <div class="col-md-7 m-auto">
-					  <input type="text" class="form-control" name="query" id="input-q" placeholder="Gene of interest">
+					  <label for="input-q">Gene of interest</label><input type="text" class="form-control" name="query" id="input-q" placeholder="NAT2">
                   </div>
                   <div class="col-md-1 m-auto">
                       <input type="submit" class="btn btn-primary"/>

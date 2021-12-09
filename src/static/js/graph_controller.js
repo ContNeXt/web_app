@@ -2,7 +2,7 @@
 var nominalBaseNodeSize = 10; // Default node radius
 var edgeStroke = 3.5;  // Edge width
 var minZoom = 0.1, maxZoom = 30; // Zoom variables
-var opacity = 0.3; //opacity links
+var opacity = 1; //opacity links
 
 //Convex Hull Constants
 var polygon, groups;
@@ -215,8 +215,8 @@ function initD3Force(graph) {
         .data(graph.links)
         .enter().append("line")
         .style("stroke-width", edgeStroke)
-        .style("stroke-opacity", 0.9)
-        .attr("fill", "blue")
+        .style("stroke-opacity", opacity)
+        .attr("stroke", "#03254c")
 
     var node = g.selectAll(".nodes")
         .data(graph.nodes)
