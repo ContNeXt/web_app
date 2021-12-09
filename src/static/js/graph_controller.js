@@ -215,7 +215,8 @@ function initD3Force(graph) {
         .data(graph.links)
         .enter().append("line")
         .style("stroke-width", edgeStroke)
-        .style("stroke-opacity", 0.4)
+        .style("stroke-opacity", 0.9)
+        .attr("fill", "blue")
 
     var node = g.selectAll(".nodes")
         .data(graph.nodes)

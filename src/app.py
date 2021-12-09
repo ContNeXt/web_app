@@ -79,16 +79,14 @@ def graph(node, network_id):
 @cross_origin(origin='*',headers=['Content-Type','Authorization'])
 def node_autocompletion():
 	q = request.form['q']
-	print ('term ', q)
 	if not q:
 		return jsonify({})
 	results = query_db_for_nodes(query=q, context='tissues')
 	# TODO add context as second query parameter context as second query!!
-	print(results)
 	return jsonify(results)
 
 # autocomplete API: result json
-@app.route("/api/neighbouringnodes/<node>/<network_id>", methods = ['GET'])
+@app.route("/api/neighbouring-nodes/<node>/<network_id>", methods = ['GET'])
 def network_explorer(node, network_id):
 	if (request.method == 'GET'):
 		print(network_id)
