@@ -78,8 +78,9 @@ def graph(node, network_id):
 @app.route("/api/autocomplete", methods = ['POST'])
 @cross_origin(origin='*',headers=['Content-Type','Authorization'])
 def node_autocompletion():
-	q = request.args.get('q')
-	resource = request.args.get('resource')
+	q = request.form['q']
+	resource = request.form['resource']
+	print(q, resource)
 	if not q or not resource:
 		return jsonify({})
 
