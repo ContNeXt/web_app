@@ -13,6 +13,7 @@ $(document).ready(function () {
                 url: "http://localhost:5000/api/autocomplete",
                 dataType: "json",
                 data: {
+                    resource: $('#input-context').find(":selected").val(),
                     q: request.term
                 },
                 success: function (data) {
