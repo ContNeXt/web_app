@@ -2,11 +2,7 @@
 {% block title %}ContNext Viewer–Results{% endblock %}
 {% block content %}
 <div class="container" style="margin-top: 20px" >
-    <p>
-	Query: {{ idquery }}
-    </br>Context: {{ idoptions }}
-	</p>
-
+	<h4 class="text-center" style="margin-top:20px"> Node: {{ idquery }} | Context: {{ idoptions }} </h4>
 </div>
 
 <!-- Table Content -->
@@ -31,6 +27,7 @@
 		    	<td>
                     {{value[1]}}
                 </td>
+		   </tr>
         {% endfor %}
      </table>
 </div>
