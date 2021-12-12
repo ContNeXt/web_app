@@ -4,6 +4,7 @@
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy_utils.functions import database_exists
 
 import networkx as nx
 import csv
@@ -76,10 +77,6 @@ class Node(db.Model):
     def __repr__(self):
         return f'<Node {self.name!r}'
 
-
-'''
-For given path, find all tsv files
-'''
 
 def list_files(dir):
     """ List all the files in a directory and it's sub-directories """
@@ -163,6 +160,10 @@ def get_context(file:str) -> str:
 @app.route('/')
 def load_database(data_source=DATA_SOURCE, supplementary_source=SUPPLEMENTARY_SOURCE):
     """ Load the SQL-Alchemy Database with files from given directory """
+
+    if database_exists(app.config["SQLALCHEMY_DATABASE_URI"]):
+    # do stuff
+
     # Find all files
     all_files = list_files(data_source)
     dic = files_to_dic(all_files)

@@ -5,7 +5,7 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
-# TODO flask_cors requirements
+# TODO flask_cors add to requirements
 
 from homepage import homepage
 from models import Network, Node
@@ -78,11 +78,15 @@ def graph(node, network_id):
 @app.route("/api/autocomplete", methods = ['POST'])
 @cross_origin(origin='*',headers=['Content-Type','Authorization'])
 def node_autocompletion():
-	q = request.form['q']
-	if not q:
+	q = request.args.get('q')
+	resource = request.args.get('resource')
+	if not q or not resource:
 		return jsonify({})
-	results = query_db_for_nodes(query=q, context='tissues')
-	# TODO add context as second query parameter context as second query!!
+
+	results = query_db_for_nodes(query=q, context=resource, limit=10)
+	if not results:
+		return jsonify({})
+
 	return jsonify(results)
 
 # autocomplete API: result json
