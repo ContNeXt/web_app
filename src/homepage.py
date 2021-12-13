@@ -1,6 +1,4 @@
 from flask import Blueprint, render_template, request, redirect, url_for, session
-from flask_sqlalchemy import SQLAlchemy
-from models import Network, Node
 
 homepage = Blueprint("homepage", __name__, static_folder="static", template_folder="templates")
 

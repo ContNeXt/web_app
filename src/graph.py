@@ -1,29 +1,20 @@
-import json
-import numpy as np
-import networkx as nx
-import matplotlib.pyplot as plt
-from tqdm import tqdm
-from sqlalchemy import and_
-from models import Network, Node, relationship_table
+from models import Network
 
-idquery = 'NAT2'
-idoptions = 'tissues'
+def create_json_file(id, node):
+	# Get network from id
+	try:
+		g = [each.data for each in Network.query.filter(Network.name == id).all()][0]
+	except:
+		return [],[]
 
-# Run query
-# Get list of all the ids for that node
-listof_nodes_id=[each.id for each in Node.query.filter(Node.name == idquery).all()]
+	# Get edges linked to nodes:
+	edges = list(g.in_edges(node))
+	edges.extend(list(g.out_edges(node)))
 
-# For each id, get list of all networks associated with it.
-listof_networks={}
-for each in tqdm(listof_nodes_id[:2]):
-	print(each)
-	for one in Network.query.filter(and_(Network.nodes_.any(id=each), Network.context==idoptions)).all():
-		listof_networks.update({one.name: [one.data, one.context_info]})
+	node_list = list(set([i[1] for i in edges[:]] + [i[0] for i in edges[:]]))
+	nodes_dic = { node_list[i] : i for i in range(len(node_list)) }
 
+	nodes = [{'id': nodes_dic[str(i)], 'name': str(i) } for i in list(set(node_list)) ]
+	links = [{'source': nodes_dic[u[0]], 'target': nodes_dic[u[1]]} for u in edges ]
 
-for each in tqdm(listof_networks.values()):
-	print(each[0].number_of_edges())
-	# g = each[0]
-	# fig, ax = plt.subplots(1, 1, figsize=(8, 6))
-	# nx.draw(g, ax=ax)
-	# plt.savefig("/Users/sara/Desktop/filename.png")
+	return nodes, links

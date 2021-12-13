@@ -4,11 +4,14 @@ from flask import Flask, render_template, request, redirect, jsonify
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_sqlalchemy import SQLAlchemy
+from flask_cors import CORS, cross_origin
+# TODO flask_cors add to requirements
 
 from homepage import homepage
 from models import Network, Node
 from querypage import querypage
 from autocomplete import query_db_for_nodes
+from graph import create_json_file
 
 app = Flask(__name__)
 
@@ -17,6 +20,9 @@ db = SQLAlchemy(app)
 
 # SQLAlchemy
 db_name = "database.db"
+
+cors = CORS(app, resources={r"/foo": {"origins": "*"}})
+app.config['CORS_HEADERS'] = 'Content-Type'
 
 app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
@@ -61,21 +67,37 @@ def tutorial():
 def admin():
 	return render_template("admin.html")
 
-@app.route("/graph")
-def graph():
-	return render_template("graph.html")
+@app.route("/graph/<node>/<network_id>")
+def graph(node, network_id):
+	nodes, links = create_json_file(id=network_id, node=node)
+	network = {'nodes': nodes, 'links': links}
+	return render_template("explorer.html", network_id=network_id, node=node, network=network)
 
 
-
-# autocomplete API: node list
-@app.route("/api/autocomplete")
+# autocomplete API: node list json
+@app.route("/api/autocomplete", methods = ['POST'])
+@cross_origin(origin='*',headers=['Content-Type','Authorization'])
 def node_autocompletion():
-	q = request.args.get("q")
-	if not q:
+	q = request.form['q']
+	resource = request.form['resource']
+	print(q, resource)
+	if not q or not resource:
 		return jsonify({})
-	# add context as second query!!
-	results = query_db_for_nodes(query=q, context='tissues')
+
+	results = query_db_for_nodes(query=q, context=resource, limit=10)
+	if not results:
+		return jsonify({})
+
 	return jsonify(results)
+
+# autocomplete API: result json
+@app.route("/api/neighbouring-nodes/<node>/<network_id>", methods = ['GET'])
+def network_explorer(node, network_id):
+	if (request.method == 'GET'):
+		print(network_id)
+		nodes, links = 	create_json_file(id=network_id, node=node)
+		return jsonify({'nodes': nodes, 'links': links})
+
 
 '''
     Run app
