@@ -84,7 +84,7 @@ def node_autocompletion():
 	if not q or not resource:
 		return jsonify({})
 
-	results = query_db_for_nodes(query=q, context=resource, limit=10)
+	results = query_db_for_nodes(query=q, context=resource)
 	if not results:
 		return jsonify({})
 
