@@ -5,21 +5,25 @@
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy_utils.functions import database_exists
-
 import networkx as nx
-import csv
 # from models import Network, Node, relationship_table
 
+from typing import List, Tuple
 from tqdm import tqdm
 import os
 import sys
+import csv
+from pathlib import Path
+
 
 app = Flask(__name__)
 
 # SQLAlchemy
-DB_NAME = "database.db"
+DB_NAME = "contnext.db"
+# TODO make database in hidden folder in home dir
+HIDDEN_FOLDER = os.path.join(Path.home(), '.contnext')
+DB_PATH = os.path.join(HIDDEN_FOLDER, DB_NAME)
 DATA_SOURCE = sys.argv[1]
-SUPPLEMENTARY_SOURCE = os.path.join(DATA_SOURCE, 'ContNeXt supplementary - Tissue overview.tsv')
 
 
 app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
@@ -44,10 +48,10 @@ relationship_table=db.Table('relationship_table',
 class Network(db.Model):
     __tablename__ = 'network'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(40), unique=True)
+    name = db.Column(db.String(100))
     data = db.Column(db.PickleType())
     context = db.Column(db.String(30))
-    context_info = db.Column(db.String(50))
+    identifier = db.Column(db.String(50), unique=True)
 
     # many-to-many relationship
     nodes_ = db.relationship('Node',
@@ -55,11 +59,11 @@ class Network(db.Model):
                              lazy='dynamic',
                              backref=db.backref('networks_'))
 
-    def __init__(self, data, name, context, context_info):
+    def __init__(self, data, name, context, identifier):
         self.data = data
         self.name = name
         self.context = context
-        self.context_info = context_info
+        self.identifier = identifier
 
     def __repr__(self):
         return f'<Network {self.data!r}'
@@ -78,7 +82,7 @@ class Node(db.Model):
         return f'<Node {self.name!r}'
 
 
-def list_files(dir):
+def list_files(dir:str) -> List:
     """ List all the files in a directory and it's sub-directories """
     # create a list of file and sub directories
     list_of_files = os.listdir(dir)
@@ -95,28 +99,28 @@ def list_files(dir):
     return all_files
 
 
-def files_to_dic(all_files):
-    """ Create dictionary of network id and files"""
-    # init dic
-    all_files_dic = {}
-    # iterate over all files
-    for files in all_files:
-        dirpath = os.path.dirname(files)
-        # Add to dictionary
-        all_files_dic.update({os.path.basename(dirpath): files})
-    return all_files_dic
-
-
-def check_tsv(all_files_dic):
+def check_tsv(all_files: List) -> Tuple[List, List]:
     """ Filters out all non-tsv files from the dictionary"""
-    for each in list(all_files_dic.items()):
+    node_degree = []
+    supplementary = []
+    all_tsv_files = []
+    for file in all_files[:]:
         # Check the extension
-        if not each[1].endswith(".tsv"):
-            del all_files_dic[each[0]]
-        if each[1].endswith("overview.tsv"):
-            # skip supplementary files
-            del all_files_dic[each[0]]
-    return all_files_dic
+        if not file.endswith(".tsv"):
+            continue
+        elif file.endswith("overview.tsv"):
+            # add to supplementary list
+            supplementary.append(file)
+            continue
+        elif file.endswith("degree.tsv"):
+            # add degree to list
+            node_degree.append(file)
+            continue
+        elif file.endswith("Readme.tsv"):
+            continue
+        all_tsv_files.append(file)
+    return all_tsv_files, supplementary
+
 
 def create_node_set(list_tsv):
     """ Create a set of all the nodes """
@@ -128,60 +132,70 @@ def create_node_set(list_tsv):
             list_of_nodes.add(node)
     return list_of_nodes
 
-def add_edgelist(file_path):
+
+def add_edgelist(file_path, interacFlag=False):
     """ Create networkx edgelist from file"""
     # Open the file as an nx object
-    network = nx.read_edgelist(file_path, comments='from', delimiter='\t', data=(
+    if interacFlag:
+        network = nx.read_edgelist(file_path, comments='from', delimiter='\t', data=(
         ("direction", str),
         ("method", str),
         ("weight", float),), encoding='utf-8', create_using=nx.DiGraph())
+        return network
+
+    network = nx.read_edgelist(file_path, comments='from', delimiter='\t', data=(
+        ("direction", str),
+        ("method", str),
+        ("weight", float),), encoding='utf-8', create_using=nx.Graph())
     return network
 
-def add_metadata_to_networks(file_path: str):
-    """ Add metadata to networks from tsv file, """
-    metadata_dict = {}
-    with open(file_path, 'r') as f:
-        csv_reader = csv.reader(f, delimiter='\t')
-        header = next(csv_reader) # skip header
-        for row in csv_reader:
-            metadata_dict.update({row[0].split(":")[1]: row[1]})
-    return metadata_dict
 
-def get_context(file:str) -> str:
-    """Get context from data folder structure"""
-    # structure is: context/network_name/file.tsv
-    dir = os.path.dirname(os.path.dirname(file))
-    return os.path.basename(dir)
+def add_metadata_to_networks(supplementary_files: List):
+    """ Add metadata to networks from list of supplementary tsv files, """
+    network_metadata = {}
+    for file in supplementary_files:
+        with open(file, 'r') as f:
+            csv_reader = csv.reader(f, delimiter='\t')
+            header = next(csv_reader) # skip header
+            for row in csv_reader:
+                network_metadata.update({row[0].split(":")[1]: {'context': os.path.basename(os.path.dirname(file)),
+                                                                'id': row[0],
+                                                                'name': row[1]}
+                                         })
+    return network_metadata
 
 '''
     Run app
 '''
 
 @app.route('/')
-def load_database(data_source=DATA_SOURCE, supplementary_source=SUPPLEMENTARY_SOURCE):
+def load_database(data_source=DATA_SOURCE):
     """ Load the SQL-Alchemy Database with files from given directory """
 
     if database_exists(app.config["SQLALCHEMY_DATABASE_URI"]):
-    # do stuff
+        return f"<h1> Database already exists: {str('sqlite:///' + DB_NAME)} </h1>"
 
     # Find all files
     all_files = list_files(data_source)
-    dic = files_to_dic(all_files)
-
-    # filter out all non-tsv
-    list_tsv = check_tsv(dic)
+    # filter out all non-tsv, and get supplementary dict
+    list_tsv, supplementary_source = check_tsv(all_files=all_files)
 
     # counter
     debugger = int(0)
     # init list of nodes
     list_of_nodes = []
 
-    context_info = add_metadata_to_networks(file_path=supplementary_source)
-    # add data from each file to database
-    for key, value in tqdm(list_tsv.items()):
-        new_network = Network(name=key, data=add_edgelist(value), context=get_context(value), context_info=context_info.get(key, None))
+    metadata = add_metadata_to_networks(supplementary_files=supplementary_source)
 
-        for node in add_edgelist(value).nodes:
+    # add data from each file to database
+    for file in tqdm(list_tsv, total=len(list_tsv)):
+        key = os.path.basename(os.path.dirname(file))
+        new_network = Network(identifier=metadata.get(key).get('id'),
+                              data=add_edgelist(file),
+                              context=metadata.get(key).get('context'),
+                              name=metadata.get(key).get('name'))
+
+        for node in add_edgelist(file).nodes:
             # check if node is already in the database
             q = Node.query.filter(Node.name == node).first()
             if q:

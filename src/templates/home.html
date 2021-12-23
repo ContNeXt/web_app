@@ -37,11 +37,13 @@
         <div class="container" style="margin-top: 50px" >
             <form class="row 3-g needs-validation col-md-11" method="post" autocomplete="on">
                   <div class="col-md-3 m-auto">
-					  <label for="input-context">Context</label><select class="form-select" name="queryOptions" id="input-context" aria-expanded="false">
-                        <option value="tissues" selected>Tissues</option>
-                        <option value="cell-lines">Cell Lines</option>
-                        <option value="cell-types">Cell Types</option>
-                        <option value="species" >Species</option>
+					  <label for="input-context">Context/Interactome</label><select class="form-select" name="queryOptions" id="input-context" aria-expanded="false">
+					 	<option  data-divider="true" disabled>Context</option>
+					  	<option value="tissues" selected>--Tissues</option>
+                        <option value="cell-lines">--Cell Lines</option>
+                        <option value="cell-types">--Cell Types</option>
+					 	<option  data-divider="true" disabled>Interactome</option>
+                        <option value="interactome" >--Interactome</option>
 
 				  </select>
                   </div>
@@ -55,6 +57,22 @@
 
            </form>
         </div>
+
+	<!–– Search bar -->
+
+		<div class="container" style="margin-top: 50px" >
+			<form class="row 3-g needs-validation col-md-11" method="post" autocomplete="on">
+				  <div class="col-md-10 m-auto">
+					  <label for="input-q">Network ID</label><input type="text" class="form-control" name="query" id="input-q" placeholder="UBERON:0000021" >
+				  </div>
+				  <div class="col-md-1 m-auto">
+					  <input type="submit" class="btn btn-primary"/>
+				  </div>
+				  <div id="match-list"></div>
+
+		   </form>
+		</div>
+
 	</body>
 
 {% endblock %}

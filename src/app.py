@@ -5,7 +5,6 @@ from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
-# TODO flask_cors add to requirements
 
 from homepage import homepage
 from models import Network, Node
@@ -13,35 +12,46 @@ from querypage import querypage
 from autocomplete import query_db_for_nodes
 from graph import create_json_file
 
-app = Flask(__name__)
+# TODO:
+def create_app():
 
-# Initialize the database
-db = SQLAlchemy(app)
+	app = Flask(__name__)
 
-# SQLAlchemy
-db_name = "database.db"
+	# Initialize the database
+	db = SQLAlchemy(app)
 
-cors = CORS(app, resources={r"/foo": {"origins": "*"}})
-app.config['CORS_HEADERS'] = 'Content-Type'
+	# SQLAlchemy
+	db_name = "database.db"
 
-app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+	cors = CORS(app, resources={r"/foo": {"origins": "*"}})
+	app.config['CORS_HEADERS'] = 'Content-Type'
 
-# Add Admin view
-admin = Admin(app)
-admin.add_view(ModelView(Network, db.session))
-admin.add_view(ModelView(Node, db.session))
+	app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
+	app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
+	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
-'''
-    URL Builders for website
-'''
+	# Add Admin view
+	admin = Admin(app)
+	admin.add_view(ModelView(Network, db.session))
+	admin.add_view(ModelView(Node, db.session))
 
-app.register_blueprint(homepage, url_prefix="")
-app.register_blueprint(querypage, url_prefix="")
+	'''
+		URL Builders for website
+	'''
 
-# app.register_blueprint(models)
+	app.register_blueprint(homepage, url_prefix="")
+	app.register_blueprint(querypage, url_prefix="")
 
+	# app.register_blueprint(models)
+
+	# load dataframe of supplemntary
+	# { node=key, value{ betweeness centr: , contect }
+	# save as:
+	# app.interactome_node_dic
+
+	return app
+
+app = create_app()
 
 @app.route("/")
 def main():
@@ -70,8 +80,10 @@ def admin():
 @app.route("/graph/<node>/<network_id>")
 def graph(node, network_id):
 	nodes, links = create_json_file(id=network_id, node=node)
+	# node_interactome_dict = { app.interactome_dic.get(node) for node in nodes if nodes in app.interactome_dic }
 	network = {'nodes': nodes, 'links': links}
-	return render_template("explorer.html", network_id=network_id, node=node, network=network)
+	node_dict={}
+	return render_template("explorer.html", network_id=network_id, node=node, network=network, node_dict=node_dict)
 
 
 # autocomplete API: node list json
@@ -80,7 +92,6 @@ def graph(node, network_id):
 def node_autocompletion():
 	q = request.form['q']
 	resource = request.form['resource']
-	print(q, resource)
 	if not q or not resource:
 		return jsonify({})
 
@@ -98,6 +109,26 @@ def network_explorer(node, network_id):
 		nodes, links = 	create_json_file(id=network_id, node=node)
 		return jsonify({'nodes': nodes, 'links': links})
 
+
+
+# TODO - change to undirected
+# TODO - interactome (in context but its not)
+# TODO - add degree, betweenes centre to network table
+# TODO - FOXP3 repeated why?
+# TODO - remove species
+# TODO - ad degree from table
+
+# TODO - network look up: by id and name
+# TODO - show table (sorting by columns: ** rank )
+
+# TODO - ID change name depending on context (CL, UBERON,...)
+# TODO - put names instead of 'tissues', column before description
+
+# TODO - interactome is DIRECTED, others arent
+
+# TODO - HOVER: each node, get degree and centrality
+# TODO - footer looks weird
+# TODO - add netwrok name to header, + node degree (conections) and betweeness centrality
 
 '''
     Run app

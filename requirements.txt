@@ -8,3 +8,5 @@ Flask-SQLAlchemy~=2.5.1
 typing-extensions~=3.10.0.2
 Jinja2~=3.0.2
 SQLAlchemy~=1.4.26
+Flask-CORS~=3.0.10
+SQLAlchemy-Utils~=0.37.9
