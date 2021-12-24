@@ -52,6 +52,7 @@ class Network(db.Model):
     data = db.Column(db.PickleType())
     context = db.Column(db.String(30))
     identifier = db.Column(db.String(50), unique=True)
+    properties = db.Column(db.PickleType)
 
     # many-to-many relationship
     nodes_ = db.relationship('Node',
@@ -59,11 +60,12 @@ class Network(db.Model):
                              lazy='dynamic',
                              backref=db.backref('networks_'))
 
-    def __init__(self, data, name, context, identifier):
+    def __init__(self, data, name, context, identifier, properties):
         self.data = data
         self.name = name
         self.context = context
         self.identifier = identifier
+        self.properties = properties
 
     def __repr__(self):
         return f'<Network {self.data!r}'
@@ -80,7 +82,6 @@ class Node(db.Model):
 
     def __repr__(self):
         return f'<Node {self.name!r}'
-
 
 def list_files(dir:str) -> List:
     """ List all the files in a directory and it's sub-directories """
@@ -99,27 +100,22 @@ def list_files(dir:str) -> List:
     return all_files
 
 
-def check_tsv(all_files: List) -> Tuple[List, List]:
+def check_tsv(all_files: List) -> Tuple[List, List, List]:
     """ Filters out all non-tsv files from the dictionary"""
-    node_degree = []
     supplementary = []
     all_tsv_files = []
+    properties = []
     for file in all_files[:]:
         # Check the extension
-        if not file.endswith(".tsv"):
-            continue
+        if file.endswith("coexp_network_edges.tsv"):
+            all_tsv_files.append(file)
         elif file.endswith("overview.tsv"):
             # add to supplementary list
             supplementary.append(file)
-            continue
-        elif file.endswith("degree.tsv"):
-            # add degree to list
-            node_degree.append(file)
-            continue
-        elif file.endswith("Readme.tsv"):
-            continue
-        all_tsv_files.append(file)
-    return all_tsv_files, supplementary
+        elif file.endswith("properties.tsv"):
+            properties.append(file)
+
+    return all_tsv_files, supplementary, properties
 
 
 def create_node_set(list_tsv):
@@ -160,9 +156,22 @@ def add_metadata_to_networks(supplementary_files: List):
             for row in csv_reader:
                 network_metadata.update({row[0].split(":")[1]: {'context': os.path.basename(os.path.dirname(file)),
                                                                 'id': row[0],
-                                                                'name': row[1]}
-                                         })
+                                                                'name': row[1]}})
     return network_metadata
+
+
+def add_properties_to_nodes(degree_files: List):
+    """ Add properties to nodes from list of degree tsv files, """
+    node_properties = {}
+    for file in degree_files:
+        with open(file, 'r') as f:
+            csv_reader = csv.reader(f, delimiter='\t')
+            header = next(csv_reader) # skip header
+            node_properties.update({os.path.basename(os.path.dirname(file)):{row[0]: {'connections': row[1],
+                                                                     'rank': row[2],
+                                                                     'housekeeping': row[3]} for row in csv_reader}})
+    return node_properties
+
 
 '''
     Run app
@@ -178,7 +187,7 @@ def load_database(data_source=DATA_SOURCE):
     # Find all files
     all_files = list_files(data_source)
     # filter out all non-tsv, and get supplementary dict
-    list_tsv, supplementary_source = check_tsv(all_files=all_files)
+    list_tsv, supplementary_source, properties_files  = check_tsv(all_files=all_files)
 
     # counter
     debugger = int(0)
@@ -186,6 +195,7 @@ def load_database(data_source=DATA_SOURCE):
     list_of_nodes = []
 
     metadata = add_metadata_to_networks(supplementary_files=supplementary_source)
+    node_properties = add_properties_to_nodes(degree_files=properties_files)
 
     # add data from each file to database
     for file in tqdm(list_tsv, total=len(list_tsv)):
@@ -193,7 +203,8 @@ def load_database(data_source=DATA_SOURCE):
         new_network = Network(identifier=metadata.get(key).get('id'),
                               data=add_edgelist(file),
                               context=metadata.get(key).get('context'),
-                              name=metadata.get(key).get('name'))
+                              name=metadata.get(key).get('name'),
+                              properties=node_properties.get(key))
 
         for node in add_edgelist(file).nodes:
             # check if node is already in the database

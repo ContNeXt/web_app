@@ -111,20 +111,14 @@ def network_explorer(node, network_id):
 
 
 
-# TODO - change to undirected
-# TODO - interactome (in context but its not)
-# TODO - add degree, betweenes centre to network table
+# TODO - interactome (in context but its not, should be digraph)
+# TODO - add degree, to network table
 # TODO - FOXP3 repeated why?
 # TODO - remove species
 # TODO - ad degree from table
 
 # TODO - network look up: by id and name
 # TODO - show table (sorting by columns: ** rank )
-
-# TODO - ID change name depending on context (CL, UBERON,...)
-# TODO - put names instead of 'tissues', column before description
-
-# TODO - interactome is DIRECTED, others arent
 
 # TODO - HOVER: each node, get degree and centrality
 # TODO - footer looks weird
