@@ -27,10 +27,11 @@ relationship_table=db.Table('relationship_table',
 class Network(db.Model):
     __tablename__ = 'network'
     id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(40), unique=True)
+    name = db.Column(db.String(100))
     data = db.Column(db.PickleType())
     context = db.Column(db.String(30))
-    context_info = db.Column(db.String(50))
+    identifier = db.Column(db.String(50), unique=True)
+    properties = db.Column(db.PickleType)
 
     # many-to-many relationship
     nodes_ = db.relationship('Node',
@@ -38,11 +39,12 @@ class Network(db.Model):
                              lazy='dynamic',
                              backref=db.backref('networks_'))
 
-    def __init__(self, data, name, context, context_info):
+    def __init__(self, data, name, context, identifier, properties):
         self.data = data
         self.name = name
         self.context = context
-        self.context_info = context_info
+        self.identifier = identifier
+        self.properties = properties
 
     def __repr__(self):
         return f'<Network {self.data!r}'

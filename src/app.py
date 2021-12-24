@@ -21,7 +21,7 @@ def create_app():
 	db = SQLAlchemy(app)
 
 	# SQLAlchemy
-	db_name = "database.db"
+	db_name = "contnext.db"
 
 	cors = CORS(app, resources={r"/foo": {"origins": "*"}})
 	app.config['CORS_HEADERS'] = 'Content-Type'
@@ -112,7 +112,6 @@ def network_explorer(node, network_id):
 
 
 # TODO - interactome (in context but its not, should be digraph)
-# TODO - add degree, to network table
 # TODO - FOXP3 repeated why?
 # TODO - remove species
 # TODO - ad degree from table
