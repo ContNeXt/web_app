@@ -2,7 +2,7 @@
 var nominalBaseNodeSize = 10; // Default node radius
 var edgeStroke = 3.5;  // Edge width
 var minZoom = 0.1, maxZoom = 30; // Zoom variables
-var opacity = 1; //opacity links
+var opacity = 0.7; //opacity links
 
 //Convex Hull Constants
 var polygon, groups;
@@ -216,7 +216,9 @@ function initD3Force(graph) {
         .enter().append("line")
         .style("stroke-width", edgeStroke)
         .style("stroke-opacity", opacity)
-        .attr("stroke", "#03254c")
+        .attr("class", "link")
+        // .attr("stroke", "#03254c")
+
 
     var node = g.selectAll(".nodes")
         .data(graph.nodes)
@@ -391,12 +393,14 @@ function initD3Force(graph) {
     // Highlight only selected nodes in the graph
     $("#get-checked-nodes").on("click", function (event) {
         event.preventDefault();
-        var checkedItems = [];
-        $(".node-checkbox:checked").each(function (idx, li) {
-            // Get the class of the span element (node-ID) Strips "node-" and evaluate the string to integer
-            checkedItems.push(li.parentElement.childNodes[2].className.replace("node-", ""))
-        });
-
+        console.log("checkedItems");
+        let checkedItems = [];
+        // $(".node-checkbox:checked").each(function (idx, li) {
+        //     // Get the class of the span element (node-ID) Strips "node-" and evaluate the string to integer
+        //     checkedItems.push(li.parentElement.childNodes[2].className)
+        //     console.log(checkedItems)
+        // });
+        checkedItems = [0, 1,2]
         resetAttributes();
         highlightNodes(checkedItems, 'id');
         resetAttributesDoubleClick();
@@ -428,10 +432,11 @@ function initD3Force(graph) {
     $("#get-checked-edges").on("click", function (event) {
         event.preventDefault();
 
-        var checkedItems = [];
-        $(".edge-checkbox:checked").each(function (idx, li) {
-            checkedItems.push(li.parentElement.childNodes[1].id);
-        });
+        let checkedItems = [];
+        // $(".edge-checkbox:checked").each(function (idx, li) {
+        //     checkedItems.push(li.parentElement.childNodes[1].id);
+        // });
+        checkedItems = ['node-1','node-2'];
 
         resetAttributes();
 

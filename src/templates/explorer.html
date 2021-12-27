@@ -11,7 +11,7 @@
 
 	<script type="text/javascript">
         // If graph data render the graph
-		var network = {{ network | safe }};
+		let network = {{ network | safe }};
     </script>
 
     <script type="text/javascript" src='{{ url_for('static', filename='js/manyBodyReuse.js') }}'></script>
@@ -28,6 +28,8 @@
 
 <div class="container container-fluid" style="max-width: 90%">
 	<h4 class="text-center" style="margin-top:20px"> Network: {{ network_id}} | Node: {{ node }} </h4>
+	<p class="text-center" style="margin-top:10px"> Connectivity: {{ node }} | Rank: {{ node }} | Housekeeping: {{ node }} </p>
+
 	<div class="row" style="margin-right: 0; margin-bottom:20px; margin-top:20px"><!-- visualization row -->
 		<div class="col-8">
 			<div id="graph-chart"></div>
@@ -58,20 +60,12 @@
 				</div>
 
 				<div class="tab-pane not-rounded" id="edges-panel" role="tabpanel">
-					<p class="text-center"><b> Modify Links Length</b></p>
-					<label for="link-slider"></label><input id="link-slider" style="width: 80%; margin-bottom: 5px; margin-top: 5px;
+					<label style="margin-left: 20%; margin-right: 20%;" for="link-slider"><b>Modify Links Length</b></label>
+					<input id="link-slider" style="width: 80%; margin-bottom: 5px; margin-top: 5px;
 					 margin-left: 10%; margin-right: 10%;"
 															class="text-center" type="range" min="0"
 															max="1"
 															step="any" value="0.7"/>
-					<div class="input-group form-inline">
-						<button class='btn btn-outline-primary' id='get-checked-edges'>Show
-							Selected </button>
-						<input placeholder="Search edges" id="edge-search" class="form-control not-rounded"
-						   aria-describedby="sizing-addon1" type="text"/>
-					</div>
-					<div id="edge-list" class="not-rounded2"
-						 style="max-height: 300px;height: 300px; overflow:auto;"></div>
 				</div>
 			</div>
 		</div>

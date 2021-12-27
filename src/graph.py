@@ -11,7 +11,6 @@ def create_json_file(id, node):
 
 	# Get edges linked to nodes:
 	edges = list(g.edges(node))
-
 	node_list = list(set([i[1] for i in edges[:]] + [i[0] for i in edges[:]]))
 	nodes_dic = {node_list[i]: i for i in range(len(node_list))}
 

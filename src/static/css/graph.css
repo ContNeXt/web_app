@@ -127,6 +127,10 @@
     stroke: blue;
 }
 
+.link {
+    stroke: #03254c;
+}
+
 .link_highlighted {
     stroke: #4EB2D4;
 !important;

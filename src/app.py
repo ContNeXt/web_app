@@ -88,7 +88,7 @@ def graph(node, network_id):
 
 # autocomplete API: node list json
 @app.route("/api/autocomplete", methods = ['POST'])
-@cross_origin(origin='*',headers=['Content-Type','Authorization'])
+@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
 def node_autocompletion():
 	q = request.form['q']
 	resource = request.form['resource']
@@ -113,7 +113,6 @@ def network_explorer(node, network_id):
 
 # TODO - interactome (in context but its not, should be digraph)
 # TODO - FOXP3 repeated why?
-# TODO - remove species
 # TODO - ad degree from table
 
 # TODO - network look up: by id and name
