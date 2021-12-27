@@ -217,7 +217,6 @@ function initD3Force(graph) {
         .style("stroke-width", edgeStroke)
         .style("stroke-opacity", opacity)
         .attr("class", "link")
-        // .attr("stroke", "#03254c")
 
 
     var node = g.selectAll(".nodes")
@@ -378,7 +377,7 @@ function initD3Force(graph) {
     nodePanel.append("<ul id='node-list-ul' class='list-group checked-list-box not-rounded'></ul>");
 
     // Variable with all node names
-    var nodeNames = [];
+    let nodeNames = [];
 
     // Create node list and create an array with duplicates
     $.each(graph.nodes, function (key, value) {
@@ -393,14 +392,11 @@ function initD3Force(graph) {
     // Highlight only selected nodes in the graph
     $("#get-checked-nodes").on("click", function (event) {
         event.preventDefault();
-        console.log("checkedItems");
         let checkedItems = [];
-        // $(".node-checkbox:checked").each(function (idx, li) {
-        //     // Get the class of the span element (node-ID) Strips "node-" and evaluate the string to integer
-        //     checkedItems.push(li.parentElement.childNodes[2].className)
-        //     console.log(checkedItems)
-        // });
-        checkedItems = [0, 1,2]
+        $(".node-checkbox:checked").each(function (idx, li) {
+            // Get the class of the span element (node-ID) Strips "node-" and evaluate the string to integer
+            checkedItems.push(parseInt((li.parentElement.childNodes[2].className.replace("node-", "")), 10));
+        });
         resetAttributes();
         highlightNodes(checkedItems, 'id');
         resetAttributesDoubleClick();
