@@ -84,7 +84,7 @@ def node_autocompletion():
 	if not q or not resource:
 		return jsonify({})
 
-	results = query_db_for_nodes(query=q, context=resource, limit=10)
+	results = query_db_for_nodes(query=q, context=resource)
 	if not results:
 		return jsonify({})
 
@@ -99,6 +99,24 @@ def network_explorer(node, network_id):
 		return jsonify({'nodes': nodes, 'links': links})
 
 
+# TODO - change to undirected
+# TODO - interactome (in context but its not)
+# TODO - add degree, betweennes centr to network table
+# TODO - FOXP3 repeated why?
+# TODO - remove species
+# TODO - ad degree from table
+
+# TODO - network look up: y id and name
+# TODO - show table (sorting by columns: ** rank )
+
+# TODO - ID change name depending on context (CL, UBERON,...)
+# TODO - put names instead of 'tissues', column before description
+
+# TODO - interactome is DIRECTED, others arent
+
+# TODO - HOVER: each node, get degree and centrality
+# TODO - footer looks weird
+# TODO - add netwrok name to header, + node degree (conections) and betweeness centrality
 '''
     Run app
 '''

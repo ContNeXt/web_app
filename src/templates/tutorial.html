@@ -7,8 +7,8 @@
 
 	<p>
 		In the search bar in <a href="{{ url_for('homepage.home') }}">Home</a>, select the context of the networks you
-		would like to query. There are for options: "Tissues", "Cell Lines", "Cell Types" and "Species". Once selected,
-		type the name of your gene of interest in the search bar.
+		would like to query. There are three context options: "Tissues", "Cell Lines", "Cell Types", and an "Interactome" option.
+        Once selected, type the name of your gene of interest in the search bar.
 	</p>
 	<div class="card">
 		<div class="card-body">
@@ -18,7 +18,7 @@
                         <option selected>Tissues</option>
                         <option>Cell Lines</option>
                         <option>Cell Types</option>
-                        <option>Species</option>
+                        <option class="dropdown-divider" >Interactome</option>
 
 				  </select>
                   </div>

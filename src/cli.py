@@ -1,7 +1,7 @@
 import os.path
 import click
 
-DB_LOADER = os.path.abspath('src/load_db.py')
+DB_LOADER = os.path.abspath('load_db.py')
 
 @click.group()
 def main():
