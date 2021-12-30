@@ -1,43 +1,91 @@
 {% extends "layout.html" %}
 {% block title %}ContNext Viewer–Results{% endblock %}
 {% block content %}
-<div class="container" style="margin-top: 20px" >
-	<h4 class="text-center" style="margin-top:20px"> Node: {{ idquery }} | Context: {{ idoptions }} </h4>
+{%  if form == 'node' %}
 
-</div>
+	<div class="container" style="margin-top: 20px" >
+		<h4 class="text-center" style="margin-top:20px"> Node: {{ idquery }} | Context: {{ idoptions }} </h4>
+	</div>
 
-<!-- Table Content -->
-<div class="container" style="margin-top: 50px" >
-<table class="table table-light table-hover table-sm">
+	<!-- Table Content -->
+	<div class="container" style="margin-top: 50px" >
+	<table class="table table-light table-hover table-sm">
 
-    <!-- Table headers -->
-        <th>Network ID</th>
-		<th>Name</th>
-        <th>Connectivity</th>
-        <th>Description</th>
+		<!-- Table headers -->
+			<th>Network ID</th>
+			<th>Name</th>
+			<th>Connectivity</th>
+			<th>Description</th>
 
-    <!-- Table content -->
+		<!-- Table content -->
 
-       {% for key, value in results.items() %}
-            <tr class="clickable text-left" onclick="window.location='{{ url_for('graph', node=idquery, network_id=key) }}'">
-                <td>
-					{{key}}
-                 </td>
-                <td>
-                    {{value[1]}}
-                </td>
-		    	<td>
-                    {{value[2].get(idquery).get('connections')}}
-                </td>
-				<td>
-                    {{value[0]}}
-                </td>
+		   {% for key, value in results.items() %}
+				<tr class="clickable text-left" onclick="window.location='{{ url_for('graph', node=idquery, network_id=key) }}'">
+					<td>
+						{{key}}
+					 </td>
+					<td>
+						{{value[1]}}
+					</td>
+					<td>
+						{{value[2].get(idquery).get('connections')}}
+					</td>
+					<td>
+						{{value[0]}}
+					</td>
 
-		   </tr>
-        {% endfor %}
-     </table>
-</div>
+			   </tr>
+			{% endfor %}
+		 </table>
+	</div>
 
+{% elif form == 'network' %}
+	{% set identifier = results[0] %}
+	{% set data = results[1] %}
+	{% set name = results[2] %}
+	{% set properties = results[3] %}
+	{% set context = results[4] %}
+
+	<div class="container" style="margin-top: 20px" >
+		<h4 class="text-center" style="margin-top:20px">
+			Network ID: {{ identifier }} |
+			Network Name: {{ name }} |
+			Context: {{ context }}
+		</h4>
+	</div>
+
+	<!-- Table Content -->
+	<div class="container" style="margin-top: 50px" >
+	<table class="table table-light table-hover table-sm">
+
+		<!-- Table headers -->
+			<th>Node</th>
+			<th>Connections</th>
+			<th>Connection Rank</th>
+			<th>Housekeeping</th>
+
+		<!-- Table content -->
+
+		{% for key, value in properties.items() %}
+				<tr class="clickable text-left" onclick="window.location='{{ url_for('graph', node=key, network_id=identificator) }}'">
+					<td>
+						{{key}}
+					 </td>
+					<td>
+						{{value['connections'] }}
+					</td>
+					<td>
+						{{value['rank'] }}
+					</td>
+					<td>
+						{{value['housekeeping'] }}
+					</td>
+
+			   </tr>
+		{% endfor %}
+		 </table>
+	</div>
+{% endif %}
 
 {% endblock %}
 

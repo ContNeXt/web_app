@@ -100,11 +100,12 @@ def list_files(dir:str) -> List:
     return all_files
 
 
-def check_tsv(all_files: List) -> Tuple[List, List, List]:
+def check_tsv(all_files: List) -> Tuple[List, List, List, str]:
     """ Filters out all non-tsv files from the dictionary"""
     supplementary = []
     all_tsv_files = []
     properties = []
+    interactome = None
     for file in all_files[:]:
         # Check the extension
         if file.endswith("coexp_network_edges.tsv"):
@@ -114,8 +115,9 @@ def check_tsv(all_files: List) -> Tuple[List, List, List]:
             supplementary.append(file)
         elif file.endswith("properties.tsv"):
             properties.append(file)
-
-    return all_tsv_files, supplementary, properties
+        elif file.endswith('interactome.edgelist'):
+            interactome = file
+    return all_tsv_files, supplementary, properties, interactome
 
 
 def create_node_set(list_tsv):
@@ -133,11 +135,7 @@ def add_edgelist(file_path, interacFlag=False):
     """ Create networkx edgelist from file"""
     # Open the file as an nx object
     if interacFlag:
-        network = nx.read_edgelist(file_path, comments='from', delimiter='\t', data=(
-        ("direction", str),
-        ("method", str),
-        ("weight", float),), encoding='utf-8', create_using=nx.DiGraph())
-        return network
+        return nx.read_edgelist(file_path, delimiter='\t', encoding='utf-8', create_using=nx.DiGraph())
 
     network = nx.read_edgelist(file_path, comments='from', delimiter='\t', data=(
         ("direction", str),
@@ -187,7 +185,7 @@ def load_database(data_source=DATA_SOURCE):
     # Find all files
     all_files = list_files(data_source)
     # filter out all non-tsv, and get supplementary dict
-    list_tsv, supplementary_source, properties_files  = check_tsv(all_files=all_files)
+    list_tsv, supplementary_source, properties_files, interactome = check_tsv(all_files=all_files)
 
     # counter
     debugger = int(0)
@@ -196,6 +194,16 @@ def load_database(data_source=DATA_SOURCE):
 
     metadata = add_metadata_to_networks(supplementary_files=supplementary_source)
     node_properties = add_properties_to_nodes(degree_files=properties_files)
+
+    # add interactome to db
+    interactome = Network(identifier='interactome',
+                          data=add_edgelist(interactome, interacFlag=True),
+                          context='interactome',
+                          name='interactome',
+                          properties=node_properties.get('interactome'))
+    # push to database
+    db.session.add(interactome)
+    db.session.commit()
 
     # add data from each file to database
     for file in tqdm(list_tsv, total=len(list_tsv)):

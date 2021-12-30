@@ -498,6 +498,14 @@ function initD3Force(graph) {
 
     });
 
+    ///////////////////////
+    // Show node properties /
+    ///////////////////////
+
+    var div = d3.select("body").append("div")
+     .attr("class", "tooltip-donut")
+     .style("opacity", 0);
+
 
     ///////////////////////
     // Tool modal buttons /

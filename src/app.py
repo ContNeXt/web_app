@@ -105,21 +105,15 @@ def node_autocompletion():
 @app.route("/api/neighbouring-nodes/<node>/<network_id>", methods = ['GET'])
 def network_explorer(node, network_id):
 	if (request.method == 'GET'):
-		print(network_id)
 		nodes, links = 	create_json_file(id=network_id, node=node)
 		return jsonify({'nodes': nodes, 'links': links})
 
 
 
-# TODO - interactome (in context but its not, should be digraph)
-# TODO - FOXP3 repeated why?
-# TODO - ad degree from table
 
-# TODO - network look up: by id and name
-# TODO - show table (sorting by columns: ** rank )
+# TODO - network look up: show table (sorting by columns: ** rank )
 
 # TODO - HOVER: each node, get degree and centrality
-# TODO - footer looks weird
 # TODO - add netwrok name to header, + node degree (conections) and betweeness centrality
 
 '''
