@@ -25,8 +25,7 @@ function initD3Force(graph) {
 
     var nodeInfoDiv = d3.select("body").append("div") // Node properties div
         .attr("class", "tooltip")
-        .style("opacity", 0)
-        .style("background-color", "#FBD603");
+        .style("opacity", 0);
 
     var graphDiv = $("#graph-chart"); // Force div
 
