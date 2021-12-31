@@ -10,6 +10,7 @@ var color = d3.scaleOrdinal(d3.schemeCategory10);
 var simulationAlpha = 0.3; //Alpha simulation convex hulls
 
 
+
 /**
  * Initialize d3 Force to plot network from json
  * @param {object} graph json data
@@ -22,11 +23,19 @@ function initD3Force(graph) {
 
     $(".disabled").attr("class", "nav-link ");     // Enable nodes and edges tabs
 
+    var nodeInfoDiv = d3.select("body").append("div") // Node properties div
+        .attr("class", "tooltip")
+        .style("opacity", 0)
+        .style("background-color", "#FBD603");
+
     var graphDiv = $("#graph-chart"); // Force div
+
+
 
     var nodePanel = $("#node-list"); // Node submit_data div
 
     var edgePanel = $("#edge-list"); // Edge submit_data div
+
 
     d = document;
     e = d.documentElement;
@@ -259,11 +268,35 @@ function initD3Force(graph) {
         .on("mousedown", function () {
             d3.event.stopPropagation();
         })
-        .on("mouseout", function () {
+        .on("mouseover", function (d) {
+          d3.select(this).transition()
+               .duration(50)
+               .attr('opacity', '.85');          //Makes the new div appear on hover:
+          nodeInfoDiv.transition()
+               .duration(50)
+               .style("opacity", 1);
+          let degree = "Degree: "+ (d.connections).toString();
+          let rank = "Rank: " + (d.rank).toString();
+          let housekeeping = "Housekeeping: "+ (d.housekeeping).toString();
+          nodeInfoDiv.html(degree + "<br>" + rank + "<br>" + housekeeping)
+                .style("left", (d3.event.pageX + 50) + "px")
+                .style("top", (d3.event.pageY - 50) + "px")
+                .style("position", "absolute")
+                .style("text-align", "center")
+                .style("padding", ".2rem")
+                .style("background", "#313639")
+                .style("color", "#f9f9f9")
+                .style("border-radius", "8px")
+                .style("font-size", ".7rem");
+     })
+        .on("mouseout", function (d, info) {
             link.classed("link_highlighted", false);
             node.classed("node_highlighted", false);
-        });
-
+            //Makes the new div disappear:
+            nodeInfoDiv.transition()
+                .duration(50)
+                .style("opacity", 0);
+         });
 
     // Highlight links on mouseenter and back to normal on mouseout
     link.on("mouseenter", function (data) {
@@ -407,11 +440,6 @@ function initD3Force(graph) {
     // Build the edge selection toggle
     ///////////////////////////////////////
 
-
-    // Build the node unordered list
-    edgePanel.append("<ul id='edge-list-ul' class='list-group checked-list-box not-rounded'></ul>");
-
-
     function zoomed() {
         //Transform svg and update convex hull
         g.attr("transform", d3.event.transform);
@@ -423,25 +451,6 @@ function initD3Force(graph) {
         .on("zoom", zoomed))
         .on("dblclick.zoom", null);
 
-    /// Convex Hull Specific
-
-    $("#get-checked-edges").on("click", function (event) {
-        event.preventDefault();
-
-        let checkedItems = [];
-        // $(".edge-checkbox:checked").each(function (idx, li) {
-        //     checkedItems.push(li.parentElement.childNodes[1].id);
-        // });
-        checkedItems = ['node-1','node-2'];
-
-        resetAttributes();
-
-        highlightEdges(checkedItems, 'id');
-
-        resetAttributesDoubleClick();
-    });
-
-
     // Update Node Dropdown
     $("#node-search").on("keyup", function () {
         // Get value from search form (fixing spaces and case insensitive
@@ -452,23 +461,6 @@ function initD3Force(graph) {
         $.each($("#node-list-ul")[0].childNodes, updateNodeArray);
 
         function updateNodeArray() {
-            var currentLiText = $(this).find("span")[0].innerHTML,
-                showCurrentLi = ((currentLiText.toLowerCase()).replace(/\s+/g, "")).indexOf(searchText) !== -1;
-            $(this).toggle(showCurrentLi);
-        }
-    });
-
-    // Update Edge Dropdown
-    $("#edge-search").on("keyup", function () {
-        // Get value from search form (fixing spaces and case insensitive
-        var searchText = $(this).val();
-        searchText = searchText.toLowerCase();
-        searchText = searchText.replace(/\s+/g, "");
-
-        $.each($("#edge-list-ul")[0].childNodes, updateEdgeArray);
-
-        function updateEdgeArray() {
-
             var currentLiText = $(this).find("span")[0].innerHTML,
                 showCurrentLi = ((currentLiText.toLowerCase()).replace(/\s+/g, "")).indexOf(searchText) !== -1;
             $(this).toggle(showCurrentLi);
@@ -498,13 +490,6 @@ function initD3Force(graph) {
 
     });
 
-    ///////////////////////
-    // Show node properties /
-    ///////////////////////
-
-    var div = d3.select("body").append("div")
-     .attr("class", "tooltip-donut")
-     .style("opacity", 0);
 
 
     ///////////////////////
@@ -514,7 +499,6 @@ function initD3Force(graph) {
     // Hide node names button
 
     var hideNodeNames = $("#hide-node-names");
-
     hideNodeNames.off("click"); // It will unbind the previous click if multiple graphs has been rendered
 
     // Hide text in graph
