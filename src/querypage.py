@@ -16,19 +16,19 @@ def query(query):
     if form == 'node':
         # Run query
         # Get list of all the ids for that node
-        listof_nodes={each.id : each.name for each in Node.query.filter(Node.name == query).all()}
+        session['listof_nodes']={each.id : each.name for each in Node.query.filter(Node.name == query).all()}
         # For each id, get list of all networks associated with it.
         listof_networks={}
-        for node in tqdm(listof_nodes.keys()):
+        for node in tqdm(session['listof_nodes'].keys()):
             for network in Network.query.filter(and_(Network.nodes_.any(id=node), Network.context == context)).all():
                 listof_networks.update({network.identifier: [network.data, network.name, network.properties]})
 
     elif form == 'network' and param == 'identifier':
-        listof_networks = [[network.identifier, network.data, network.name, network.properties, network.context]
+        session['listof_nodes'] = [[network.identifier, network.data, network.name, network.properties, network.context]
                            for network in Network.query.filter(Network.identifier == query).all()][0]
 
     elif form == 'network' and param == 'name':
-        listof_networks = [[network.identifier, network.data, network.name, network.properties, network.context]
+        session['listof_nodes'] = [[network.identifier, network.data, network.name, network.properties, network.context]
                            for network in Network.query.filter(Network.name == query).all()][0]
 
-    return render_template("results.html", idquery=query, idoptions=context, form=form, results=listof_networks)
+    return render_template("results.html", idquery=query, idoptions=context, form=form, results=session['listof_nodes'])

@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask, render_template, request, redirect, jsonify
+from flask import Flask, render_template, request, redirect, jsonify, session
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_sqlalchemy import SQLAlchemy
@@ -12,7 +12,6 @@ from querypage import querypage
 from autocomplete import query_db_for_nodes
 from graph import create_json_file
 
-# TODO:
 def create_app():
 
 	app = Flask(__name__)
@@ -80,10 +79,8 @@ def admin():
 @app.route("/graph/<node>/<network_id>")
 def graph(node, network_id):
 	nodes, links = create_json_file(id=network_id, node=node)
-	# node_interactome_dict = { app.interactome_dic.get(node) for node in nodes if nodes in app.interactome_dic }
 	network = {'nodes': nodes, 'links': links}
-	node_dict={}
-	return render_template("explorer.html", network_id=network_id, node=node, network=network, node_dict=node_dict)
+	return render_template("explorer.html", network_id=network_id, node=node, network_json=network)
 
 
 # autocomplete API: node list json
@@ -111,10 +108,7 @@ def network_explorer(node, network_id):
 
 
 
-# TODO - network look up: show table (sorting by columns: ** rank )
-
-# TODO - HOVER: each node, get degree and centrality
-# TODO - add netwrok name to header, + node degree (conections) and betweeness centrality
+# TODO - network look up: table (sorting by columns: ** rank )
 
 '''
     Run app

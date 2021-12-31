@@ -11,7 +11,7 @@
 
 	<script type="text/javascript">
         // If graph data render the graph
-		let network = {{ network | safe }};
+		let network = {{ network_json | safe }};
     </script>
 
     <script type="text/javascript" src='{{ url_for('static', filename='js/manyBodyReuse.js') }}'></script>
@@ -27,8 +27,7 @@
 <body>
 
 <div class="container container-fluid" style="max-width: 90%">
-	<h4 class="text-center" style="margin-top:20px"> Network: {{ network_id}} | Node: {{ node }} </h4>
-	<p class="text-center" style="margin-top:10px"> Connectivity: {{ node }} | Rank: {{ node }} | Housekeeping: {{ node }} </p>
+	<h4 class="text-center" style="margin-top:20px"> Network: {{ network_id }} | Node: {{ node }} </h4>
 
 	<div class="row" style="margin-right: 0; margin-bottom:20px; margin-top:20px"><!-- visualization row -->
 		<div class="col-8">
