@@ -39,6 +39,64 @@ ContNext WebApp
 > TODO show in a very small amount of space the **MOST** useful thing your package can do.
 Make it as short as possible! You have an entire set of docs for later.
 
+### Data Structure
+
+To correctly load the contnextViewer database, network data must have 
+the following structure:
+```
+.
+├── node_properties
+│   ├── tissue
+│   │   ├── 0000001 
+│   │   │ 	└── node_properties.tsv
+│   │   ├── 0000002
+│   │   │	└── node_properties.tsv
+│   │   └── ... 
+│   │
+│   ├── cell line
+│   │   ├── 0000003 
+│   │   │ 	└── node_properties.tsv
+│   │   ├── 0000004
+│   │   │	└── node_properties.tsv
+│   │   └── ... 
+│   │
+│   └── cell type
+│	    ├── 0000005 
+│	    │ 	└── node_properties.tsv
+│	    ├── 0000006
+│	    │	└── node_properties.tsv
+│	    └── ... 
+│
+├── tissues
+│   ├── ContNeXt supplementary - Tissue overview.tsv
+│   ├── ContNeXt supplementary - tissue_node_degree.tsv
+│   ├── 0000001 
+│   │ 	└── coexp_network_edges.tsv
+│   ├── 0000002
+│   │	└── coexp_network_edges.tsv
+│   └── ... 
+│
+├── cell types
+│   ├── ContNeXt supplementary - Cell type overview.tsv
+│   ├── ContNeXt supplementary - celltype_node_degree.tsv
+│   ├── 0000003 
+│   │ 	└── coexp_network_edges.tsv
+│   ├── 0000004
+│   │	└── coexp_network_edges.tsv
+│   └── ... 
+│
+├── cell lines
+│   ├── ContNeXt supplementary - Cell line overview.tsv
+│   ├── ContNeXt supplementary - cellline_node_degree.tsv
+│   ├── 0000005 
+│   │ 	└── coexp_network_edges.tsv
+│   ├── 0000006
+│   │	└── coexp_network_edges.tsv
+│   └── ... 
+│
+└── interactome.edgelist
+
+```
 ### Command Line Interface
 
 The contnextViewer command line tool is automatically installed. It can
@@ -48,8 +106,10 @@ be used from the shell with the `--help` flag to show all subcommands:
 $ contnextViewer --help
 ```
 
-> TODO show the most useful thing the CLI does! The CLI will have documentation auto-generated
-by `sphinx`.
+To load the contnextViewer database, use the `load` command:
+```shell
+$ contnextViewer load --source /path/to/network/data/directory
+```
 
 ## 🚀 Installation
 

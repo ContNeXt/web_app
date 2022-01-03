@@ -276,7 +276,7 @@ function initD3Force(graph) {
                .style("opacity", 1);
           let degree = "Degree: "+ (d.connections).toString();
           let rank = "Rank: " + (d.rank).toString();
-          let housekeeping = "Housekeeping: "+ (d.housekeeping).toString();
+          let housekeeping = (d.housekeeping) ? "Housekeeping":None;
           nodeInfoDiv.html(degree + "<br>" + rank + "<br>" + housekeeping)
                 .style("left", (d3.event.pageX + 50) + "px")
                 .style("top", (d3.event.pageY - 50) + "px")

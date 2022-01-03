@@ -6,6 +6,8 @@ from flask_admin.contrib.sqla import ModelView
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
 
+from pathlib import Path
+import os
 from homepage import homepage
 from models import Network, Node
 from querypage import querypage
@@ -20,13 +22,15 @@ def create_app():
 	db = SQLAlchemy(app)
 
 	# SQLAlchemy
-	db_name = "contnext.db"
+	DB_NAME = "contnext.db"
+	HIDDEN_FOLDER = os.path.join(Path.home(), '.contnext')
+	DB_PATH = os.path.join(HIDDEN_FOLDER, DB_NAME)
 
 	cors = CORS(app, resources={r"/foo": {"origins": "*"}})
 	app.config['CORS_HEADERS'] = 'Content-Type'
 
 	app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
-	app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
+	app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + DB_PATH
 	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
 
 	# Add Admin view
