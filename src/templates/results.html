@@ -46,12 +46,15 @@
 	{% set properties = results[3] %}
 	{% set context = results[4] %}
 
-	<div class="container" style="margin-top: 20px" >
-		<h4 class="text-center" style="margin-top:20px">
-			Network ID: {{ identifier }} |
-			Network Name: {{ name }} |
-			Context: {{ context }}
-		</h4>
+	<div class="card container-results">
+		<header class="card-header-results">Results</header>
+		<div class="card-results-body">
+			<p class="text-left" style="padding-left:10px">
+			Network ID: <bold>{{ identifier }}</bold><br>
+			Network Name: <bold>{{ name }}</bold><br>
+			Context: <bold> {{ context }}</bold><br>
+			</p>
+		</div>
 	</div>
 
 	<!-- Table Content -->

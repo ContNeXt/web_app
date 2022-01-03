@@ -1,0 +1,131 @@
+:root {
+  --primary: #0a344b;
+  --accent: #FF3D85;
+  --secondary: #11557C;
+  --success: #35bb78;
+  --info: #05B4E1;
+  --warning: #FAC14D;
+  --danger: #FF4943;
+  --grey: #B4B2C5;
+  --dark: #2D2B3A;
+  --light: #F6F5FC;
+}
+
+body {
+    font-family: "Work Sans", sans-serif;
+    line-height: 1.5;
+    color: #0a344b;
+    background-color: #e7f9ff;
+}
+
+a {
+    color: #11557C;
+    background-color: transparent;
+    text-decoration: underline;
+}
+
+a:hover {
+  color: #a6cfe5;
+  text-decoration: underline;
+}
+
+/* Nav Bar */
+
+.navbar {
+    min-height: 70px;
+    background-color: #11557C;
+}
+.navbar-brand{
+    color: whitesmoke;
+}
+.navbar-nav {
+    flex-shrink: 0;
+}
+.nav-link{
+    color: whitesmoke
+}
+.nav-link:hover {
+    color: #05B4E1
+}
+.link-slider {
+    width: 80%;
+    margin-bottom: 5px;
+    margin-top: 5px;
+
+    margin-left: 10%;
+    margin-right: 10%;
+}
+
+/* Search Cards */
+.card{
+    margin: 60px;
+    padding: 10px;
+    background-color: #11557C
+}
+.card-header{
+    padding: 10px;
+    color: whitesmoke;
+    font-weight: bold;
+}
+.card-body{
+    color: whitesmoke;
+}
+.btn-custom-1 {
+    background-color: #05B4E1 ;
+    color: whitesmoke;
+}
+.btn-custom-1:hover {
+    background-color: #a6cfe5;
+    color: whitesmoke;
+}
+
+/* Results Div*/
+.container-results {
+    background-color: #a6cfe5;
+    margin-top:30px;
+    margin-left:100px;
+    margin-right:100px;
+}
+.card-header-results{
+    padding: 10px;
+    color: #0a344b;
+    font-weight: bold;
+}
+.card-results-body {
+    color: #0a344b;
+    margin-bottom: 0px;
+}
+
+/* Explorer */
+.card-results{
+    max-height: 585px;
+    min-height: 10px;
+    margin-left: 20px;
+    margin-right: 20px;
+}
+.tab-pane{
+    background-color: #11557C;
+    padding: 20px;
+}
+.nav-link-results{
+    color: whitesmoke;
+    text-align: justify;
+    background-color: #11557C;
+    padding: 10px;
+    border-radius: .25rem;
+    margin: 0px;
+    width: 100%;
+}
+
+.nav-link-results:active{
+    color: whitesmoke;
+    text-align: justify;
+    background: 0 0;
+    padding: 10px;
+    border-radius: .25rem;
+    text-decoration: none;
+    margin: 0px;
+    width: 100%;
+
+
+}

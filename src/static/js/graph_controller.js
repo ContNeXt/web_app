@@ -276,7 +276,7 @@ function initD3Force(graph) {
                .style("opacity", 1);
           let degree = "Degree: "+ (d.connections).toString();
           let rank = "Rank: " + (d.rank).toString();
-          let housekeeping = (d.housekeeping) ? "Housekeeping":None;
+          let housekeeping = (d.housekeeping) ? "Housekeeping": "" ;
           nodeInfoDiv.html(degree + "<br>" + rank + "<br>" + housekeeping)
                 .style("left", (d3.event.pageX + 50) + "px")
                 .style("top", (d3.event.pageY - 50) + "px")
@@ -434,6 +434,16 @@ function initD3Force(graph) {
         resetAttributesDoubleClick();
 
     });
+    $("#clear-checked-nodes").on("click", function (event){
+            // Remove the overriding stroke so the links default back to the CSS definitions
+            link.style("stroke", null);
+
+            // SET default attributes //
+            svg.selectAll(".link, .node").style("visibility", "visible")
+                .style("opacity", "1");
+            // Show node names
+            svg.selectAll(".node-name").style("visibility", "visible").style("opacity", "1");
+        });
 
     ///////////////////////////////////////
     // Build the edge selection toggle
