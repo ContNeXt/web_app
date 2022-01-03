@@ -1,18 +1,23 @@
 import os.path
 import click
-
-DB_LOADER = os.path.abspath('src/load_db.py')
+from load import load_database
+from model import DB_PATH
+from pathlib import Path
 
 @click.group()
 def main():
 	"""Entry method."""
 
 @main.command()
-@click.argument('source-dir')
-def load(source_dir: str):
+@click.option('-s', '--source', help="A source directory with network data.")
+def load(source: str):
 	"""Creates a database from source directory."""
-	# TODO check database is not loaded
-	os.system(f"{DB_LOADER} {source_dir}")
+	try:
+		files = load_database(data_source=source)
+		print(f"Files uploaded to database: {str(files)}")
+	except:
+		print(f"ContNext database already exists at: {Path(DB_PATH).resolve()}",
+			"\nDatabase must be deleted in order to reload it.")
 
 if __name__ == "__main__":
 	main()

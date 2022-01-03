@@ -1,87 +1,19 @@
 # -*- coding: utf-8 -*-
 
 """ RUN ONCE TO CREATE THE DATABASE """
+import pathlib
 
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
-from sqlalchemy_utils.functions import database_exists
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy_utils import database_exists, create_database
 import networkx as nx
-# from models import Network, Node, relationship_table
+from model import Base, engine, Node, Network
 
 from typing import List, Tuple
 from tqdm import tqdm
 import os
-import sys
 import csv
-from pathlib import Path
-
-
-app = Flask(__name__)
-
-# SQLAlchemy
-DB_NAME = "contnext.db"
-# TODO make database in hidden folder in home dir
-HIDDEN_FOLDER = os.path.join(Path.home(), '.contnext')
-DB_PATH = os.path.join(HIDDEN_FOLDER, DB_NAME)
-DATA_SOURCE = sys.argv[1]
-
-
-app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + DB_NAME
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-
-
-# Initialize the database
-db = SQLAlchemy(app)
-
-'''
-database structure 
-'''
-
-# Create many-to-many relationship table
-relationship_table=db.Table('relationship_table',
-                            db.Column('network_id', db.Integer, db.ForeignKey('network.id'), primary_key=True),
-                            db.Column('node_id', db.Integer, db.ForeignKey('node.id'), primary_key=True)
-)
-
-# Create database class: Network
-class Network(db.Model):
-    __tablename__ = 'network'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    data = db.Column(db.PickleType())
-    context = db.Column(db.String(30))
-    identifier = db.Column(db.String(50), unique=True)
-    properties = db.Column(db.PickleType)
-
-    # many-to-many relationship
-    nodes_ = db.relationship('Node',
-                             secondary=relationship_table,
-                             lazy='dynamic',
-                             backref=db.backref('networks_'))
-
-    def __init__(self, data, name, context, identifier, properties):
-        self.data = data
-        self.name = name
-        self.context = context
-        self.identifier = identifier
-        self.properties = properties
-
-    def __repr__(self):
-        return f'<Network {self.data!r}'
-
-
-# Create database class: Node
-class Node(db.Model):
-    __tablename__ = 'node'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(30))
-
-    def __init__(self, name):
-        self.name = name
-
-    def __repr__(self):
-        return f'<Node {self.name!r}'
 
 def list_files(dir:str) -> List:
     """ List all the files in a directory and it's sub-directories """
@@ -175,12 +107,16 @@ def add_properties_to_nodes(degree_files: List):
     Run app
 '''
 
-@app.route('/')
-def load_database(data_source=DATA_SOURCE):
+def load_database(data_source):
     """ Load the SQL-Alchemy Database with files from given directory """
+    # Start database session
+    Session = sessionmaker(bind=engine)
+    session = Session()
 
-    if database_exists(app.config["SQLALCHEMY_DATABASE_URI"]):
-        return f"<h1> Database already exists: {str('sqlite:///' + DB_NAME)} </h1>"
+    # Check if database exists
+    if not database_exists(engine.url):
+        # Create db
+        create_database(engine.url)
 
     # Find all files
     all_files = list_files(data_source)
@@ -202,8 +138,8 @@ def load_database(data_source=DATA_SOURCE):
                           name='interactome',
                           properties=node_properties.get('interactome'))
     # push to database
-    db.session.add(interactome)
-    db.session.commit()
+    session.add(interactome)
+    session.commit()
 
     # add data from each file to database
     for file in tqdm(list_tsv, total=len(list_tsv)):
@@ -216,7 +152,7 @@ def load_database(data_source=DATA_SOURCE):
 
         for node in add_edgelist(file).nodes:
             # check if node is already in the database
-            q = Node.query.filter(Node.name == node).first()
+            q = session.query(Node).filter(Node.name == node).first()
             if q:
                 new_node = q
             else:
@@ -224,21 +160,13 @@ def load_database(data_source=DATA_SOURCE):
                 list_of_nodes.append({'node': node})
             # add relationship between nodes
             new_network.nodes_.append(new_node)
-            db.session.add(new_node)
+            session.add(new_node)
 
         debugger = debugger+1
 
         # push to database
-        db.session.add(new_network)
-        db.session.commit()
-
-    return f"<h1> Files uploaded to database: {str(debugger) } </h1>"
+        session.add(new_network)
+        session.commit()
 
 
-
-if __name__ == "__main__":
-
-    # Create database
-    db.create_all()
-    db.session.commit()
-    app.run(debug=True)
+    return debugger
