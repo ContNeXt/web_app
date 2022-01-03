@@ -8,7 +8,7 @@ from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists, create_database
 import networkx as nx
-from model import Base, engine, Node, Network
+from .models import Base, engine, Node, Network
 
 from typing import List, Tuple
 from tqdm import tqdm

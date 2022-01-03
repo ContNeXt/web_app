@@ -67,7 +67,7 @@
 		<!-- Table content -->
 
 		{% for key, value in properties.items() %}
-				<tr class="clickable text-left" onclick="window.location='{{ url_for('graph', node=key, network_id=identificator) }}'">
+				<tr class="clickable text-left" onclick="window.location='{{ url_for('graph', node=key, network_id=identifier) }}'">
 					<td>
 						{{key}}
 					 </td>

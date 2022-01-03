@@ -1,43 +1,44 @@
 # -*- coding: utf-8 -*-
 
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import create_engine
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy import Column, Integer, String, PickleType, ForeignKey, Table
+from pathlib import Path
+from sqlalchemy.orm import relationship, backref
 
+# SQLAlchemy
+DB_PATH = str(Path(Path(__file__).parent.resolve(), 'contnext.db'))
 
-app = Flask(__name__)
-
-
-# Database settings
-db_name = "database.db"
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + db_name
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
-
-# Assign variable to the db for SQLAlchemy commands
-db = SQLAlchemy(app)
+# Create engine
+engine = create_engine('sqlite:///'+DB_PATH)
+Base = declarative_base()
 
 '''
 database structure 
 '''
+
 # Create many-to-many relationship table
-relationship_table=db.Table('relationship_table',
-                            db.Column('network_id', db.Integer, db.ForeignKey('network.id'), primary_key=True),
-                            db.Column('node_id', db.Integer, db.ForeignKey('node.id'), primary_key=True))
+relationship_table=Table('relationship_table',
+                         Base.metadata,
+                         Column('network_id', Integer, ForeignKey('network.id'), primary_key=True),
+                         Column('node_id', Integer, ForeignKey('node.id'), primary_key=True)
+)
 
 # Create database class: Network
-class Network(db.Model):
+class Network(Base):
     __tablename__ = 'network'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(100))
-    data = db.Column(db.PickleType())
-    context = db.Column(db.String(30))
-    identifier = db.Column(db.String(50), unique=True)
-    properties = db.Column(db.PickleType)
+    id = Column(Integer, primary_key=True)
+    name = Column(String(100))
+    data = Column(PickleType())
+    context = Column(String(30))
+    identifier = Column(String(50), unique=True)
+    properties = Column(PickleType)
 
     # many-to-many relationship
-    nodes_ = db.relationship('Node',
+    nodes_ = relationship('Node',
                              secondary=relationship_table,
                              lazy='dynamic',
-                             backref=db.backref('networks_'))
+                             backref=backref('networks_'))
 
     def __init__(self, data, name, context, identifier, properties):
         self.data = data
@@ -51,10 +52,10 @@ class Network(db.Model):
 
 
 # Create database class: Node
-class Node(db.Model):
+class Node(Base):
     __tablename__ = 'node'
-    id = db.Column(db.Integer, primary_key=True)
-    name = db.Column(db.String(30))
+    id = Column(Integer, primary_key=True)
+    name = Column(String(30))
 
     def __init__(self, name):
         self.name = name
@@ -62,10 +63,4 @@ class Node(db.Model):
     def __repr__(self):
         return f'<Node {self.name!r}'
 
-
-if __name__ == "__main__":
-
-    # Create database
-    db.create_all()
-    db.session.commit()
-    app.run(debug=True)
+Base.metadata.create_all(engine, checkfirst=True)

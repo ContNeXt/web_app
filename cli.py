@@ -1,7 +1,7 @@
 import os.path
 import click
-from load import load_database
-from model import DB_PATH
+from src.load import load_database
+from src.models import DB_PATH
 from pathlib import Path
 
 @click.group()
@@ -16,7 +16,7 @@ def load(source: str):
 		files = load_database(data_source=source)
 		print(f"Files uploaded to database: {str(files)}")
 	except:
-		print(f"ContNext database already exists at: {Path(DB_PATH).resolve()}",
+		print(f"ContNext database already exists at: {DB_PATH}",
 			"\nDatabase must be deleted in order to reload it.")
 
 if __name__ == "__main__":

@@ -9,7 +9,7 @@ from flask_cors import CORS, cross_origin
 from pathlib import Path
 import os
 from homepage import homepage
-from models import Network, Node
+from models import Network, Node, DB_PATH
 from querypage import querypage
 from autocomplete import query_db_for_nodes
 from graph import create_json_file
@@ -20,11 +20,6 @@ def create_app():
 
 	# Initialize the database
 	db = SQLAlchemy(app)
-
-	# SQLAlchemy
-	DB_NAME = "contnext.db"
-	HIDDEN_FOLDER = os.path.join(Path.home(), '.contnext')
-	DB_PATH = os.path.join(HIDDEN_FOLDER, DB_NAME)
 
 	cors = CORS(app, resources={r"/foo": {"origins": "*"}})
 	app.config['CORS_HEADERS'] = 'Content-Type'
@@ -108,7 +103,6 @@ def network_explorer(node, network_id):
 	if (request.method == 'GET'):
 		nodes, links = 	create_json_file(id=network_id, node=node)
 		return jsonify({'nodes': nodes, 'links': links})
-
 
 
 

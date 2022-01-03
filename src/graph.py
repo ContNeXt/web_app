@@ -1,11 +1,15 @@
-from models import Network
+from models import Network, engine
+from sqlalchemy.orm import sessionmaker
 
 
 def create_json_file(id, node):
-	# Get network from id
+	# Start database session
+	Session = sessionmaker(bind=engine)
+	sqlsession = Session()
+
 	try:
-		g = [each.data for each in Network.query.filter(Network.identifier == id).all()][0]
-		properties = [each.properties for each in Network.query.filter(Network.identifier == id).all()][0]
+		g = [each.data for each in sqlsession.query(Network).filter(Network.identifier == id).all()][0]
+		properties = [each.properties for each in sqlsession.query(Network).filter(Network.identifier == id).all()][0]
 	except:
 		return [], []
 
