@@ -1,8 +1,7 @@
-import os.path
 import click
 from src.load import load_database
 from src.models import DB_PATH
-from pathlib import Path
+from src.app import create_app
 
 @click.group()
 def main():
@@ -18,6 +17,13 @@ def load(source: str):
 	except:
 		print(f"ContNext database already exists at: {DB_PATH}",
 			"\nDatabase must be deleted in order to reload it.")
+
+@main.command()
+def run():
+	"""Runs webapp"""
+	app = create_app()
+	app.run(debug=False)
+
 
 if __name__ == "__main__":
 	main()

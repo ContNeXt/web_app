@@ -1,18 +1,15 @@
 # -*- coding: utf-8 -*-
-
 from flask import Flask, render_template, request, redirect, jsonify, session
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_sqlalchemy import SQLAlchemy
 from flask_cors import CORS, cross_origin
 
-from pathlib import Path
-import os
-from homepage import homepage
-from models import Network, Node, DB_PATH
-from querypage import querypage
-from autocomplete import query_db_for_nodes
-from graph import create_json_file
+from .homepage import homepage
+from .models import Network, Node, DB_PATH
+from .querypage import querypage
+from .autocomplete import query_db_for_nodes
+from .graph import create_json_file
 
 def create_app():
 
@@ -104,9 +101,6 @@ def network_explorer(node, network_id):
 		nodes, links = 	create_json_file(id=network_id, node=node)
 		return jsonify({'nodes': nodes, 'links': links})
 
-
-
-# TODO - network look up: table (sorting by columns: ** rank )
 
 '''
     Run app

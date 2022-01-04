@@ -1,8 +1,8 @@
+# -*- coding: utf-8 -*-
 from flask import Blueprint, render_template, request, redirect, url_for, session
-
 from sqlalchemy import and_
 from sqlalchemy.orm import sessionmaker
-from models import Network, Node, engine
+from .models import Network, Node, engine
 
 
 querypage = Blueprint("querypage", __name__, static_folder="static", template_folder="templates")

@@ -1,9 +1,6 @@
 # -*- coding: utf-8 -*-
-
-from flask import Flask
-from flask_sqlalchemy import SQLAlchemy, SignallingSession
 from sqlalchemy import and_
-from models import Network, Node, relationship_table, engine
+from .models import Network, Node, relationship_table, engine
 from sqlalchemy.orm import sessionmaker
 
 
