@@ -1,5 +1,5 @@
 {% extends "layout.html" %}
-{% block title %}ContNext Viewer—Home{% endblock %}
+{% block title %}ContNeXt Viewer—Home{% endblock %}
 {% block styles %}
     {{ super() }}
 	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> <!-- new -->
@@ -26,8 +26,8 @@
                     <img src="{{ url_for('static', filename='img/simple_logo.png') }}" height="150px" width="150px" alt="Logo">
                 </div>
                 <div class="col-lg-10 col-md-10 col-sm-10">
-                        <h1>ContNext Viewer</h1>
-                        <p>A web application for ContNext. See our <a href="{{ url_for('tutorial') }}">tutorial</a> on how to get started.</p>
+                        <h1>ContNeXt Viewer</h1>
+                        <p>A web application for ContNeXt. See our <a href="{{ url_for('tutorial') }}">tutorial</a> on how to get started.</p>
                 </div>
             </div>
         </div>
@@ -51,10 +51,10 @@
 				  </select>
                   </div>
                   <div class="col-md-7 m-auto">
-					  <label for="input-q">Gene of interest</label><input type="text" class="form-control" name="node-query" id="input-q" placeholder="NAT2">
+					  <label for="input-q">Gene of interest</label><input type="text" class="form-control" name="node-query" id="input-q" placeholder="NAT2" required>
                   </div>
                   <div class="col-md-1 m-auto">
-                      <label for="submit-button-1"></label><input id="submit-button-1" type="submit" class="btn btn-custom-1"/>
+                      <label for="submit-button-1"></label><input id="submit-button-1" type="submit" value="Submit Query" class="btn btn-custom-1"/>
                   </div>
 				  <div id="match-list"></div>
            </form>
@@ -70,10 +70,10 @@
 		<div class="container">
 			<form class="row 3-g needs-validation col-md-11" method="post" autocomplete="on">
 				  <div class="col-md-10 m-auto">
-					  <label for="input-q">Network ID or Name</label><input type="text" class="form-control" name="network-query" id="input-q" placeholder="UBERON:0000021" >
+					  <label for="input-q">Network ID or Name</label><input type="text" class="form-control" name="network-query" id="input-q" placeholder="UBERON:0000021" required >
 				  </div>
 				  <div class="col-md-1 m-auto">
-					  <label for="submit-button-2"></label><input type="submit" class="btn btn-custom-1"/>
+					  <label for="submit-button-2"></label><input type="submit" value="Submit Query" class="btn btn-custom-1"/>
 				  </div>
 				  <div id="match-list"></div>
 

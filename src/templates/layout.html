@@ -7,7 +7,7 @@
     <!-- Bootstrap & CSS -->
     {% include "dependencies/bootstrap_css.html" %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 	{% block styles %}{% endblock %}
 
     <title>{% block title %}{% endblock %}</title>

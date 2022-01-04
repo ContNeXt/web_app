@@ -1,39 +1,44 @@
 :root {
-  --primary: #0a344b;
+  --primary: #336021FF;
   --accent: #FF3D85;
-  --secondary: #11557C;
+  --secondary: #51803e;
   --success: #35bb78;
-  --info: #05B4E1;
+  --info: #05e152;
   --warning: #FAC14D;
   --danger: #FF4943;
   --grey: #B4B2C5;
-  --dark: #2D2B3A;
+  --dark: #273626;
   --light: #F6F5FC;
+}
+
+address {
+  display: block;
+  font-style: italic;
 }
 
 body {
     font-family: "Work Sans", sans-serif;
     line-height: 1.5;
-    color: #0a344b;
-    background-color: #e7f9ff;
+    color: #273626;
+    background-color: #e7ffe7;
 }
 
 a {
-    color: #11557C;
+    color: #117c2a;
     background-color: transparent;
     text-decoration: underline;
 }
 
 a:hover {
-  color: #a6cfe5;
+  color: #b2e5a6;
   text-decoration: underline;
 }
 
-/* Nav Bar */
 
+/* Nav Bar */
 .navbar {
     min-height: 70px;
-    background-color: #11557C;
+    background-color: #51803e;
 }
 .navbar-brand{
     color: whitesmoke;
@@ -45,7 +50,7 @@ a:hover {
     color: whitesmoke
 }
 .nav-link:hover {
-    color: #05B4E1
+    color: #117c2a
 }
 .link-slider {
     width: 80%;
@@ -60,7 +65,7 @@ a:hover {
 .card{
     margin: 60px;
     padding: 10px;
-    background-color: #11557C
+    background-color: #51803e
 }
 .card-header{
     padding: 10px;
@@ -71,28 +76,31 @@ a:hover {
     color: whitesmoke;
 }
 .btn-custom-1 {
-    background-color: #05B4E1 ;
-    color: whitesmoke;
+    background-color: whitesmoke ;
+    color: black;
+    border: 1px solid #336021FF;
+
 }
 .btn-custom-1:hover {
-    background-color: #a6cfe5;
-    color: whitesmoke;
+    background-color: #b2e5a6;
+    color: black;
+    border: 1px solid white;
 }
 
 /* Results Div*/
 .container-results {
-    background-color: #a6cfe5;
+    background-color: #b2e5a6;
     margin-top:30px;
     margin-left:100px;
     margin-right:100px;
 }
 .card-header-results{
     padding: 10px;
-    color: #0a344b;
+    color: #273626;
     font-weight: bold;
 }
 .card-results-body {
-    color: #0a344b;
+    color: #273626;
     margin-bottom: 0px;
 }
 
@@ -104,13 +112,13 @@ a:hover {
     margin-right: 20px;
 }
 .tab-pane{
-    background-color: #11557C;
+    background-color: #51803e;
     padding: 20px;
 }
 .nav-link-results{
     color: whitesmoke;
     text-align: justify;
-    background-color: #11557C;
+    background-color: #51803e;
     padding: 10px;
     border-radius: .25rem;
     margin: 0px;
@@ -126,6 +134,4 @@ a:hover {
     text-decoration: none;
     margin: 0px;
     width: 100%;
-
-
 }

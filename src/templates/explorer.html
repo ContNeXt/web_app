@@ -5,7 +5,6 @@
     {% include "dependencies/jquery_dependencies.html" %}
 
 	<!-- Block for Network dependencies -->
-
     {% include "dependencies/graph_css.html" %}
     {% include "dependencies/graph_js.html" %}
 
@@ -30,9 +29,9 @@
 	<div class="card container-results">
 		<header class="card-header-results">Results</header>
 		<div class="card-results-body">
-			<p class="text-left" style="padding-left:10px">
-			Network ID: <bold>{{ network_id }}</bold><br>
-			Node: <bold>{{ node }}</bold><br>
+			<p class="text-left" style="padding-left:30px">
+			Network ID: <strong>{{ network_id }}</strong><br>
+			Node: <strong>{{ node }}</strong><br>
 			</p>
 		</div>
 	</div>
@@ -60,7 +59,7 @@
 						<button class='btn btn-custom-1' id='get-checked-nodes'>Show</button>
 						<input placeholder="Search nodes" id="node-search" class="form-control not-rounded"
 						   aria-describedby="sizing-addon1" type="text"/>
-						<button class='btn btn-custom-1' id='clear-checked-nodes'>Reset</button>
+						<button class='btn btn-custom-1' id='reset-graph-view'>Reset</button>
 
 					</div>
 					<div class="not-rounded" id="node-list" style="max-height: 450px;height: 450px; overflow:auto;"></div>

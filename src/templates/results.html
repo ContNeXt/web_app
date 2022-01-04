@@ -1,10 +1,21 @@
 {% extends "layout.html" %}
 {% block title %}ContNext Viewer–Results{% endblock %}
-{% block content %}
-{%  if form == 'node' %}
+{% block scripts %}
+    <script type="text/javascript" src='{{ url_for('static', filename='js/sort-table.min.js') }}'></script>
+{% endblock %}
 
-	<div class="container" style="margin-top: 20px" >
-		<h4 class="text-center" style="margin-top:20px"> Node: {{ idquery }} | Context: {{ idoptions }} </h4>
+{% block content %}
+
+<!-- Node Search Results -->
+{%  if form == 'node' %}
+	<div class="card container-results">
+		<header class="card-header-results">Results</header>
+		<div class="card-results-body">
+			<p class="text-left" style="padding-left:30px">
+			Node: <strong>{{ idquery }}</strong><br>
+			Context: <strong> {{ idoptions }}</strong><br>
+			</p>
+		</div>
 	</div>
 
 	<!-- Table Content -->
@@ -18,9 +29,8 @@
 			<th>Description</th>
 
 		<!-- Table content -->
-
 		   {% for key, value in results.items() %}
-				<tr class="clickable text-left" onclick="window.location='{{ url_for('graph', node=idquery, network_id=key) }}'">
+				<tr class="clickable text-left" style="cursor: pointer;" onclick="window.location='{{ url_for('graph', node=idquery, network_id=key) }}'">
 					<td>
 						{{key}}
 					 </td>
@@ -39,6 +49,7 @@
 		 </table>
 	</div>
 
+<!-- Network Search Results -->
 {% elif form == 'network' %}
 	{% set identifier = results[0] %}
 	{% set data = results[1] %}
@@ -49,28 +60,28 @@
 	<div class="card container-results">
 		<header class="card-header-results">Results</header>
 		<div class="card-results-body">
-			<p class="text-left" style="padding-left:10px">
-			Network ID: <bold>{{ identifier }}</bold><br>
-			Network Name: <bold>{{ name }}</bold><br>
-			Context: <bold> {{ context }}</bold><br>
+			<p class="text-left" style="padding-left:30px">
+			Network ID: <strong>{{ identifier }}</strong><br>
+			Network Name: <strong>{{ name }}</strong><br>
+			Context: <strong> {{ context }}</strong><br>
 			</p>
 		</div>
 	</div>
 
 	<!-- Table Content -->
 	<div class="container" style="margin-top: 50px" >
-	<table class="table table-light table-hover table-sm">
+	<table class="table js-sort-table table-light table-hover">
 
 		<!-- Table headers -->
 			<th>Node</th>
-			<th>Connections</th>
-			<th>Connection Rank</th>
+			<th>Degree</th>
+			<th>Degree Rank</th>
 			<th>Housekeeping</th>
 
 		<!-- Table content -->
 
 		{% for key, value in properties.items() %}
-				<tr class="clickable text-left" onclick="window.location='{{ url_for('graph', node=key, network_id=identifier) }}'">
+				<tr class="clickable text-left" style="cursor: pointer;" onclick="window.location='{{ url_for('graph', node=key, network_id=identifier) }}'">
 					<td>
 						{{key}}
 					 </td>

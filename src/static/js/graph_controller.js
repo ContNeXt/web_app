@@ -276,7 +276,7 @@ function initD3Force(graph) {
                .style("opacity", 1);
           let degree = "Degree: "+ (d.connections).toString();
           let rank = "Rank: " + (d.rank).toString();
-          let housekeeping = (d.housekeeping) ? "Housekeeping": "" ;
+          let housekeeping = (d.housekeeping==true) ? "Housekeeping": "" ;
           nodeInfoDiv.html(degree + "<br>" + rank + "<br>" + housekeeping)
                 .style("left", (d3.event.pageX + 50) + "px")
                 .style("top", (d3.event.pageY - 50) + "px")
@@ -434,7 +434,7 @@ function initD3Force(graph) {
         resetAttributesDoubleClick();
 
     });
-    $("#clear-checked-nodes").on("click", function (event){
+    $("#reset-graph-view").on("click", function (event){
             // Remove the overriding stroke so the links default back to the CSS definitions
             link.style("stroke", null);
 
