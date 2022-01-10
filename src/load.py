@@ -1,15 +1,13 @@
 # -*- coding: utf-8 -*-
-
 """ RUN ONCE TO CREATE THE DATABASE """
-import pathlib
 
-from sqlalchemy import create_engine
-from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists, create_database
-import networkx as nx
+from sqlalchemy import inspect
 from .models import Base, engine, Node, Network
+from .constants import CONTEXT
 
+import networkx as nx
 from typing import List, Tuple
 from tqdm import tqdm
 import os
@@ -45,9 +43,10 @@ def check_tsv(all_files: List) -> Tuple[List, List, List, str]:
         elif file.endswith("overview.tsv"):
             # add to supplementary list
             supplementary.append(file)
-        elif file.endswith("properties.tsv"):
+        elif file.endswith("node_properties.tsv"):
             properties.append(file)
         elif file.endswith('interactome.edgelist'):
+            # TODO change name
             interactome = file
     return all_tsv_files, supplementary, properties, interactome
 
@@ -84,16 +83,16 @@ def add_metadata_to_networks(supplementary_files: List):
             csv_reader = csv.reader(f, delimiter='\t')
             header = next(csv_reader) # skip header
             for row in csv_reader:
-                network_metadata.update({row[0].split(":")[1]: {'context': os.path.basename(os.path.dirname(file)),
+                network_metadata.update({row[0].split(":")[1]: {'context': CONTEXT[os.path.basename(file).split("_")[0]] ,
                                                                 'id': row[0],
                                                                 'name': row[1]}})
     return network_metadata
 
 
-def add_properties_to_nodes(degree_files: List):
-    """ Add properties to nodes from list of degree tsv files, """
+def add_properties_to_nodes(property_files: List):
+    """ Add properties to nodes from list of properties tsv files, """
     node_properties = {}
-    for file in degree_files:
+    for file in property_files:
         with open(file, 'r') as f:
             csv_reader = csv.reader(f, delimiter='\t')
             header = next(csv_reader) # skip header
@@ -102,9 +101,8 @@ def add_properties_to_nodes(degree_files: List):
                                                                      'housekeeping': row[3]} for row in csv_reader}})
     return node_properties
 
-
 '''
-    Run app
+    Load database
 '''
 
 def load_database(data_source):
@@ -129,7 +127,7 @@ def load_database(data_source):
     list_of_nodes = []
 
     metadata = add_metadata_to_networks(supplementary_files=supplementary_source)
-    node_properties = add_properties_to_nodes(degree_files=properties_files)
+    node_properties = add_properties_to_nodes(property_files=properties_files)
 
     # add interactome to db
     interactome = Network(identifier='interactome',
@@ -170,3 +168,19 @@ def load_database(data_source):
 
 
     return debugger
+
+
+'''
+    Check database 
+'''
+
+def is_ready():
+    """Checks whether there's a valid database to load from"""
+    # Check if database exists
+    if not database_exists(engine.url):
+        # Create db
+        create_database(engine.url)
+    # Check if database is empty
+    if not inspect(engine).get_table_names():
+        return False
+    return True

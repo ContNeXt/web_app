@@ -1,8 +1,9 @@
 # -*- coding: utf-8 -*-
+from pathlib import Path
+
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy import Column, Integer, String, PickleType, ForeignKey, Table
-from pathlib import Path
 from sqlalchemy.orm import relationship, backref
 
 # SQLAlchemy

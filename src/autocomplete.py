@@ -1,8 +1,8 @@
 # -*- coding: utf-8 -*-
 from sqlalchemy import and_
-from .models import Network, Node, relationship_table, engine
 from sqlalchemy.orm import sessionmaker
 
+from .models import Network, Node, relationship_table, engine
 
 def query_db_for_nodes(query, context, limit=10):
 	# Start database session
