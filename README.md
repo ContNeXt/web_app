@@ -1,8 +1,6 @@
-<!--
 <p align="center">
-  <img src="https://github.com/gitlab.scai.fraunhofer/gitlab.scai.fraunhofer/raw/main/docs/source/logo.png" height="150">
+<img src="horizontal-logo.png" height="150">
 </p>
--->
 
 <h1 align="center">
   ContNextViewer
