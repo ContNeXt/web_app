@@ -20,7 +20,7 @@ body {
     font-family: "Work Sans", sans-serif;
     line-height: 1.5;
     color: #273626;
-    background-color: #e7ffe7;
+    background-color: whitesmoke;
 }
 
 a {
@@ -30,7 +30,7 @@ a {
 }
 
 a:hover {
-  color: #b2e5a6;
+  color: #49a65f;
   text-decoration: underline;
 }
 
@@ -50,7 +50,7 @@ a:hover {
     color: whitesmoke
 }
 .nav-link:hover {
-    color: #117c2a
+    color: #b4dcbe
 }
 .link-slider {
     width: 80%;
@@ -101,7 +101,7 @@ a:hover {
 }
 .card-results-body {
     color: #273626;
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 /* Explorer */
@@ -121,7 +121,7 @@ a:hover {
     background-color: #51803e;
     padding: 10px;
     border-radius: .25rem;
-    margin: 0px;
+    margin: 0;
     width: 100%;
 }
 
@@ -132,6 +132,6 @@ a:hover {
     padding: 10px;
     border-radius: .25rem;
     text-decoration: none;
-    margin: 0px;
+    margin: 0;
     width: 100%;
 }
