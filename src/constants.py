@@ -7,4 +7,4 @@ CONTEXT = {'cell_line': 'Cell Line',
 			}
 HIDDEN_FOLDER = '.context'
 DATA_FOLDER = 'data'
-ZENODO_URL = 'https://zenodo.org/record/4700652'
+ZENODO_URL = 'https://zenodo.org/record/5831786/files/data.zip?download=1'

@@ -22,16 +22,22 @@ def load(source: str=None):
 		print(f"Files uploaded to database: {str(files)}")
 
 	else:
+		# Create data folder in home
+		datafolder = os.path.join(Path.home(), HIDDEN_FOLDER, DATA_FOLDER)
+		Path(datafolder).mkdir(parents=True, exist_ok=True)
 		# Load from Zenodo
-		hidden_folder = os.path.join(Path.home(), HIDDEN_FOLDER)
-		Path(hidden_folder).mkdir(parents=True, exist_ok=True)
-		filepath = os.path.join(hidden_folder, DATA_FOLDER)
-		urlretrieve(ZENODO_URL, filepath)
+		filepath = os.path.join(datafolder, 'data')
+		urlretrieve(ZENODO_URL, filename=filepath)
 		print(f"ContNeXt data successfully downloaded: {filepath}")
+
 		# Unzip downloaded data
 		with ZipFile(filepath, 'r') as zip:
 			zip.extractall(DATA_FOLDER)
 			print(f"ContNeXt data successfully uncompressed: {DATA_FOLDER}")
+
+		# Load with data files if path is given
+		load_database(data_source=datafolder)
+
 
 
 @main.command()
@@ -39,8 +45,7 @@ def load(source: str=None):
 @click.option('--port', type=int, default=5000, help='Flask port. Defaults to 5000')
 @click.option('--template', help='Defaults to "./templates"')
 @click.option('--static', help='Defaults to "./static"')
-@click.option('-v', '--verbose', is_flag=True)
-def web(host, port, template, static, verbose):
+def web(host, port, template, static):
 	"""Runs web application."""
 	if not is_ready:
 		load()
