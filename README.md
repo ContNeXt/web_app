@@ -115,7 +115,12 @@ $ contnextViewer --help
 
 To load the contnextViewer database, use the `load` command:
 ```shell
-$ contnextViewer load --source /path/to/network/data/directory
+$ contnextViewer load [--source /path/to/network/data/directory ]
+```
+
+To load the contnextViewer database, use the `web` command:
+```shell
+$ contnextViewer web [--host 0.0.0.0 ] [ --port 5000 ]  [ --template path/to/template] [ --static path/tp/static]
 ```
 
 ## 🚀 Installation
