@@ -24,6 +24,7 @@ def load(source: str=None):
 	else:
 		# Load from Zenodo
 		hidden_folder = os.path.join(Path.home(), HIDDEN_FOLDER)
+		Path(hidden_folder).mkdir(parents=True, exist_ok=True)
 		filepath = os.path.join(hidden_folder, DATA_FOLDER)
 		urlretrieve(ZENODO_URL, filepath)
 		print(f"ContNeXt data successfully downloaded: {filepath}")
