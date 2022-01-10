@@ -51,48 +51,57 @@ the following structure:
 │   │   │	└── node_properties.tsv
 │   │   └── ... 
 │   │
-│   ├── cell line
+│   ├── cell_line
 │   │   ├── 0000003 
 │   │   │ 	└── node_properties.tsv
 │   │   ├── 0000004
 │   │   │	└── node_properties.tsv
 │   │   └── ... 
 │   │
-│   └── cell type
-│	    ├── 0000005 
-│	    │ 	└── node_properties.tsv
-│	    ├── 0000006
-│	    │	└── node_properties.tsv
-│	    └── ... 
+│   ├── cell_type
+│	│   ├── 0000005 
+│   │   │	└── node_properties.tsv
+│	│   ├── 0000006
+│   │   │	└── node_properties.tsv
+│   │   └── ... 
+│   │
+│   └── interactome
+│	    └── node_properties.tsv
 │
-├── tissues
-│   ├── ContNeXt supplementary - Tissue overview.tsv
-│   ├── ContNeXt supplementary - tissue_node_degree.tsv
-│   ├── 0000001 
-│   │ 	└── coexp_network_edges.tsv
-│   ├── 0000002
-│   │	└── coexp_network_edges.tsv
-│   └── ... 
+├── coexpr_networks
+│   ├── tissue
+│   │   ├── 0000001 
+│   │   │   └── coexp_network_edges.tsv
+│   │   ├── 0000002
+│   │   │   └── coexp_network_edges.tsv
+│   │   └── ... 
+│   │
+│   ├── cell_type
+│   │   ├── 0000003 
+│   │   │   └── coexp_network_edges.tsv
+│   │   ├── 0000004
+│   │   │   └── coexp_network_edges.tsv
+│   │   └── ... 
+│   │
+│   └── cell_line
+│       ├── 0000005 
+│       │   └── coexp_network_edges.tsv
+│       ├── 0000006
+│       │   └── coexp_network_edges.tsv
+│       └── ... 
 │
-├── cell types
-│   ├── ContNeXt supplementary - Cell type overview.tsv
-│   ├── ContNeXt supplementary - celltype_node_degree.tsv
-│   ├── 0000003 
-│   │ 	└── coexp_network_edges.tsv
-│   ├── 0000004
-│   │	└── coexp_network_edges.tsv
-│   └── ... 
+├── misc_data
+│   ├── tissue_overview.tsv
+│   ├── celltype_overview.tsv
+│   ├── cellline_overview.tsv
+│   ├── tissue_node_degree.tsv
+│   ├── celltype_node_degree.tsv
+│   └── cellline_node_degree.tsv
 │
-├── cell lines
-│   ├── ContNeXt supplementary - Cell line overview.tsv
-│   ├── ContNeXt supplementary - cellline_node_degree.tsv
-│   ├── 0000005 
-│   │ 	└── coexp_network_edges.tsv
-│   ├── 0000006
-│   │	└── coexp_network_edges.tsv
-│   └── ... 
-│
-└── interactome.edgelist
+└── interactome
+    ├── interactome_edges.tsv
+    └── ... 
+    
 
 ```
 ### Command Line Interface
