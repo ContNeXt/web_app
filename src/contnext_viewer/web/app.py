@@ -11,8 +11,6 @@ from flask_admin.contrib.sqla import ModelView
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
-from contnext_viewer.web.homepage import homepage
-from contnext_viewer.web.querypage import querypage
 from contnext_viewer.models import Network, Node, DB_PATH
 from contnext_viewer.web.views import contnext
 
@@ -47,8 +45,6 @@ def create_app(template_folder: str = None, static_folder: str = None):
 		Blueprints for the website
 	'''
 	app.register_blueprint(contnext)
-	app.register_blueprint(querypage, url_prefix="")
-	app.register_blueprint(homepage, url_prefix="")
 
 	log.info('Done building %s in %.2f seconds', app, time.time() - t)
 	return app
