@@ -94,7 +94,11 @@
 					<td>
 						{{value['housekeeping'] }}
 					</td>
-
+					{% if value.get('controllability') %}
+					<td>
+						{{value['controllability'] }}
+					</td>
+					{% enif %}
 			   </tr>
 		{% endfor %}
 		 </table>

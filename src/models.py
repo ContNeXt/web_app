@@ -31,7 +31,7 @@ class Network(Base):
     name = Column(String(100))
     data = Column(PickleType())
     context = Column(String(30))
-    identifier = Column(String(50), unique=True)
+    identifier = Column(String(50))
     properties = Column(PickleType)
 
     # many-to-many relationship

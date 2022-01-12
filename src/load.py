@@ -40,13 +40,17 @@ def check_tsv(all_files: List) -> Tuple[List, List, List, str]:
         # Check the extension
         if file.endswith("coexp_network_edges.tsv"):
             all_tsv_files.append(file)
-        elif file.endswith("overview.tsv"):
+        elif file.endswith("overview.tsv") and \
+            not file.endswith("FULL_cellline_overview.tsv")and \
+            not file.endswith("FULL_celltype_overview.tsv")and \
+            not file.endswith("FULL_tissue_overview.tsv"):
+            # TODO make this cleaner
             # add to supplementary list
             supplementary.append(file)
         elif file.endswith("node_properties.tsv"):
             properties.append(file)
-        elif file.endswith('interactome.edgelist'):
-            # TODO change name
+        elif file.endswith('interactome_edges.tsv'):
+            print("Interactome: ",file)
             interactome = file
     return all_tsv_files, supplementary, properties, interactome
 
@@ -96,9 +100,17 @@ def add_properties_to_nodes(property_files: List):
         with open(file, 'r') as f:
             csv_reader = csv.reader(f, delimiter='\t')
             header = next(csv_reader) # skip header
-            node_properties.update({os.path.basename(os.path.dirname(file)):{row[0]: {'connections': row[1],
-                                                                     'rank': row[2],
-                                                                     'housekeeping': row[3]} for row in csv_reader}})
+            # In interactome, add extra column
+            if os.path.basename(file) == 'interactome_node_properties.tsv':
+                node_properties.update({os.path.basename(os.path.dirname(file)):{row[0]: {'connections': row[4],
+                                                                         'rank': row[5],
+                                                                         'housekeeping': row[6],
+                                                                         'controllability': row[1]} for row in csv_reader}})
+            else:
+                node_properties.update({os.path.basename(os.path.dirname(file)):{row[0]: {'connections': row[1],
+                                                                         'rank': row[2],
+                                                                         'housekeeping': row[3]} for row in csv_reader}})
+
     return node_properties
 
 '''

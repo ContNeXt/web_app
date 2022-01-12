@@ -26,14 +26,14 @@ def load(source: str=None):
 		datafolder = os.path.join(Path.home(), HIDDEN_FOLDER, DATA_FOLDER)
 		Path(datafolder).mkdir(parents=True, exist_ok=True)
 		# Load from Zenodo
-		filepath = os.path.join(datafolder, 'data')
+		filepath = os.path.join(datafolder, 'contnext.zip')
 		urlretrieve(ZENODO_URL, filename=filepath)
 		print(f"ContNeXt data successfully downloaded: {filepath}")
 
 		# Unzip downloaded data
 		with ZipFile(filepath, 'r') as zip:
-			zip.extractall(DATA_FOLDER)
-			print(f"ContNeXt data successfully uncompressed: {DATA_FOLDER}")
+			zip.extractall()
+			print(f"ContNeXt data successfully uncompressed: {datafolder}")
 
 		# Load with data files if path is given
 		load_database(data_source=datafolder)
