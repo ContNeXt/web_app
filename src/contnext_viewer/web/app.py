@@ -22,8 +22,8 @@ def create_app(template_folder: str = None, static_folder: str = None):
 	t = time.time()
 
 	app = Flask(__name__,
-				template_folder=(template_folder or './templates'),
-				static_folder=(static_folder or './static')
+				template_folder=(template_folder or '../templates'),
+				static_folder=(static_folder or '../static')
 				)
 
 	cors = CORS(app, resources={r"/foo": {"origins": "*"}})
