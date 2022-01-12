@@ -12,7 +12,8 @@ from sqlalchemy.orm import sessionmaker
 
 from contnext_viewer.graph import create_json_file
 from contnext_viewer.models import Network, Node, engine
-from contnext_viewer.web.autocomplete import query_db_for_nodes
+from contnext_viewer.web.autocomplete import autocomplete_search
+from contnext_viewer.constants import CONTEXT
 
 log = logging.getLogger(__name__)
 
@@ -22,6 +23,13 @@ contnext = Blueprint(
 	template_folder=resource_filename('contnext_viewer', 'templates'),
 	static_folder=resource_filename('contnext_viewer', 'templates')
 )
+
+
+# load dataframe of supplemntary
+# { node=key, value{ betweeness centr: , contect }
+# save as:
+# app.interactome_node_dic
+
 
 @contnext.route("/")
 def main():
@@ -90,6 +98,20 @@ def query(query):
 		return render_template("results.html", idquery=query, idoptions=context, form=form,
 							   results=list_of_networks)
 
+@contnext.route("/heatmap/<context>")
+def heatmap(context):
+	if CONTEXT.get(context):
+		title = CONTEXT.get(context)
+		if context == 'cell_line' or 'cellline':
+			json_path = "/static/json/cellline-pathway_clustergrammer.json"
+		elif context == 'cell_type' or 'celltype':
+			json_path = "/static/json/celltype-pathway_clustergrammer.json"
+		elif context == 'tissue' or 'tissue':
+			json_path = "/static/json/tissue-pathway_clustergrammer.json"
+		return render_template("heatmaps.html", title=title, json_path=json_path)
+	else:
+		return render_template("error.html")
+
 
 @contnext.route("/about")
 def about():
@@ -127,7 +149,7 @@ def node_autocompletion():
 	if not q or not resource:
 		return jsonify({})
 
-	results = query_db_for_nodes(query=q, context=resource, limit=10)
+	results = autocomplete_search(query=q, context=resource, limit=10)
 	if not results:
 		return jsonify({})
 

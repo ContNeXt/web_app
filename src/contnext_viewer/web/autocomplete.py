@@ -4,7 +4,7 @@ from sqlalchemy.orm import sessionmaker
 
 from contnext_viewer.models import Network, Node, relationship_table, engine
 
-def query_db_for_nodes(query, context, limit=10):
+def autocomplete_search(query, context, limit=10):
 	# Start database session
 	Session = sessionmaker(bind=engine)
 	sqlsession = Session()
