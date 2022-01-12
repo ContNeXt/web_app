@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from .models import Network, engine
+from contnext_viewer.models import Network, engine
 from sqlalchemy.orm import sessionmaker
 
 

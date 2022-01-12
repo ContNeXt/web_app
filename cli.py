@@ -50,7 +50,7 @@ def web(host, port, template, static):
 	if not is_ready:
 		load()
 	app = create_app(template_folder=template, static_folder=static)
-	app.run(host=host, port=port)
+	app.run(debug=True, host=host, port=port)
 
 
 if __name__ == "__main__":

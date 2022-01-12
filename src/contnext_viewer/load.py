@@ -4,8 +4,8 @@
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists, create_database
 from sqlalchemy import inspect
-from .models import Base, engine, Node, Network
-from .constants import CONTEXT
+from contnext_viewer.models import engine, Node, Network
+from contnext_viewer.constants import CONTEXT
 
 import networkx as nx
 from typing import List, Tuple
@@ -50,7 +50,6 @@ def check_tsv(all_files: List) -> Tuple[List, List, List, str]:
         elif file.endswith("node_properties.tsv"):
             properties.append(file)
         elif file.endswith('interactome_edges.tsv'):
-            print("Interactome: ",file)
             interactome = file
     return all_tsv_files, supplementary, properties, interactome
 
@@ -101,8 +100,9 @@ def add_properties_to_nodes(property_files: List):
             csv_reader = csv.reader(f, delimiter='\t')
             header = next(csv_reader) # skip header
             # In interactome, add extra column
-            if os.path.basename(file) == 'interactome_node_properties.tsv':
-                node_properties.update({os.path.basename(os.path.dirname(file)):{row[0]: {'connections': row[4],
+            if file.endswith('interactome_node_properties.tsv'):
+                print('interactome_added')
+                node_properties.update({'interactome': {row[0]: {'connections': row[4],
                                                                          'rank': row[5],
                                                                          'housekeeping': row[6],
                                                                          'controllability': row[1]} for row in csv_reader}})
