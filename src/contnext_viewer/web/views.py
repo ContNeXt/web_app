@@ -9,7 +9,7 @@ from flask import render_template, request
 from flask_cors import cross_origin
 from pkg_resources import resource_filename
 
-from autocomplete import query_db_for_nodes
+from contnext_viewer.web.autocomplete import query_db_for_nodes
 from contnext_viewer.graph import create_json_file
 
 log = logging.getLogger(__name__)
@@ -18,7 +18,7 @@ contnext = Blueprint(
 	'contnext_viewer',
 	__name__,
 	template_folder=resource_filename('contnext_viewer', 'templates'),
-	static_folder=resource_filename('contnext_viewer', 'static')
+	static_folder=resource_filename('contnext_viewer', 'templates')
 )
 
 

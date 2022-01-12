@@ -11,8 +11,8 @@ from flask_admin.contrib.sqla import ModelView
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 
-from homepage import homepage
-from querypage import querypage
+from contnext_viewer.web.homepage import homepage
+from contnext_viewer.web.querypage import querypage
 from contnext_viewer.models import Network, Node, DB_PATH
 from contnext_viewer.web.views import contnext
 

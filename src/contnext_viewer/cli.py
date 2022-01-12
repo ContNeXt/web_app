@@ -4,9 +4,9 @@ import os
 from urllib.request import urlretrieve
 from zipfile import ZipFile
 
-from src.load import load_database, is_ready
-from src.app import create_app
-from src.constants import HIDDEN_FOLDER, DATA_FOLDER, ZENODO_URL
+from contnext_viewer.load import load_database, is_ready
+from contnext_viewer.web.app import create_app
+from contnext_viewer.constants import HIDDEN_FOLDER, DATA_FOLDER, ZENODO_URL
 
 @click.group()
 def main():
