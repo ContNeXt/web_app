@@ -16,6 +16,7 @@ def main():
 @click.option('-s', '--source', help="A source directory with network data.")
 def load(source: str=None):
 	"""Creates a database from source directory."""
+	print("Loading database....")
 	# Load with data files if path is given
 	if source:
 		files = load_database(data_source=source)
@@ -23,20 +24,22 @@ def load(source: str=None):
 
 	else:
 		# Create data folder in home
-		datafolder = os.path.join(Path.home(), HIDDEN_FOLDER, DATA_FOLDER)
+		datafolder = os.path.join(Path.home(), HIDDEN_FOLDER)
 		Path(datafolder).mkdir(parents=True, exist_ok=True)
-		# Load from Zenodo
 		filepath = os.path.join(datafolder, 'contnext.zip')
-		urlretrieve(ZENODO_URL, filename=filepath)
-		print(f"ContNeXt data successfully downloaded: {filepath}")
+
+		if not Path(filepath).is_file():
+			# Load from Zenodo
+			print(f"Downloading data ...")
+			urlretrieve(ZENODO_URL, filename=filepath)
+			print(f"ContNeXt data successfully downloaded: {filepath}")
 
 		# Unzip downloaded data
 		with ZipFile(filepath, 'r') as zip:
-			zip.extractall()
-			print(f"ContNeXt data successfully uncompressed: {datafolder}")
-
-		# Load with data files if path is given
-		load_database(data_source=datafolder)
+			zip.extractall(datafolder)
+			print(f"ContNeXt data successfully uncompressed to: {datafolder}")
+			# Load with data files if path is given
+			load_database(data_source=datafolder)
 
 
 
@@ -47,8 +50,27 @@ def load(source: str=None):
 @click.option('--static', help='Defaults to "./static"')
 def web(host, port, template, static):
 	"""Runs web application."""
-	if not is_ready:
-		load()
+	if not is_ready():
+		print("Loading database....")
+		# Create data folder in home
+		datafolder = os.path.join(Path.home(), HIDDEN_FOLDER)
+		Path(datafolder).mkdir(parents=True, exist_ok=True)
+		filepath = os.path.join(datafolder, 'contnext.zip')
+
+		if not Path(filepath).is_file():
+			# Load from Zenodo
+			print(f"Downloading data ...")
+			urlretrieve(ZENODO_URL, filename=filepath)
+			print(f"ContNeXt data successfully downloaded: {filepath}")
+
+		# Unzip downloaded data
+		with ZipFile(filepath, 'r') as zip:
+			print("Extracting downloaded dataa...")
+			zip.extractall(datafolder)
+			print(f"ContNeXt data successfully uncompressed to: {datafolder}")
+			# Load with data files if path is given
+			load_database(data_source=datafolder)
+
 	app = create_app(template_folder=template, static_folder=static)
 	app.run(debug=True, host=host, port=port)
 

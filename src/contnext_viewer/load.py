@@ -3,7 +3,6 @@
 
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy_utils import database_exists, create_database
-from sqlalchemy import inspect
 from contnext_viewer.models import engine, Node, Network
 from contnext_viewer.constants import CONTEXT
 
@@ -34,6 +33,7 @@ def check_tsv(all_files: List) -> Tuple[List, List, List, str]:
     """ Filters out all non-tsv files from the dictionary"""
     supplementary = []
     all_tsv_files = []
+    print(all_files)
     properties = []
     interactome = None
     for file in all_files[:]:
@@ -44,7 +44,6 @@ def check_tsv(all_files: List) -> Tuple[List, List, List, str]:
             not file.endswith("FULL_cellline_overview.tsv")and \
             not file.endswith("FULL_celltype_overview.tsv")and \
             not file.endswith("FULL_tissue_overview.tsv"):
-            # TODO make this cleaner
             # add to supplementary list
             supplementary.append(file)
         elif file.endswith("node_properties.tsv"):
@@ -69,7 +68,8 @@ def add_edgelist(file_path, interacFlag=False):
     """ Create networkx edgelist from file"""
     # Open the file as an nx object
     if interacFlag:
-        return nx.read_edgelist(file_path, delimiter='\t', encoding='utf-8', create_using=nx.DiGraph())
+        print("file: ", file_path)
+        return nx.read_edgelist(file_path, delimiter='\t', encoding='utf-8', data=False, create_using=nx.DiGraph())
 
     network = nx.read_edgelist(file_path, comments='from', delimiter='\t', data=(
         ("direction", str),
@@ -89,6 +89,7 @@ def add_metadata_to_networks(supplementary_files: List):
                 network_metadata.update({row[0].split(":")[1]: {'context': CONTEXT[os.path.basename(file).split("_")[0]] ,
                                                                 'id': row[0],
                                                                 'name': row[1]}})
+        print(file)
     return network_metadata
 
 
@@ -101,7 +102,6 @@ def add_properties_to_nodes(property_files: List):
             header = next(csv_reader) # skip header
             # In interactome, add extra column
             if file.endswith('interactome_node_properties.tsv'):
-                print('interactome_added')
                 node_properties.update({'interactome': {row[0]: {'connections': row[4],
                                                                          'rank': row[5],
                                                                          'housekeeping': row[6],
@@ -188,11 +188,20 @@ def load_database(data_source):
 
 def is_ready():
     """Checks whether there's a valid database to load from"""
+    print("Checking if database is ready...")
     # Check if database exists
     if not database_exists(engine.url):
         # Create db
         create_database(engine.url)
+        print("Database successfully created.")
+
     # Check if database is empty
-    if not inspect(engine).get_table_names():
+    print("Checking if database is loaded...")
+    # Start database session
+    Session = sessionmaker(bind=engine)
+    session = Session()
+    if not session.query(Network).first():
+        session.close()
         return False
+    session.close()
     return True
