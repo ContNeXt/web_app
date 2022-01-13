@@ -1,0 +1,87 @@
+{% extends "layout.html" %}
+{% block title %}ContNeXt Viewer—Home{% endblock %}
+{% block styles %}
+    {{ super() }}
+	<link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> <!-- new -->
+
+{% endblock %}
+
+{% block scripts %}
+	    {{ super() }}
+		{% include "dependencies/autocomplete_dependencies.html" %}
+    	{% include "dependencies/jquery_dependencies.html" %}
+		<script type="text/javascript" src="{{ url_for('static', filename='js/autocomplete.js') }}"></script>
+
+{% endblock %}
+
+
+{% block content %}
+    <body>
+
+    <!–– Box with site name, logo and quick summary of application -->
+
+        <div class="container" style="margin-top: 50px" >
+            <div class="row align-items-center">
+                <div class="col-lg-2 col-md-2 col-sm-2">
+                    <img src="{{ url_for('static', filename='img/simple_logo.png') }}" height="150px" width="150px" alt="Logo">
+                </div>
+                <div class="col-lg-10 col-md-10 col-sm-10">
+                        <h1>ContNeXt Viewer</h1>
+                        <p>A web application for ContNeXt. See our <a href="{{ url_for('contnext_viewer.tutorial') }}">tutorial</a> on how to get started.</p>
+                </div>
+            </div>
+        </div>
+
+    <!–– Node Search -->
+	<div class="card">
+		<header class="card-header">Node Search</header>
+		<div class="card-body">
+
+        <div class="container">
+            <form class="row 3-g needs-validation col-md-11" method="post" autocomplete="on">
+                  <div class="col-md-3 m-auto">
+					  <label for="input-context">Context/Interactome</label><select class="form-select" name="queryOptions" id="input-context" aria-expanded="false">
+					 	<option  data-divider="true" disabled>Context</option>
+					  	<option value="Tissue" selected>--Tissues</option>
+                        <option value="Cell Line">--Cell Lines</option>
+                        <option value="Cell Type">--Cell Types</option>
+					 	<option  data-divider="true" disabled>Interactome</option>
+                        <option value="interactome" >--Interactome</option>
+
+				  </select>
+                  </div>
+                  <div class="col-md-7 m-auto">
+					  <label for="input-q">Gene of interest</label><input type="text" class="form-control" name="node-query" id="input-q" placeholder="NAT2" required>
+                  </div>
+                  <div class="col-md-1 m-auto">
+                      <label for="submit-button-1"></label><input id="submit-button-1" type="submit" value="Submit Query" class="btn btn-custom-1"/>
+                  </div>
+				  <div id="match-list"></div>
+           </form>
+        </div>
+		</div>
+	</div>
+
+	<!–– Network search -->
+	<div class="card">
+		<header class="card-header">Network Search</header>
+		<div class="card-body">
+
+		<div class="container">
+			<form class="row 3-g needs-validation col-md-11" method="post" autocomplete="on">
+				  <div class="col-md-10 m-auto">
+					  <label for="input-q">Network ID or Name</label><input type="text" class="form-control" name="network-query" id="input-q" placeholder="UBERON:0000021" required >
+				  </div>
+				  <div class="col-md-1 m-auto">
+					  <label for="submit-button-2"></label><input type="submit" value="Submit Query" class="btn btn-custom-1"/>
+				  </div>
+				  <div id="match-list"></div>
+
+		   </form>
+		</div>
+		</div>
+	</div>
+	</body>
+
+{% endblock %}
+

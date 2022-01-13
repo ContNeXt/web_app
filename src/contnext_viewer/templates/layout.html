@@ -7,28 +7,27 @@
     <!-- Bootstrap & CSS -->
     {% include "dependencies/bootstrap_css.html" %}
     <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='css/style.css') }}">
-
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
 	{% block styles %}{% endblock %}
 
     <title>{% block title %}{% endblock %}</title>
 	{% block scripts %}{% endblock %}
 
 </head>
-<body style="color:#11557C;">
-
-    <div class="container">
-
-    </div>
+<body>
 
 <!-- Navigator -->
 
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
-        <a class="navbar-brand" href="#">ContNext Viewer</a>
+        <header class="navbar-brand">
+		  <a href="/"><img src="/static/img/small_logo.png" alt="ContNeXt Logo" width="40" height="40" class="d-inline-block align-text-center"></a>
+		  ContNeXt Viewer
+		</header>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
-          <span class="navbar-toggler-icon"></span>
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/">Home</a>
@@ -38,16 +37,29 @@
                 Getting Started
               </a>
 				  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-					<li><a class="dropdown-item" href="/about">About ContNext</a></li>
-					<li><a class="dropdown-item" href="/terms">Terms and Conditions</a></li>
-					<li><hr class="dropdown-divider"></li>
-					<li><a class="dropdown-item" href="{{ url_for ('tutorial') }}">Tutorial</a></li>
+					<li><a class="dropdown-item" href="{{ url_for ('contnext_viewer.about') }}">About ContNext</a></li>
+					<li><a class="dropdown-item" href="{{ url_for ('contnext_viewer.tutorial') }}">Tutorial</a></li>
+				  </ul>
+            </li>
+			<li class="nav-item dropdown active">
+              <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Pathway Similarity
+              </a>
+				  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<li><a class="dropdown-item" href="{{ url_for ('contnext_viewer.heatmap', context='tissue') }}" target="_blank">Tissues</a></li>
+					<li><a class="dropdown-item" href="{{ url_for ('contnext_viewer.heatmap', context='cellline') }}" target="_blank">Cell Lines</a></li>
+					<li><a class="dropdown-item" href="{{ url_for ('contnext_viewer.heatmap', context='celltype') }}" target="_blank">Cell Types</a></li>
 				  </ul>
             </li>
             <li class="nav-item">
-              <a class="nav-link active" aria-current="page" href="/terms">SCAI Resources</a>
+              <a class="nav-link active" aria-current="page" href="{{ url_for ('contnext_viewer.imprint') }}">Imprint</a>
             </li>
           </ul>
+			<span>
+				<a id="nav-scai-logo" href="https://www.scai.fraunhofer.de/en/business-research-areas/bioinformatics.html">
+					<img alt="Fraunhofer SCAI" src="/static/img/scai_logo.svg" height="35">
+				</a>
+			</span>
         </div>
       </div>
     </nav>
@@ -62,9 +74,9 @@
 	<!-- Footer -->
 
     <div class="container-fluid">
-	  <footer class="d-flex flex-wrap py-3 my-4 border-top col-12" style="position:absolute; bottom:0;">
+	  <footer class="d-flex flex-wrap py-3 my-4 border-top col-12" style="bottom:0;">
 		<div class="d-flex align-items-center">
-		  <span class="text-muted">© 2021 Company, Inc</span>
+		  <span class="text-muted"></span>
 		</div>
 	  </footer>
     </div>

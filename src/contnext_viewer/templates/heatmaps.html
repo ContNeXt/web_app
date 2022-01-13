@@ -1,0 +1,76 @@
+	<!-- Bootstrap & CSS -->
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>ContNeXt Viewer—Pathways Similarities</title>
+
+	<!-- Scripts -->
+
+	<!-- Block for Heatmap dependencies -->
+	{% include "dependencies/jquery_dependencies.html" %}
+    {% include "dependencies/clustergrammer.html" %}
+	{% include "dependencies/clustergrammer_style.html" %}
+
+    <script>
+        let aboutString = 'Zoom, scroll, and click buttons to interact with the clustergram.';
+		let sourceFile = {{ json_path | tojson }};
+
+        d3.json(`${sourceFile}`, function (network_data) {
+
+            // define arguments object
+            let args = {
+                root: '#heatmap-matrix',
+                'network_data': network_data,
+                'about': aboutString,
+                'col_tip_callback': test_col_callback,
+                'tile_tip_callback': test_tile_callback,
+                'cat_update_callback': cat_update_callback,
+                'sidebar_width': 150,
+                //'ini_view':{'N_row_var':20},
+                //'ini_expand':true
+            };
+
+            resize_container(args);
+
+            d3.select(window).on('resize', function () {
+                resize_container(args);
+                cgm.resize_viz();
+            });
+
+            cgm = Clustergrammer(args);
+
+            $(".wait_message").remove();
+
+        });
+
+
+        function cat_update_callback() {
+            console.log('callback to run after cats are updated');
+        }
+
+        function test_tile_callback(tile_data) {
+            let row_name = tile_data.row_name;
+            let col_name = tile_data.col_name;
+
+        }
+
+        function test_col_callback(col_data) {
+            let col_name = col_data.name;
+        }
+
+        function resize_container(args) {
+
+            let screen_width = window.innerWidth;
+            let screen_height = window.innerHeight - 20;
+
+            d3.select(args.root)
+                .style('width', screen_width + 'px')
+                .style('height', screen_height + 'px');
+        }
+
+    </script>
+
+    <h4 class='text-center wait_message'>Please wait ...</h4>
+    <div class="text-center">
+        <h3>{{ title }} Overlap Clustergram</h3>
+
+        <div id="heatmap-matrix"></div>
+    </div>

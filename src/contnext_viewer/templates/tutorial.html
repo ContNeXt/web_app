@@ -1,0 +1,153 @@
+{% extends "layout.html" %}
+{% block title %}ContNeXt Viewer—Tutorial{% endblock %}
+{% block content %}
+<div class="container container-fluid" style="max-width: 80%">
+
+	<h4 class="text-center" style="margin-top:20px"> Tutorial: Node Query </h4>
+
+	<p>
+		In the Node search bar in <a href="{{ url_for('contnext_viewer.home') }}">Home</a>, select the context of the networks you
+		would like to query. There are for options: "Tissues", "Cell Lines", "Cell Types" and "Species". Once selected,
+		type the name of your gene of interest in the search bar.
+	</p>
+	<div class="card" style="margin-top: 10px; margin-bottom: 10px">
+		<div class="card-body">
+            <form class="row 3-g needs-validation col-md-11">
+                  <div class="col-md-3 m-auto">
+					  <label for="input-context">Context</label><select class="form-select" id="input-context" aria-expanded="false">
+                        <option selected>Tissues</option>
+                        <option>Cell Lines</option>
+                        <option>Cell Types</option>
+                        <option>Species</option>
+
+				  </select>
+                  </div>
+                  <div class="col-md-7 m-auto">
+					  <label for="input-q">Gene of interest</label><input type="text" class="form-control" id="input-q" placeholder="NAT2">
+                  </div>
+                  <div class="col-md-1 m-auto">
+                      <button type="button" class="btn btn-custom-1">Submit</button>
+                  </div>
+           </form>
+		</div>
+	</div>
+	<p class="mt-3">A dropdown of available genes in that context will appear. Select one and click "Submit".</p>
+
+	<div class="card" style="margin-top: 10px; margin-bottom: 10px">
+		<div class="card-body">
+            <form class="row 3-g needs-validation col-md-11">
+                  <div class="col-md-3">
+					  <label for="input-context">Context</label><select class="form-select" id="input-context" aria-expanded="false" disabled>
+                        <option selected>Tissues</option>
+				  </select>
+
+                  </div>
+                  <div class="col-md-7 m-auto">
+					  <label for="input-q">Gene of interest</label><p class="form-control mb-0" id="input-q">NA</p>
+					  <p class="form-control mt-0"> NAT2 <br> SERPINA12 <br> IFNA5 <br> IFNA10 <br> DNAJC9-AS1></p>
+                  </div>
+                  <div class="col-md-1">
+                      <button type="button" class="btn btn-custom-1">Submit</button>
+                  </div>
+           </form>
+		</div>
+	</div>
+
+	<p class="mt-3">Once the result page has finished loading, a table of networks in with your gene of interest will
+		be shown:</p>
+	<div class="card" style="margin-top: 10px; margin-bottom: 10px">
+		<div class="card-body">
+			<div class="container-fluid" >
+			<table class="table table-light table-hover col-md-7">
+					<th>Network</th>
+					<th>Description</th>
+					<th>tissues</th>
+
+				<tr><td>0000029</td><td>DiGraph with 11001 nodes and 150555 edges</td><td>lymph node</td></tr>
+				<tr><td>0000992</td><td>DiGraph with 17899 nodes and 2034851 edges</td><td>ovary</td></tr>
+				<tr><td>0000945</td><td>DiGraph with 18618 nodes and 2034851 edges</td><td>stomach</td></tr>
+				<tr><td>0000317</td><td>DiGraph with 9457 nodes and 2034851 edges</td><td>colonic mucosa</td></tr>
+				<tr><td>0000310</td><td>DiGraph with 16306 nodes and 2034851 edges</td><td>breast</td></tr>
+				<tr><td>0000002</td><td>DiGraph with 4768 nodes and 11369 edges</td><td>uterine cervix</td></tr>
+				<tr><td>0000955</td><td>DiGraph with 10566 nodes and 2034851 edges</td><td>brain</td></tr>
+				<tr><td>0000173</td><td>DiGraph with 10438 nodes and 105578 edges</td><td>amniotic fluid</td></tr>
+				 </table>
+			</div>
+		</div>
+	</div>
+
+	<p class="mt-3">You can click on a network to see the graph.</p>
+
+	<div class="card" style="margin-top: 10px; margin-bottom: 10px">
+		<div class="card-body">
+			<img src="{{ url_for('static', filename='img/graph_example.png') }}" height="300" width="800" alt="Graph example">
+		</div>
+	</div>
+
+	<p class="mt-3">In the graph interface, you can use the Nodes Tab to select which nodes you'd like to see, and the
+	Edges Tag to change the width of the network's edges. In the graph itself, you can hover over a particular node
+	to see the node's degree and degree rank.</p>
+	<br>
+	<h4 class="text-center" style="margin-top:20px"> Tutorial: Network Query </h4>
+
+	<p>
+		In the Network search bar in <a href="{{ url_for('contnext_viewer.home') }}">Home</a>, type the name or ID of
+		the network you would like to explore and click "Submit".
+	</p>
+	<div class="card" style="margin-top: 10px; margin-bottom: 10px">
+		<div class="card-body">
+			<form class="row 3-g needs-validation col-md-11">
+				  <div class="col-md-10 m-auto">
+					  <label for="input-q">Network ID or Name</label>
+					  <input type="text" class="form-control" name="network-query" placeholder="UBERON:0000021" required >
+				  </div>
+                  <div class="col-md m-auto">
+                      <button type="button" id="btn1" class="btn btn-custom-1">Submit</button>
+                  </div>
+           </form>
+		</div>
+	</div>
+	<p class="mt-3">A results table appear, showing the nodes and node properties of your network. You can sort the columns
+		of by clicking on the column headers. You can click on a node, to query it in the current context.</p>
+
+	<div class="card" style="margin-top: 10px; margin-bottom: 10px">
+		<div class="card-body">
+			<div class="container-fluid" >
+			<table class="table table-light table-hover col-md-7">
+					<th>Node</th>
+					<th>Degree</th>
+					<th>Degree Rank</th>
+					<th>Housekeeping</th>
+
+				<tr><td>NAT2</td><td>507</td><td>2604.5</td><td>False</td></tr>
+				<tr><td>FAM229A</td><td>73</td><td>8783.0</td><td>False</td></tr>
+				<tr><td>STAU2-AS1</td><td>1123</td><td>749.0</td><td>False</td></tr>
+				<tr><td>C20orf78</td><td>597</td><td>2113.5</td><td>False</td></tr>
+				<tr><td>GTF3C2</td><td>999</td><td>975.0</td><td>True</td></tr>
+				<tr><td>AGTRAP</td><td>999</td><td>975.0</td><td>False</td></tr>
+				<tr><td>BCDIN3D-AS1</td><td>999</td><td>975.0</td><td>False</td></tr>
+				<tr><td>KPNA2</td><td>997</td><td>977.5</td><td>>False</td></tr>
+				<tr><td>PSTPIP2</td><td>997</td><td>977.5</td><td>False</td></tr>
+				<tr><td>BATF2</td><td>996</td><td>977.5</td><td>False</td></tr>
+				 </table>
+			</div>
+		</div>
+	</div>
+	<br>
+	<h4 class="text-center" style="margin-top:20px"> Tutorial: Pathway Similarities </h4>
+
+	<p>
+		You can also explore a the network overlap of particular context (<a href="{{ url_for('contnext_viewer.heatmap', context='tissue') }}">Tissue</a>,
+		<a href="{{ url_for('contnext_viewer.heatmap', context='cellline') }}">Cell Line</a>,
+		<a href="{{ url_for('contnext_viewer.heatmap', context='celltype') }}">Cell Type</a>), in the Clustergrams available
+		in the "Pathway Similarity" menu on the navigation bar.
+
+	<div class="card" style="margin-top: 10px; margin-bottom: 10px; background-color:whitesmoke" >
+		<div class="card-body">
+			<img src="{{ url_for('static', filename='img/heatmap_example.png') }}" height="300" width="700" alt="Heatmap example">
+		</div>
+	</div>
+
+</div>
+
+{% endblock %}

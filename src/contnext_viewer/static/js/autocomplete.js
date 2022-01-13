@@ -14,11 +14,11 @@ $(document).ready(function () {
                 dataType: "json",
                 data: {
                     resource: $('#input-context').find(":selected").val(),
-                    q: request.term
+                    q: request.term,
                 },
                 success: function (data) {
                     //alert(data)
-                    // console.log(data)
+                    //console.log(data)
                     response(data);
                 },
                 error: function(jqXHR, textStatus, errorThrown) {

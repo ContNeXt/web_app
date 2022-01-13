@@ -1,8 +1,6 @@
-<!--
 <p align="center">
-  <img src="https://github.com/gitlab.scai.fraunhofer/gitlab.scai.fraunhofer/raw/main/docs/source/logo.png" height="150">
+<img src="horizontal-logo.png" height="150">
 </p>
--->
 
 <h1 align="center">
   ContNextViewer
@@ -39,6 +37,73 @@ ContNext WebApp
 > TODO show in a very small amount of space the **MOST** useful thing your package can do.
 Make it as short as possible! You have an entire set of docs for later.
 
+### Data Structure
+
+To correctly load the contnextViewer database, network data must have 
+the following structure:
+```
+.
+├── node_properties
+│   ├── tissue
+│   │   ├── 0000001 
+│   │   │ 	└── node_properties.tsv
+│   │   ├── 0000002
+│   │   │	└── node_properties.tsv
+│   │   └── ... 
+│   │
+│   ├── cell_line
+│   │   ├── 0000003 
+│   │   │ 	└── node_properties.tsv
+│   │   ├── 0000004
+│   │   │	└── node_properties.tsv
+│   │   └── ... 
+│   │
+│   ├── cell_type
+│	│   ├── 0000005 
+│   │   │	└── node_properties.tsv
+│	│   ├── 0000006
+│   │   │	└── node_properties.tsv
+│   │   └── ... 
+│   │
+│   └── interactome
+│	    └── node_properties.tsv
+│
+├── coexpr_networks
+│   ├── tissue
+│   │   ├── 0000001 
+│   │   │   └── coexp_network_edges.tsv
+│   │   ├── 0000002
+│   │   │   └── coexp_network_edges.tsv
+│   │   └── ... 
+│   │
+│   ├── cell_type
+│   │   ├── 0000003 
+│   │   │   └── coexp_network_edges.tsv
+│   │   ├── 0000004
+│   │   │   └── coexp_network_edges.tsv
+│   │   └── ... 
+│   │
+│   └── cell_line
+│       ├── 0000005 
+│       │   └── coexp_network_edges.tsv
+│       ├── 0000006
+│       │   └── coexp_network_edges.tsv
+│       └── ... 
+│
+├── misc_data
+│   ├── tissue_overview.tsv
+│   ├── celltype_overview.tsv
+│   ├── cellline_overview.tsv
+│   ├── tissue_node_degree.tsv
+│   ├── celltype_node_degree.tsv
+│   └── cellline_node_degree.tsv
+│
+└── interactome
+    ├── interactome_edges.tsv
+    └── ... 
+    
+
+```
 ### Command Line Interface
 
 The contnextViewer command line tool is automatically installed. It can
@@ -48,8 +113,15 @@ be used from the shell with the `--help` flag to show all subcommands:
 $ contnextViewer --help
 ```
 
-> TODO show the most useful thing the CLI does! The CLI will have documentation auto-generated
-by `sphinx`.
+To load the contnextViewer database, use the `load` command:
+```shell
+$ contnextViewer load [--source /path/to/network/data/directory ]
+```
+
+To load the contnextViewer database, use the `web` command:
+```shell
+$ contnextViewer web [--host 0.0.0.0 ] [ --port 5000 ]  [ --template path/to/template] [ --static path/tp/static]
+```
 
 ## 🚀 Installation
 

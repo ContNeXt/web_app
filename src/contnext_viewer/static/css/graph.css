@@ -98,14 +98,6 @@
     width: 100%;
 }
 
-.color_red {
-    color: darkred;
-}
-
-.color_black {
-    color: black;
-}
-
 .link_continuous {
     fill: none;
     stroke-width: 1px;
@@ -119,30 +111,29 @@
     stroke: #888;
 }
 
-.link_red {
-    stroke: red;
-}
 
-.link_blue {
-    stroke: blue;
+.link {
+    stroke: #034c1a;
 }
 
 .link_highlighted {
-    stroke: #4EB2D4;
+    stroke: #7aef59;
 !important;
 }
 
 circle {
-    fill: #187bcd;
+    fill: #18cd4b;
 }
 
 .node_highlighted > circle {
     stroke-width: 2.5px;
-    stroke: #4EB2D4 !important;
+    stroke: #7aef59 !important;
 }
 
 .node_highlighted > text {
-    fill: #4EB2D4 !important;
+    fill: black !important;
+    font-size: 120%;
+    background: rgba(249, 248, 248, 0.7);
 }
 
 /* Add text shadow to nodes*/

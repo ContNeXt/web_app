@@ -131,8 +131,8 @@ html_theme = 'sphinx_rtd_theme'
 # The name of an image file (relative to this directory) to place at the top
 # of the sidebar.
 #
-if os.path.exists('logo.png'):
-    html_logo = 'logo.png'
+if os.path.exists('favicon.ico'):
+    html_logo = 'favicon.ico'
 
 # -- Options for HTMLHelp output ---------------------------------------------
 
