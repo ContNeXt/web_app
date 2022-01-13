@@ -33,7 +33,6 @@ def check_tsv(all_files: List) -> Tuple[List, List, List, str]:
     """ Filters out all non-tsv files from the dictionary"""
     supplementary = []
     all_tsv_files = []
-    print(all_files)
     properties = []
     interactome = None
     for file in all_files[:]:
@@ -68,7 +67,6 @@ def add_edgelist(file_path, interacFlag=False):
     """ Create networkx edgelist from file"""
     # Open the file as an nx object
     if interacFlag:
-        print("file: ", file_path)
         return nx.read_edgelist(file_path, delimiter='\t', encoding='utf-8', data=False, create_using=nx.DiGraph())
 
     network = nx.read_edgelist(file_path, comments='from', delimiter='\t', data=(
@@ -89,7 +87,6 @@ def add_metadata_to_networks(supplementary_files: List):
                 network_metadata.update({row[0].split(":")[1]: {'context': CONTEXT[os.path.basename(file).split("_")[0]] ,
                                                                 'id': row[0],
                                                                 'name': row[1]}})
-        print(file)
     return network_metadata
 
 

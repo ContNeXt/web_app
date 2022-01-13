@@ -6,7 +6,7 @@ from zipfile import ZipFile
 
 from contnext_viewer.load import load_database, is_ready
 from contnext_viewer.web.app import create_app
-from contnext_viewer.constants import HIDDEN_FOLDER, DATA_FOLDER, ZENODO_URL
+from contnext_viewer.constants import HIDDEN_FOLDER, ZENODO_URL
 
 @click.group()
 def main():
@@ -24,23 +24,30 @@ def load(source: str=None):
 
 	else:
 		# Create data folder in home
-		datafolder = os.path.join(Path.home(), HIDDEN_FOLDER)
-		Path(datafolder).mkdir(parents=True, exist_ok=True)
-		filepath = os.path.join(datafolder, 'contnext.zip')
+		contnext_datafolder = os.path.join(Path.home(), HIDDEN_FOLDER)
+		Path(contnext_datafolder).mkdir(parents=True, exist_ok=True)
+		zipfile_path = os.path.join(contnext_datafolder, 'contnext.zip')
 
-		if not Path(filepath).is_file():
+		# Check if there's downloaded data
+		if not Path(zipfile_path).is_file():
 			# Load from Zenodo
 			print(f"Downloading data ...")
-			urlretrieve(ZENODO_URL, filename=filepath)
-			print(f"ContNeXt data successfully downloaded: {filepath}")
+			urlretrieve(ZENODO_URL, filename=zipfile_path)
+			print(f"ContNeXt data successfully downloaded: {zipfile_path}")
 
-		# Unzip downloaded data
-		with ZipFile(filepath, 'r') as zip:
-			zip.extractall(datafolder)
-			print(f"ContNeXt data successfully uncompressed to: {datafolder}")
-			# Load with data files if path is given
-			load_database(data_source=datafolder)
+		# Data folder inside zip
+		data_source=os.path.join(contnext_datafolder, 'data')
 
+		# Check if it's uncompressed
+		if not Path(data_source).is_dir():
+			# Unzip downloaded data
+			with ZipFile(zipfile_path, 'r') as zip:
+				print("Extracting downloaded data...")
+				zip.extractall(contnext_datafolder)
+				print(f"ContNeXt data successfully uncompressed to: {contnext_datafolder}")
+
+		# Load with data files if path is given
+		load_database(data_source=data_source)
 
 
 @main.command()
@@ -53,23 +60,30 @@ def web(host, port, template, static):
 	if not is_ready():
 		print("Loading database....")
 		# Create data folder in home
-		datafolder = os.path.join(Path.home(), HIDDEN_FOLDER)
-		Path(datafolder).mkdir(parents=True, exist_ok=True)
-		filepath = os.path.join(datafolder, 'contnext.zip')
+		contnext_datafolder = os.path.join(Path.home(), HIDDEN_FOLDER)
+		Path(contnext_datafolder).mkdir(parents=True, exist_ok=True)
+		zipfile_path = os.path.join(contnext_datafolder, 'contnext.zip')
 
-		if not Path(filepath).is_file():
+		# Check if there's downloaded data
+		if not Path(zipfile_path).is_file():
 			# Load from Zenodo
 			print(f"Downloading data ...")
-			urlretrieve(ZENODO_URL, filename=filepath)
-			print(f"ContNeXt data successfully downloaded: {filepath}")
+			urlretrieve(ZENODO_URL, filename=zipfile_path)
+			print(f"ContNeXt data successfully downloaded: {zipfile_path}")
 
-		# Unzip downloaded data
-		with ZipFile(filepath, 'r') as zip:
-			print("Extracting downloaded dataa...")
-			zip.extractall(datafolder)
-			print(f"ContNeXt data successfully uncompressed to: {datafolder}")
-			# Load with data files if path is given
-			load_database(data_source=datafolder)
+		# Data folder inside zip
+		data_source=os.path.join(contnext_datafolder, 'data')
+
+		# Check if it's uncompressed
+		if not Path(data_source).is_dir():
+			# Unzip downloaded data
+			with ZipFile(zipfile_path, 'r') as zip:
+				print("Extracting downloaded data...")
+				zip.extractall(contnext_datafolder)
+				print(f"ContNeXt data successfully uncompressed to: {contnext_datafolder}")
+
+		# Load with data files if path is given
+		load_database(data_source=data_source)
 
 	app = create_app(template_folder=template, static_folder=static)
 	app.run(debug=True, host=host, port=port)
