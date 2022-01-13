@@ -34,6 +34,10 @@ a:hover {
   text-decoration: underline;
 }
 
+a:focus {
+  color: #49a65f;
+  text-decoration: underline;
+}
 
 /* Nav Bar */
 .navbar {
@@ -50,6 +54,9 @@ a:hover {
     color: whitesmoke
 }
 .nav-link:hover {
+    color: #b4dcbe
+}
+.nav-link:focus {
     color: #b4dcbe
 }
 .link-slider {

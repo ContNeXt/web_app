@@ -30,7 +30,7 @@
 
 		<!-- Table content -->
 		   {% for key, value in results.items() %}
-				<tr class="clickable text-left" style="cursor: pointer;" onclick="window.location='{{ url_for('graph', node=idquery, network_id=key) }}'">
+				<tr class="clickable text-left" style="cursor: pointer;" onclick="window.location='{{ url_for('contnext_viewer.graph', node=idquery, network_id=key) }}'">
 					<td>
 						{{key}}
 					 </td>
@@ -81,7 +81,7 @@
 		<!-- Table content -->
 
 		{% for key, value in properties.items() %}
-				<tr class="clickable text-left" style="cursor: pointer;" onclick="window.location='{{ url_for('graph', node=key, network_id=identifier) }}'">
+				<tr class="clickable text-left" style="cursor: pointer;" onclick="window.location='{{ url_for('contnext_viewer.graph', node=key, network_id=identifier) }}'">
 					<td>
 						{{key}}
 					 </td>
