@@ -128,27 +128,38 @@ def load_database(data_source):
     # Find all files
     all_files = list_files(data_source)
     # filter out all non-tsv, and get supplementary dict
-    list_tsv, supplementary_source, properties_files, interactome = check_tsv(all_files=all_files)
+    list_tsv, supplementary_source, properties_files, interactome_file = check_tsv(all_files=all_files)
 
-    # counter
-    debugger = int(0)
     # init list of nodes
     list_of_nodes = []
 
     metadata = add_metadata_to_networks(supplementary_files=supplementary_source)
     node_properties = add_properties_to_nodes(property_files=properties_files)
 
-    # add interactome to db
+    # Add interactome to db
     interactome = Network(identifier='interactome',
-                          data=add_edgelist(interactome, interacFlag=True),
+                          data=add_edgelist(interactome_file, interacFlag=True),
                           context='interactome',
                           name='interactome',
                           properties=node_properties.get('interactome'))
+
+    for node in add_edgelist(interactome_file, interacFlag=True).nodes:
+        # check if node is already in the database
+        q = session.query(Node).filter(Node.name == node).first()
+        if q:
+            new_node = q
+        else:
+            new_node = Node(name=node)
+            list_of_nodes.append({'node': node})
+        # add relationship between nodes
+        interactome.nodes_.append(new_node)
+        session.add(new_node)
+
     # push to database
     session.add(interactome)
     session.commit()
 
-    # add data from each file to database
+    # Add network data (except interactome) from each file to database
     for file in tqdm(list_tsv, total=len(list_tsv)):
         key = os.path.basename(os.path.dirname(file))
         new_network = Network(identifier=metadata.get(key).get('id'),
@@ -169,14 +180,12 @@ def load_database(data_source):
             new_network.nodes_.append(new_node)
             session.add(new_node)
 
-        debugger = debugger+1
-
         # push to database
         session.add(new_network)
         session.commit()
 
 
-    return debugger
+    return
 
 
 '''

@@ -25,12 +25,6 @@ contnext = Blueprint(
 )
 
 
-# load dataframe of supplemntary
-# { node=key, value{ betweeness centr: , contect }
-# save as:
-# app.interactome_node_dic
-
-
 @contnext.route("/")
 def main():
 	"""Redirect to ContNeXt home page."""
@@ -82,12 +76,14 @@ def query(query):
 		for network in sqlsession.query(Network).filter(
 			and_(Network.nodes_.any(id=node_id[0]), Network.context == context)).all():
 			list_of_nodes.update({network.identifier: [network.data, network.name, network.properties]})
+		sqlsession.close()
 		return render_template("results.html", idquery=query, idoptions=context, form=form, results=list_of_nodes)
 
 	elif form == 'network' and param == 'identifier':
 		# Get network info
 		list_of_networks = [[network.identifier, network.data, network.name, network.properties, network.context]
 							for network in sqlsession.query(Network).filter(Network.identifier == query).all()][0]
+		sqlsession.close()
 		return render_template("results.html", idquery=query, idoptions=context, form=form,
 							   results=list_of_networks)
 
@@ -95,6 +91,8 @@ def query(query):
 		# Get network info
 		list_of_networks = [[network.identifier, network.data, network.name, network.properties, network.context]
 							for network in sqlsession.query(Network).filter(Network.name == query).all()][0]
+
+		sqlsession.close()
 		return render_template("results.html", idquery=query, idoptions=context, form=form,
 							   results=list_of_networks)
 
