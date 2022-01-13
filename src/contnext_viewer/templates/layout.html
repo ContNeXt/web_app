@@ -16,18 +16,18 @@
 </head>
 <body>
 
-    <div class="container">
-
-    </div>
-
 <!-- Navigator -->
 
     <nav class="navbar navbar-expand-lg">
       <div class="container-fluid">
-        <header class="navbar-brand">ContNeXt Viewer</header>
+        <header class="navbar-brand">
+		  <a href="/"><img src="/static/img/small_logo.png" alt="ContNeXt Logo" width="40" height="40" class="d-inline-block align-text-center"></a>
+		  ContNeXt Viewer
+		</header>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         </button>
         <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
           <ul class="navbar-nav me-auto mb-2 mb-lg-0">
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="/">Home</a>
@@ -41,10 +41,25 @@
 					<li><a class="dropdown-item" href="{{ url_for ('contnext_viewer.tutorial') }}">Tutorial</a></li>
 				  </ul>
             </li>
+			<li class="nav-item dropdown active">
+              <a class="nav-link dropdown-toggle" href="/" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                Pathway Similarity
+              </a>
+				  <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+					<li><a class="dropdown-item" href="{{ url_for ('contnext_viewer.heatmap', context='tissue') }}" target="_blank">Tissues</a></li>
+					<li><a class="dropdown-item" href="{{ url_for ('contnext_viewer.heatmap', context='cellline') }}" target="_blank">Cell Lines</a></li>
+					<li><a class="dropdown-item" href="{{ url_for ('contnext_viewer.heatmap', context='celltype') }}" target="_blank">Cell Types</a></li>
+				  </ul>
+            </li>
             <li class="nav-item">
               <a class="nav-link active" aria-current="page" href="{{ url_for ('contnext_viewer.imprint') }}">Imprint</a>
             </li>
           </ul>
+			<span>
+				<a id="nav-scai-logo" href="https://www.scai.fraunhofer.de/en/business-research-areas/bioinformatics.html">
+					<img alt="Fraunhofer SCAI" src="/static/img/scai_logo.svg" height="35">
+				</a>
+			</span>
         </div>
       </div>
     </nav>

@@ -2,12 +2,13 @@
     -webkit-box-sizing: border-box;
 }
 
+
 body {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Work Sans", sans-serif;
     font-size: 14px;
-    line-height: 1.428;
-    color: #333;
-    background-color: #fff;
+    line-height: 1.5;
+    color: #273626;
+    background-color: whitesmoke;
 }
 
 /*.clust_icon{
@@ -66,10 +67,6 @@ body {
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
-}
-
-.icon_buttons {
-    color: #00967f;
 }
 
 .sidebar_text {

@@ -1,11 +1,14 @@
-{% extends "layout.html" %}
-{% block title %}ContNext Viewer—Heatmaps{% endblock %}
+	<!-- Bootstrap & CSS -->
+	<link rel="shortcut icon" href="{{ url_for('static', filename='favicon.ico') }}">
+    <title>ContNeXt Viewer—Pathways Similarities</title>
 
-{% block scripts %}
-    {% include "dependencies/jquery_dependencies.html" %}
+	<!-- Scripts -->
 
 	<!-- Block for Heatmap dependencies -->
+	{% include "dependencies/jquery_dependencies.html" %}
     {% include "dependencies/clustergrammer.html" %}
+	{% include "dependencies/clustergrammer_style.html" %}
+
     <script>
         let aboutString = 'Zoom, scroll, and click buttons to interact with the clustergram.';
 		let sourceFile = {{ json_path | tojson }};
@@ -65,18 +68,9 @@
 
     </script>
 
-{% endblock %}
-
-{% block content %}
-<head>
-    <title>Network Graph Explorer</title>
-</head>
-<body>
-
     <h4 class='text-center wait_message'>Please wait ...</h4>
     <div class="text-center">
-        <h3>{{ title }} Overlap Heatmap</h3>
+        <h3>{{ title }} Overlap Clustergram</h3>
 
         <div id="heatmap-matrix"></div>
     </div>
-{% endblock %}
