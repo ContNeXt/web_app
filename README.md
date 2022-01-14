@@ -36,7 +36,52 @@
 
 ContNeXt is web application that allows the exploration of comprehensive context-specific portraits of biological processes using gene expression data, and the change in such portraits across different contexts.
 
-### ContNeXt Data
+## Command Line Interface
+
+The ContNeXt Viewer command line tool is automatically installed. It can
+be used from the shell with the `--help` flag to show all subcommands:
+
+```shell
+$ contnext_viewer --help
+```
+
+To load the contnextViewer database, use the `load` command:
+```shell
+$ contnext_viewer load [--source /path/to/network/data/directory ]
+```
+If no source path is given, contnextViewer automatically downloads the necessary data from the project's Zenodo's page [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5831786.svg)](https://doi.org/10.5281/zenodo.5831786).
+
+To load the contnextViewer database, use the `web` command:
+```shell
+$ contnext_viewer web [--host 0.0.0.0 ] [ --port 5000 ] [ --template path/to/template] [ --static path/tp/static]
+```
+
+## 🚀 Installation
+
+<!-- Uncomment this section after your first ``tox -e finish``
+The most recent release can be installed from
+[PyPI](https://pypi.org/project/contnextViewer/) with:
+
+```bash
+$ pip install contnext_viewer
+```
+-->
+
+The most recent code and data can be installed directly from GitHub with:
+
+```bash
+$ pip install git+https://github.com/ContNeXt/web_app.git
+```
+
+To install in development mode, use the following:
+
+```bash
+$ git clone git+https://github.com/ContNeXt/web_app.git
+$ cd web_app.git
+$ pip install -e .
+```
+
+## ContNeXt Data
 
 ContNeXt's data can be downloaded directly from the project's Zenodo page [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5831786.svg)](https://doi.org/10.5281/zenodo.5831786).
 
@@ -105,51 +150,6 @@ the following structure:
     
 
 ```
-### Command Line Interface
-
-The ContNeXt Viewer command line tool is automatically installed. It can
-be used from the shell with the `--help` flag to show all subcommands:
-
-```shell
-$ contnext_viewer --help
-```
-
-To load the contnextViewer database, use the `load` command:
-```shell
-$ contnext_viewer load [--source /path/to/network/data/directory ]
-```
-If no source path is given, contnextViewer automatically downloads the necessary data from the project's Zenodo's page [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5831786.svg)](https://doi.org/10.5281/zenodo.5831786).
-
-To load the contnextViewer database, use the `web` command:
-```shell
-$ contnext_viewer web [--host 0.0.0.0 ] [ --port 5000 ] [ --template path/to/template] [ --static path/tp/static]
-```
-
-## 🚀 Installation
-
-<!-- Uncomment this section after your first ``tox -e finish``
-The most recent release can be installed from
-[PyPI](https://pypi.org/project/contnextViewer/) with:
-
-```bash
-$ pip install contnext_viewer
-```
--->
-
-The most recent code and data can be installed directly from GitHub with:
-
-```bash
-$ pip install git+https://github.com/ContNeXt/web_app.git
-```
-
-To install in development mode, use the following:
-
-```bash
-$ git clone git+https://github.com/ContNeXt/web_app.git
-$ cd web_app.git
-$ pip install -e .
-```
-
 ## 👐 Contributing
 
 Contributions, whether filing an issue, making a pull request, or forking, are appreciated. See
