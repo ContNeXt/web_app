@@ -6,29 +6,6 @@
   ContNeXtViewer
 </h1>
 
-<p align="center">
-    <a href="https://github.com/ContNeXt/web_app/actions?query=workflow%3ATests">
-        <img alt="Tests" src="https://github.com/ContNeXt/web_app/workflows/Tests/badge.svg" />
-    </a>
-    <a href="https://github.com/cthoyt/cookiecutter-python-package">
-        <img alt="Cookiecutter template from @cthoyt" src="https://img.shields.io/badge/Cookiecutter-python--package-yellow" /> 
-    </a>
-    <a href="https://pypi.org/project/contnextViewer">
-        <img alt="PyPI" src="https://img.shields.io/pypi/v/contnextViewer" />
-    </a>
-    <a href="https://pypi.org/project/contnextViewer">
-        <img alt="PyPI - Python Version" src="https://img.shields.io/pypi/pyversions/contnextViewer" />
-    </a>
-    <a href="https://github.com/gitlab.scai.fraunhofer/gitlab.scai.fraunhofer/blob/main/LICENSE">
-        <img alt="PyPI - License" src="https://img.shields.io/pypi/l/contnextViewer" />
-    </a>
-    <a href='https://contnextViewer.readthedocs.io/en/latest/?badge=latest'>
-        <img src='https://readthedocs.org/projects/contnextViewer/badge/?version=latest' alt='Documentation Status' />
-    </a>
-    <a href='https://github.com/psf/black'>
-        <img src='https://img.shields.io/badge/code%20style-black-000000.svg' alt='Code style: black' />
-    </a>
-</p>
 
 ### ContNeXt WebApp
 
@@ -45,13 +22,13 @@ be used from the shell with the `--help` flag to show all subcommands:
 $ contnext_viewer --help
 ```
 
-To load the contnextViewer database, use the `load` command:
+To load the ContNeXt Viewer database, use the `load` command:
 ```shell
 $ contnext_viewer load [--source /path/to/network/data/directory ]
 ```
 If no source path is given, contnextViewer automatically downloads the necessary data from the project's Zenodo's page [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5831786.svg)](https://doi.org/10.5281/zenodo.5831786).
 
-To run the contnextViewer webapp, use the `web` command:
+To run the ContNeXt Viewer webapp, use the `web` command:
 ```shell
 $ contnext_viewer web [--host 0.0.0.0 ] [ --port 5000 ] [ --template path/to/template] [ --static path/tp/static]
 ```
@@ -247,6 +224,7 @@ This package was created with [@audreyfeldroy](https://github.com/audreyfeldroy)
   
 The final section of the README is for if you want to get involved by making a code contribution.
 
+ <!--
 ### ❓ Testing
 
 After cloning the repository and installing `tox` with `pip install tox`, the unit tests in the `tests/` folder can be
@@ -257,6 +235,7 @@ $ tox
 ```
 
 Additionally, these tests are automatically re-run with each commit in a [GitHub Action](https://github.com/ContNeXt/web_app/actions?query=workflow%3ATests).
+-->
 
 ### 📦 Making a Release
 
