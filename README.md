@@ -7,8 +7,8 @@
 </h1>
 
 <p align="center">
-    <a href="https://github.com/gitlab.scai.fraunhofer/gitlab.scai.fraunhofer/actions?query=workflow%3ATests">
-        <img alt="Tests" src="https://github.com/gitlab.scai.fraunhofer/gitlab.scai.fraunhofer/workflows/Tests/badge.svg" />
+    <a href="https://github.com/ContNeXt/web_app/actions?query=workflow%3ATests">
+        <img alt="Tests" src="https://github.com/ContNeXt/web_app/workflows/Tests/badge.svg" />
     </a>
     <a href="https://github.com/cthoyt/cookiecutter-python-package">
         <img alt="Cookiecutter template from @cthoyt" src="https://img.shields.io/badge/Cookiecutter-python--package-yellow" /> 
@@ -30,7 +30,7 @@
     </a>
 </p>
 
-ContNeXt WebApp
+### ContNeXt WebApp
 
 ## 💪 Getting Started
 
@@ -38,7 +38,7 @@ ContNeXt is web application that allows the exploration of comprehensive context
 
 ### ContNeXt Data
 
-ContNeXt's data can be downloaded directly from the project's <a href='https://zenodo.org/record/5831786'>Zenodo page</a>.
+ContNeXt's data can be downloaded directly from the project's Zenodo page [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5831786.svg)](https://doi.org/10.5281/zenodo.5831786).
 
 To correctly load the ContNeXt Viewer database, the source data must have 
 the following structure:
@@ -118,7 +118,7 @@ To load the contnextViewer database, use the `load` command:
 ```shell
 $ contnext_viewer load [--source /path/to/network/data/directory ]
 ```
-If no source path is given, contnextViewer automatically downloads the necessary data from the project's Zenodo's page.
+If no source path is given, contnextViewer automatically downloads the necessary data from the project's Zenodo's page [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5831786.svg)](https://doi.org/10.5281/zenodo.5831786).
 
 To load the contnextViewer database, use the `web` command:
 ```shell
