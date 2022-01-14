@@ -89,65 +89,112 @@ To correctly load the ContNeXt Viewer database, the source data must have
 the following structure:
 ```
 .
-├── node_properties
-│   ├── tissue
-│   │   ├── 0000001 
-│   │   │ 	└── node_properties.tsv
-│   │   ├── 0000002
-│   │   │	└── node_properties.tsv
-│   │   └── ... 
-│   │
-│   ├── cell_line
-│   │   ├── 0000003 
-│   │   │ 	└── node_properties.tsv
-│   │   ├── 0000004
-│   │   │	└── node_properties.tsv
-│   │   └── ... 
-│   │
+├── coexpr_networks 
+│   ├── tissue 
+│   │   ├── <UBERON ID>
+│   │   │   └── coexp_network_edges.tsv
+│   │   └── ... x46
 │   ├── cell_type
-│	│   ├── 0000005 
-│   │   │	└── node_properties.tsv
-│	│   ├── 0000006
-│   │   │	└── node_properties.tsv
-│   │   └── ... 
-│   │
-│   └── interactome
-│	    └── node_properties.tsv
+│   │   ├── <CL ID> 
+│   │   │   └── coexp_network_edges.tsv
+│   │   └── ... x30
+│   └── cell_line 
+│       ├── <CLO ID> 
+│       │   └── coexp_network_edges.tsv
+│       └── ... x22
 │
-├── coexpr_networks
-│   ├── tissue
-│   │   ├── 0000001 
-│   │   │   └── coexp_network_edges.tsv
-│   │   ├── 0000002
-│   │   │   └── coexp_network_edges.tsv
-│   │   └── ... 
-│   │
-│   ├── cell_type
-│   │   ├── 0000003 
-│   │   │   └── coexp_network_edges.tsv
-│   │   ├── 0000004
-│   │   │   └── coexp_network_edges.tsv
-│   │   └── ... 
-│   │
-│   └── cell_line
-│       ├── 0000005 
-│       │   └── coexp_network_edges.tsv
-│       ├── 0000006
-│       │   └── coexp_network_edges.tsv
-│       └── ... 
+├── controllability_analysis
+│   ├── interactome_edge_classifications.tsv
+│   ├── interactome_indispensable_edges.txt
+│   ├── interactome_indispensable_nodes.txt
+│   ├── interactome_node_classifications.tsv
+│   ├── interactome_summary.tsv
+│   ├── interactome.linktype
+│   ├── interactome.nodemap
+│   ├── interactome.nodetype
+│   └── interactome.output
+│
+├── data_for_coexp_network_construction
+│   ├── organism.part 
+│   │   ├── <UBERON ID>
+│   │   │   ├── datasets.txt
+│   │   │   └── metadata.tsv
+│   │   └── ... x46
+│   ├── cell.type
+│   │   ├── <CL ID> 
+│   │   │   ├── datasets.txt
+│   │   │   └── metadata.tsv
+│   │   └── ... x30
+│   └── cell.line 
+│       ├── <CLO ID> 
+│       │   ├── datasets.txt
+│       │   └── metadata.tsv
+│       └── ... x22
+│
+├── interactome 
+│   ├── interactome_18_01_2021.tsv 
+│   └── interactome_edges.tsv 
+│
+├── mappings 
+│   ├── CL_name_mappings.json
+│   ├── CLO_name_mappings.json
+│   ├── doid_name_mappings.json
+│   ├── hgnc_name_mappings.json
+│   └── uberon_name_mappings.json
+│
+├── metadata 
+│   ├── final_metadata.tsv
+│   ├── gemma_dump_FINAL.tsv
+│   ├── gemma_dump_ontologies.tsv
+│   ├── metadata_before_curation_shortened.tsv
+│   ├── metadata_before_curation.tsv
+│   ├── metadata_for_manual_curation_shortened.tsv
+│   ├── metadata_for_manual_curation.tsv
+│   ├── metadata_manual_curation_version_shortened.tsv
+│   ├── metadata_manual_curation_version.tsv
+│   ├── metadataFinal_afterDataLoading.RData
+│   └── metadataFinal_afterDataLoading.tsv
 │
 ├── misc_data
+│   ├── tissue_neighbors.json
+│   ├── cell-type_neighbors.json
+│   ├── cell-line_neighbors.json
+│   ├── tis_100000most_common_edges.json
+│   ├── ct_100000most_common_edges.json
+│   ├── cl_100000most_common_edges.json
 │   ├── tissue_overview.tsv
 │   ├── celltype_overview.tsv
 │   ├── cellline_overview.tsv
-│   ├── tissue_node_degree.tsv
-│   ├── celltype_node_degree.tsv
-│   └── cellline_node_degree.tsv
+│   ├── FULL_tissue_overview_after_download.tsv
+│   ├── FULL_celltype_overview_after_download.tsv
+│   ├── FULL_cellline_overview_after_download.tsv
+│   ├── FULL_tissue_overview.tsv
+│   ├── FULL_celltype_overview.tsv
+│   ├── FULL_cellline_overview.tsv
+│   ├── pairwise_similarity_tissues.tsv
+│   ├── pairwise_similarity_cell_types.tsv
+│   ├── pairwise_similarity_cell_lines.tsv
+│   └── HK_genes.txt
 │
-└── interactome
-    ├── interactome_edges.tsv
-    └── ... 
-    
+├── node_properties
+│   ├── interactome_node_properties.tsv 
+│   ├── tissue
+│   │   ├── <UBERON ID> 
+│   │   │   └── node_properties.tsv
+│   │   └── ... x46
+│   ├── cell_type  
+│   │   ├── <CL ID>  
+│   │   │   └── node_properties.tsv
+│   │   └── ... x30
+│   └──  cell_line
+│       ├── <CLO ID> 
+│       │   └── node_properties.tsv
+│       └── ... x22
+│
+└── pathway
+    ├── gene_pathway_assignment.json
+    ├── kegg_hgnc_ids.gmt
+    └── kegg_mapping.json
 
 ```
 ## 👐 Contributing
