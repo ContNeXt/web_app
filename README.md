@@ -38,7 +38,7 @@ ContNeXt is web application that allows the exploration of comprehensive context
 
 ### ContNeXt Data
 
-ContNeXt's data can be downloaded directly from the project's <a href='https://zenodo.org/record/5831786'>Zenodo</a> page.
+ContNeXt's data can be downloaded directly from the project's <a href='https://zenodo.org/record/5831786'>Zenodo page</a>.
 
 To correctly load the ContNeXt Viewer database, the source data must have 
 the following structure:
@@ -139,21 +139,21 @@ $ pip install contnext_viewer
 The most recent code and data can be installed directly from GitHub with:
 
 ```bash
-$ pip install git+https://github.com/gitlab.scai.fraunhofer/gitlab.scai.fraunhofer.git
+$ pip install git+https://github.com/ContNeXt/web_app.git
 ```
 
 To install in development mode, use the following:
 
 ```bash
-$ git clone git+https://github.com/gitlab.scai.fraunhofer/gitlab.scai.fraunhofer.git
-$ cd gitlab.scai.fraunhofer
+$ git clone git+https://github.com/ContNeXt/web_app.git
+$ cd web_app.git
 $ pip install -e .
 ```
 
 ## 👐 Contributing
 
 Contributions, whether filing an issue, making a pull request, or forking, are appreciated. See
-[CONTRIBUTING.rst](https://github.com/gitlab.scai.fraunhofer/gitlab.scai.fraunhofer/blob/master/CONTRIBUTING.rst) for more information on getting involved.
+[CONTRIBUTING.rst](https://github.com/ContNeXt/web_app/blob/master/CONTRIBUTING.rst) for more information on getting involved.
 
 ## 👋 Attribution
 
@@ -209,7 +209,7 @@ run reproducibly with:
 $ tox
 ```
 
-Additionally, these tests are automatically re-run with each commit in a [GitHub Action](https://github.com/gitlab.scai.fraunhofer/gitlab.scai.fraunhofer/actions?query=workflow%3ATests).
+Additionally, these tests are automatically re-run with each commit in a [GitHub Action](https://github.com/ContNeXt/web_app/actions?query=workflow%3ATests).
 
 ### 📦 Making a Release
 
@@ -224,7 +224,7 @@ $ tox -e finish
 This script does the following:
 
 1. Uses BumpVersion to switch the version number in the `setup.cfg` and
-   `src/contnextViewer/version.py` to not have the `-dev` suffix
+   `src/contnext_viewer/version.py` to not have the `-dev` suffix
 2. Packages the code in both a tar archive and a wheel
 3. Uploads to PyPI using `twine`. Be sure to have a `.pypirc` file configured to avoid the need for manual input at this
    step
