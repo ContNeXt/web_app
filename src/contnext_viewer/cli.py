@@ -86,7 +86,7 @@ def web(host, port, template, static):
 		load_database(data_source=data_source)
 
 	app = create_app(template_folder=template, static_folder=static)
-	app.run(debug=True, host=host, port=port)
+	app.run(debug=False, host=host, port=port)
 
 
 if __name__ == "__main__":
