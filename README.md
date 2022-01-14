@@ -107,22 +107,22 @@ the following structure:
 ```
 ### Command Line Interface
 
-The contnextViewer command line tool is automatically installed. It can
+The ContNeXt Viewer command line tool is automatically installed. It can
 be used from the shell with the `--help` flag to show all subcommands:
 
 ```shell
-$ contnextViewer --help
+$ contnext_viewer --help
 ```
 
 To load the contnextViewer database, use the `load` command:
 ```shell
-$ contnextViewer load [--source /path/to/network/data/directory ]
+$ contnext_viewer load [--source /path/to/network/data/directory ]
 ```
 If no source path is given, contnextViewer automatically downloads the necessary data from the project's Zenodo's page.
 
 To load the contnextViewer database, use the `web` command:
 ```shell
-$ contnextViewer web [--host 0.0.0.0 ] [ --port 5000 ] [ --template path/to/template] [ --static path/tp/static]
+$ contnext_viewer web [--host 0.0.0.0 ] [ --port 5000 ] [ --template path/to/template] [ --static path/tp/static]
 ```
 
 ## 🚀 Installation
@@ -132,7 +132,7 @@ The most recent release can be installed from
 [PyPI](https://pypi.org/project/contnextViewer/) with:
 
 ```bash
-$ pip install contnextViewer
+$ pip install contnext_viewer
 ```
 -->
 
