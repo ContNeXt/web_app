@@ -69,6 +69,9 @@ body {
     user-select: none;
 }
 
+.icon_buttons{
+  color: #336021FF;
+}
 .sidebar_text {
     font-weight: 300;
     font-size: 14px;
@@ -148,7 +151,34 @@ body {
     background-image: none;
     border: 1px solid transparent;
     border-radius: 4px;
+    color: white;
+    background-color: #336021FF ;
 }
+
+.btn:hover {
+    background-color: #b2e5a6;
+    color: black;
+    border: 1px solid #336021FF;
+
+}
+
+.btn:focus {
+    background-color: #b2e5a6;
+    color: black;
+    border: 1px solid #336021FF;
+}
+.btn:active{
+    background-color: #336021FF;
+    color: white;
+    border: 1px solid #336021FF;
+}
+
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show > .btn-primary.dropdown-toggle{
+    background-color: #4f9434;
+    color: white;
+    border: 1px solid white;
+}
+
 
 .toggle_row_order {
     position: relative;

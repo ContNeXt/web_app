@@ -27622,7 +27622,7 @@ var Clustergrammer =
 
 	  if (params.sidebar.about != null) {
 
-	    sidebar.select('.about_section').append('h5').classed('sidebar_text', true).style('margin-left', '7px').style('margin-top', '5px').style('margin-bottom', '2px').style('text-align', 'justify').html(params.sidebar.about);
+	    sidebar.select('.about_section').append('h5').classed('sidebar_text', true).style('margin-left', '7px').style('margin-top', '5px').style('margin-bottom', '2px').style('text-align', 'center').html(params.sidebar.about);
 	  }
 
 	  sidebar.append('div').classed('icons_section', true).style('text-align', 'center');
