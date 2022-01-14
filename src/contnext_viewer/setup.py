@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-"""Setup module for :mod:`contnextViewer`."""
+"""Setup module for :mod:`contnext_viewer`."""
 
 import setuptools
 
