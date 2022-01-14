@@ -3,7 +3,7 @@
 </p>
 
 <h1 align="center">
-  ContNextViewer
+  ContNeXtViewer
 </h1>
 
 <p align="center">
@@ -30,16 +30,17 @@
     </a>
 </p>
 
-ContNext WebApp
+ContNeXt WebApp
 
 ## 💪 Getting Started
 
-> TODO show in a very small amount of space the **MOST** useful thing your package can do.
-Make it as short as possible! You have an entire set of docs for later.
+ContNeXt is web application that allows the exploration of comprehensive context-specific portraits of biological processes using gene expression data, and the change in such portraits across different contexts.
 
-### Data Structure
+### ContNeXt Data
 
-To correctly load the contnextViewer database, network data must have 
+ContNeXt's data can be downloaded directly from the project's <a href='https://zenodo.org/record/5831786'>Zenodo</a> page.
+
+To correctly load the ContNeXt Viewer database, the source data must have 
 the following structure:
 ```
 .
@@ -117,10 +118,11 @@ To load the contnextViewer database, use the `load` command:
 ```shell
 $ contnextViewer load [--source /path/to/network/data/directory ]
 ```
+If no source path is given, contnextViewer automatically downloads the necessary data from the project's Zenodo's page.
 
 To load the contnextViewer database, use the `web` command:
 ```shell
-$ contnextViewer web [--host 0.0.0.0 ] [ --port 5000 ]  [ --template path/to/template] [ --static path/tp/static]
+$ contnextViewer web [--host 0.0.0.0 ] [ --port 5000 ] [ --template path/to/template] [ --static path/tp/static]
 ```
 
 ## 🚀 Installation
