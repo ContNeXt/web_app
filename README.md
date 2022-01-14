@@ -24,7 +24,7 @@ To load the ContNeXt Viewer database, use the `load` command:
 ```shell
 $ contnext_viewer load [--source /path/to/network/data/directory ]
 ```
-If no source path is given, contnextViewer automatically downloads the necessary data from the project's Zenodo's [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5831786.svg)](https://doi.org/10.5281/zenodo.5831786)
+If no source path is given, contnextViewer automatically downloads the necessary data from the project's Zenodo [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5831786.svg)](https://doi.org/10.5281/zenodo.5831786)
 
 To run the ContNeXt Viewer webapp, use the `web` command:
 ```shell
