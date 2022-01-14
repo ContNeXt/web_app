@@ -51,7 +51,7 @@ $ contnext_viewer load [--source /path/to/network/data/directory ]
 ```
 If no source path is given, contnextViewer automatically downloads the necessary data from the project's Zenodo's page [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5831786.svg)](https://doi.org/10.5281/zenodo.5831786).
 
-To load the contnextViewer database, use the `web` command:
+To run the contnextViewer webapp, use the `web` command:
 ```shell
 $ contnext_viewer web [--host 0.0.0.0 ] [ --port 5000 ] [ --template path/to/template] [ --static path/tp/static]
 ```
