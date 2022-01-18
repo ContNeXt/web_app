@@ -10,7 +10,7 @@ $(document).ready(function () {
         source: function (request, response) {
             $.ajax({
                 type: "POST",
-                url: "http://localhost:5000/api/autocomplete",
+                url: "https://contnext.scai.fraunhofer.de/api/autocomplete",
                 dataType: "json",
                 data: {
                     resource: $('#input-context').find(":selected").val(),
