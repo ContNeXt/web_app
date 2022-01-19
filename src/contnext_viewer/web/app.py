@@ -30,7 +30,7 @@ def create_app(template_folder: str = None, static_folder: str = None):
 	app.config['CORS_HEADERS'] = 'Content-Type'
 
 	app.config['SECRET_KEY'] = "1P313P4OO138O4UQRP9343P4AQEKRFLKEQRAS230"
-	app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + DB_PATH
+	app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///' + DB_PATH + + '?check_same_thread=False'
 	app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 	# Initialize the database
