@@ -23,6 +23,12 @@ contnext = Blueprint(
 	static_folder=resource_filename('contnext_viewer', 'templates')
 )
 
+sqlsession = scoped_session(sessionmaker(bind=engine))
+
+@contnext.teardown_request
+def remove_session(ex=None):
+    sqlsession.remove()
+
 
 @contnext.route("/")
 def main():
@@ -67,7 +73,6 @@ def query(query):
 	form = session.get('form', None)
 
 	# Start database session
-	sqlsession = scoped_session(sessionmaker(bind=engine))
 	try:
 		if form == 'node':
 			# Get list of all the ids for that node
@@ -141,7 +146,7 @@ def graph(node, network_id):
 
 # autocomplete API: node list json
 @contnext.route("/api/autocomplete", methods=['POST'])
-@cross_origin(origin='*', headers=['Content-Type', 'Authorization'])
+@cross_origin(origin='*', headers=['Content-Type', 'Authorization'], support_credentials=True)
 def node_autocompletion():
 	q = request.form['q']
 	resource = request.form['resource']
