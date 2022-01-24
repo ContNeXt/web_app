@@ -12,7 +12,7 @@ from flask import jsonify, Blueprint, render_template, request, redirect, url_fo
 from flask_cors import cross_origin
 from pkg_resources import resource_filename
 from sqlalchemy import and_
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.orm import sessionmaker, scoped_session
 
 log = logging.getLogger(__name__)
 
@@ -67,8 +67,7 @@ def query(query):
 	form = session.get('form', None)
 
 	# Start database session
-	Session = sessionmaker(bind=engine)
-	sqlsession = Session()
+	sqlsession = scoped_session(sessionmaker(bind=engine))
 	try:
 		if form == 'node':
 			# Get list of all the ids for that node
