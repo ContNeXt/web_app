@@ -77,11 +77,13 @@ def query(query):
 		if form == 'node':
 			# Get list of all the ids for that node
 			node_id = [each.id for each in sqlsession.query(Node).filter(Node.name == query).all()]
+
 			# For each id, get list of all networks associated with it.
 			list_of_nodes = {}
-			for network in sqlsession.query(Network).filter(
-				and_(Network.nodes_.any(id=node_id[0]), Network.context == context)).all():
+
+			for network in sqlsession.query(Network).join(Node, Network.nodes_).filter(and_(Network.context == context, Node.id == node_id[0])).all():
 				list_of_nodes.update({network.identifier: [network.data, network.name, network.properties]})
+				
 			return render_template("results.html", idquery=query, idoptions=context, form=form, results=list_of_nodes)
 
 		elif form == 'network' and param == 'identifier':
