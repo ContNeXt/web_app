@@ -53,6 +53,6 @@ def create_app(template_folder: str = None, static_folder: str = None):
 '''
     Run app
 '''
+app = create_app()
 if __name__ == "__main__":
-	app = create_app()
 	app.run(debug=True, host='0.0.0.0', port=5000)
