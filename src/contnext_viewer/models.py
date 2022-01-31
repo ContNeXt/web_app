@@ -10,7 +10,7 @@ from sqlalchemy.orm import relationship, backref
 DB_PATH = str(Path(Path(__file__).parent.resolve(), 'contnext.db'))
 
 # Create engine
-engine = create_engine('sqlite:///'+DB_PATH)
+engine = create_engine('sqlite:///' + DB_PATH + '?check_same_thread=False')
 Base = declarative_base()
 
 '''
