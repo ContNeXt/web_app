@@ -5,15 +5,13 @@
 import logging
 import time
 
-
+from contnext_viewer.models import Network, Node, DB_PATH
+from contnext_viewer.web.views import contnext
 from flask import Flask
 from flask_admin import Admin
 from flask_admin.contrib.sqla import ModelView
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
-
-from contnext_viewer.models import Network, Node, DB_PATH
-from contnext_viewer.web.views import contnext
 
 log = logging.getLogger(__name__)
 
@@ -22,10 +20,11 @@ def create_app(template_folder: str = None, static_folder: str = None):
     """Create the Flask application"""
     t = time.time()
 
-    app = Flask(__name__,
-                template_folder=(template_folder or '../templates'),
-                static_folder=(static_folder or '../static')
-                )
+    app = Flask(
+        __name__,
+        template_folder=(template_folder or '../templates'),
+        static_folder=(static_folder or '../static')
+    )
 
     cors = CORS(app, resources={r"/foo": {"origins": "*"}})
     app.config['CORS_HEADERS'] = 'Content-Type'
