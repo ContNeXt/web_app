@@ -83,7 +83,7 @@ def query(query):
 			
 			print(node_ids, context)
 
-			qry = sqlsession.query(Node, Network).filter(and_(Node.id.in_(node_ids)), Network.context == context).join(Node, Network).all()
+			qry = sqlsession.query(Node, Network).filter(and_(Node.id.in_(node_ids), Network.context == context)).join(Node, Network).all()
 							
 			print(qry)
 
