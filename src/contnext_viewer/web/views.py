@@ -82,12 +82,11 @@ def query(query):
 
             # For each id, get list of all networks associated with it.
             list_of_nodes = {}
-
             qry = sqlsession.query(Node).filter(Node.id == node_ids[0])
-
-            print(qry.count())
-
+            print('done')
             for node in qry.all():
+
+                print(node)
 
                 for network in node.networks_:
                     print(network)
