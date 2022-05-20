@@ -76,19 +76,18 @@ def query(query):
 	try:
 		if form == 'node':
 			# Get list of all the ids for that node
-			node_id = [each.id for each in sqlsession.query(Node).filter(Node.name == query).all()]
+			node_ids = [each.id for each in sqlsession.query(Node).filter(Node.name == query).all()]
 
 			# For each id, get list of all networks associated with it.
 			list_of_nodes = {}
 			
-			sql_results = sqlsession.query(Network).join(Node, Network.nodes_)
-			
-			print(sql_results)
-				
-			filtered_results = sql_results.filter(and_(Network.context == context, Node.id == node_id[0]))
-			print(filtered_results)
+			qry = sqlsession.query(Node, Network).\ # Query both tables!
+                                filter(and_(Node.id.in_(node_ids)), Network.context == context).\
+                                join(Node, Network).all()
+							
+			print(qry)
 
-			for network in filtered_results.all():
+			for network in qry.all():
 				list_of_nodes.update({network.identifier: [network.data, network.name, network.properties]})
 				
 			return render_template("results.html", idquery=query, idoptions=context, form=form, results=list_of_nodes)
