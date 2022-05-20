@@ -108,11 +108,11 @@ def query(query):
 def heatmap(context):
 	if CONTEXT.get(context):
 		title = CONTEXT.get(context)
-		if context == 'cell_line' or 'cellline':
+		if context == 'cell_line' or context == 'cellline':
 			json_path = "/static/json/cellline-pathway_clustergrammer.json"
-		elif context == 'cell_type' or 'celltype':
+		elif context == 'cell_type' or context == 'celltype':
 			json_path = "/static/json/celltype-pathway_clustergrammer.json"
-		elif context == 'tissue' or 'tissue':
+		elif context == 'tissue' or context == 'tissue':
 			json_path = "/static/json/tissue-pathway_clustergrammer.json"
 		return render_template("heatmaps.html", title=title, json_path=json_path)
 	else:
