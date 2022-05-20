@@ -80,15 +80,16 @@ def query(query):
 
 			# For each id, get list of all networks associated with it.
 			list_of_nodes = {}
-			
-			print(node_ids, context)
 
-			qry = sqlsession.query(Node, Network).filter(and_(Node.id.in_(node_ids), Network.context == context)).join(Node, Network).all()
-							
+			qry = sqlsession.query(Node).filter(Node.id.in_(node_ids)	
 			print(qry)
-
-			for network in qry.all():
-				list_of_nodes.update({network.identifier: [network.data, network.name, network.properties]})
+							
+			for node in qry.all():
+				for network in node.networks_:
+					if network.context != context:
+						continue
+							    
+					list_of_nodes.update({network.identifier: [network.data, network.name, network.properties]})
 				
 			return render_template("results.html", idquery=query, idoptions=context, form=form, results=list_of_nodes)
 
