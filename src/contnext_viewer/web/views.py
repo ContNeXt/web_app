@@ -81,6 +81,8 @@ def query(query):
 			# For each id, get list of all networks associated with it.
 			list_of_nodes = {}
 			
+			print(node_ids, context)
+
 			qry = sqlsession.query(Node, Network).\ # Query both tables!
                                 filter(and_(Node.id.in_(node_ids)), Network.context == context).\
                                 join(Node, Network).all()
