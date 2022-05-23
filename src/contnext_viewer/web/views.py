@@ -84,7 +84,8 @@ def query(query):
         qry = sqlsession.query(Node).filter(Node.id == node_ids[0])
         for node in qry.all():
 
-            print(node)
+            print(node.id)
+            print(node.networks_)
 
             for network in node.networks_:
 
