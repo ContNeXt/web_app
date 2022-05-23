@@ -88,6 +88,8 @@ def query(query):
                 if network.context != context:
                     continue
 
+                print(network.id)
+
                 list_of_nodes.update({network.identifier: [network.data, network.name, network.properties]})
 
         if not list_of_nodes:
