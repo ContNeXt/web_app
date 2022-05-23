@@ -16,7 +16,7 @@ def main():
 @click.option('-s', '--source', help="A source directory with network data.")
 def load(source: str=None):
 	"""Creates a database from source directory."""
-	print("Loading database....")
+	print("Loading database....(this might take a while...)")
 	# Load with data files if path is given
 	if source:
 		files = load_database(data_source=source)
