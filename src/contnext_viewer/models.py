@@ -1,9 +1,8 @@
 # -*- coding: utf-8 -*-
 from pathlib import Path
-
+from sqlalchemy import Column, Integer, String, PickleType, ForeignKey, Table
 from sqlalchemy import create_engine
 from sqlalchemy.ext.declarative import declarative_base
-from sqlalchemy import Column, Integer, String, PickleType, ForeignKey, Table
 from sqlalchemy.orm import relationship, backref
 
 # SQLAlchemy
@@ -18,11 +17,12 @@ database structure
 '''
 
 # Create many-to-many relationship table
-relationship_table=Table('relationship_table',
-                         Base.metadata,
-                         Column('network_id', Integer, ForeignKey('network.id'), primary_key=True),
-                         Column('node_id', Integer, ForeignKey('node.id'), primary_key=True)
-)
+relationship_table = Table('relationship_table',
+                           Base.metadata,
+                           Column('network_id', Integer, ForeignKey('network.id'), primary_key=True),
+                           Column('node_id', Integer, ForeignKey('node.id'), primary_key=True)
+                           )
+
 
 # Create database class: Network
 class Network(Base):
@@ -35,10 +35,12 @@ class Network(Base):
     properties = Column(PickleType)
 
     # many-to-many relationship
-    nodes_ = relationship('Node',
-                             secondary=relationship_table,
-                             lazy='dynamic',
-                             backref=backref('networks_'))
+    nodes_ = relationship(
+        'Node',
+        secondary=relationship_table,
+        lazy='dynamic',
+        backref=backref('networks_')
+    )
 
     def __init__(self, data, name, context, identifier, properties):
         self.data = data
@@ -62,5 +64,6 @@ class Node(Base):
 
     def __repr__(self):
         return f'<Node {self.name!r}'
+
 
 Base.metadata.create_all(engine, checkfirst=True)

@@ -75,40 +75,48 @@ def query(query):
     form = session.get('form', None)
 
     # Start database session
-    try:
-        if form == 'node':
-            # Get list of all the ids for that node
-            node_ids = [each.id for each in sqlsession.query(Node).filter(Node.name == query).all()]
+    if form == 'node':
+        # Get list of all the ids for that node
+        node_ids = [each.id for each in sqlsession.query(Node).filter(Node.name == query).all()]
 
-            # For each id, get list of all networks associated with it.
-            list_of_nodes = {}
-            qry = sqlsession.query(Node).filter(Node.id == node_ids[0])
-            for node in qry.all():
+        # For each id, get list of all networks associated with it.
+        list_of_nodes = {}
+        qry = sqlsession.query(Node).filter(Node.id == node_ids[0])
+        for node in qry.all():
 
-                for network in node.networks_:
-                    if network.context != context:
-                        continue
+            print(node)
 
-                    list_of_nodes.update({network.identifier: [network.data, network.name, network.properties]})
+            for network in node.networks_:
 
-            return render_template("results.html", idquery=query, idoptions=context, form=form, results=list_of_nodes)
+                print(network)
 
-        elif form == 'network' and param == 'identifier':
-            # Get network info
-            list_of_networks = [[network.identifier, network.data, network.name, network.properties, network.context]
-                                for network in sqlsession.query(Network).filter(Network.identifier == query).all()][0]
-            return render_template("results.html", idquery=query, idoptions=context, form=form,
-                                   results=list_of_networks)
+                if network.context != context:
+                    continue
 
-        elif form == 'network' and param == 'name':
-            # Get network info
-            list_of_networks = [[network.identifier, network.data, network.name, network.properties, network.context]
-                                for network in sqlsession.query(Network).filter(Network.name == query).all()][0]
+                list_of_nodes.update({network.identifier: [network.data, network.name, network.properties]})
 
-            return render_template("results.html", idquery=query, idoptions=context, form=form,
-                                   results=list_of_networks)
-    except IndexError:
-        return render_template("error500.html")
+        if not list_of_nodes:
+            return render_template("error500.html")
+
+        return render_template("results.html", idquery=query, idoptions=context, form=form, results=list_of_nodes)
+
+    elif form == 'network' and param == 'identifier':
+        # Get network info
+        list_of_networks = [[network.identifier, network.data, network.name, network.properties, network.context]
+                            for network in sqlsession.query(Network).filter(Network.identifier == query).all()][0]
+
+        return render_template("results.html", idquery=query, idoptions=context, form=form,
+                               results=list_of_networks)
+
+    elif form == 'network' and param == 'name':
+        # Get network info
+        list_of_networks = [[network.identifier, network.data, network.name, network.properties, network.context]
+                            for network in sqlsession.query(Network).filter(Network.name == query).all()][0]
+
+        return render_template("results.html", idquery=query, idoptions=context, form=form,
+                               results=list_of_networks)
+
+    return render_template("error500.html")
 
 
 @contnext.route("/heatmap/<context>")
