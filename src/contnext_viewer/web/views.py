@@ -83,14 +83,12 @@ def query(query):
         list_of_nodes = {}
         qry = sqlsession.query(Node).filter(Node.id == node_ids[0])
         for node in qry.all():
-            print(node)
             for network in node.networks_:
 
-                print(network.id)
                 if network.context != context:
                     continue
 
-                print(e)
+                print(network)
 
                 list_of_nodes.update({network.identifier: [network.data, network.name, network.properties]})
 
